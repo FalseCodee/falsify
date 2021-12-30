@@ -1,0 +1,24 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "falsify.falsify.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "MixinClientPlayerEntity",
+    "MixinKeyboard",
+    "MixinMinecraft",
+    "MixinMultiplayerGUI",
+    "MixinPacket",
+    "MixinRender",
+    "special.MixinEntityTracker",
+    "special.MixinFishingBobberEntity",
+    "special.MixinHandshakeC2SPacket",
+    "special.MixinMinecraft",
+    "special.MixinPlayerEntity"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

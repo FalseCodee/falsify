@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "falsify",
+  "version": "${version}",
+  "name": "Falsify",
+  "description": "falsify",
+  "authors": [
+    "FalseCode"
+  ],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/falsify/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "main": []
+  },
+  "mixins": [
+    "falsify.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.12.5",
+    "minecraft": "1.18.1"
+  }
+}
