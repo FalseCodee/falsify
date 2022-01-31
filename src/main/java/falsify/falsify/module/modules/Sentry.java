@@ -31,7 +31,13 @@ public class Sentry extends Module {
 
     @Override
     public void onEnable() {
-        rendered = Lists.newArrayList(Lists.newArrayList(mc.world.getEntities()).stream().sorted(Comparator.comparingInt(entity -> mc.textRenderer.getWidth(entity.getName()))).collect(Collectors.toList()));
+        rendered = Lists.newArrayList(Lists.newArrayList(mc.world.getEntities()).stream().filter(entity -> entity instanceof PlayerEntity).sorted(Comparator.comparingInt(entity -> mc.textRenderer.getWidth(entity.getName()))).collect(Collectors.toList()));
+        rendered.forEach(entity -> entity.setGlowing(true));
+    }
+
+    @Override
+    public void onDisable() {
+        rendered.forEach(entity -> entity.setGlowing(false));
     }
 
     final int max = mc.textRenderer.getWidth("WWWWWWWWWWWWWWWW WWWWW");
@@ -39,7 +45,9 @@ public class Sentry extends Module {
     @Override
     public void onEvent(Event e) {
         if(e instanceof EventTrack){
-            rendered = Lists.newArrayList(Lists.newArrayList(mc.world.getEntities()).stream().sorted(Comparator.comparingInt(entity -> mc.textRenderer.getWidth(entity.getName()))).collect(Collectors.toList()));
+            rendered.forEach(entity -> entity.setGlowing(false));
+            rendered = Lists.newArrayList(Lists.newArrayList(mc.world.getEntities()).stream().filter(entity -> entity instanceof PlayerEntity).sorted(Comparator.comparingInt(entity -> mc.textRenderer.getWidth(entity.getName()))).collect(Collectors.toList()));
+            rendered.forEach(entity -> entity.setGlowing(true));
         }
         if(e instanceof EventRender){
             if(rendered != null && rendered.size() > 0){
@@ -57,7 +65,6 @@ public class Sentry extends Module {
                                     mc.getWindow().getScaledHeight() - ((mc.textRenderer.fontHeight) * count.get()) - mc.textRenderer.fontHeight - 15,
                                     RenderUtils.getIntFromColor(Math.round(Math.max(0, 255-(entity.distanceTo(mc.player)*entity.distanceTo(mc.player)))),Math.round(Math.min(255, entity.distanceTo(mc.player)*entity.distanceTo(mc.player))),0),
                                     Alignment.RIGHT);
-
                             count.getAndIncrement();
                         });
             }

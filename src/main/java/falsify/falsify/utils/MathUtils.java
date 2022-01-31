@@ -11,7 +11,7 @@ public class MathUtils {
         double diffX = x+0.5 - Falsify.mc.player.getX();
         double diffY;
 
-       diffY = y+0.5 - (Falsify.mc.player.getY()+Falsify.mc.player.getEyeHeight(Falsify.mc.player.getPose()));
+       diffY = y+1 - (Falsify.mc.player.getY()+Falsify.mc.player.getEyeHeight(Falsify.mc.player.getPose()));
         double diffZ = z+0.5 - Falsify.mc.player.getZ();
         double dist = Math.sqrt(diffX * diffX + diffZ * diffZ);
         float yaw = (float) (Math.atan2(diffZ, diffX) * 180.0D / Math.PI) - 90.0F;

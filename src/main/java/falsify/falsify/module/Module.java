@@ -50,7 +50,7 @@ public class Module {
     public void onDisable(){
 
     }
-    public void onEvent(Event e){
+    public void onEvent(Event<?> e){
 
     }
 }

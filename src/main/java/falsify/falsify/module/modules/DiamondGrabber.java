@@ -1,11 +1,13 @@
 package falsify.falsify.module.modules;
 
 import falsify.falsify.listeners.Event;
+import falsify.falsify.listeners.events.EventRender;
 import falsify.falsify.listeners.events.EventUpdate;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
 import falsify.falsify.utils.MathUtils;
 import falsify.falsify.utils.Timer;
+import net.minecraft.block.Material;
 import net.minecraft.client.render.debug.PathfindingDebugRenderer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
@@ -38,7 +40,7 @@ public class DiamondGrabber extends Module {
     boolean running = false;
     @Override
     public void onEvent(Event e) {
-        if(e instanceof EventUpdate){
+        if(e instanceof EventRender){
             assert mc.player != null;
             if(hasDiamond()){
                 if(timer.hasTimeElapsed(1000*11, true)){
@@ -54,8 +56,8 @@ public class DiamondGrabber extends Module {
             } else{
                 if(!mc.player.isDead()){
                     if(Math.sqrt((coords[0]-mc.player.getX())*(coords[0]-mc.player.getX())+(coords[2]-mc.player.getZ())*(coords[2]-mc.player.getZ())) >= 1.5){
-                        mc.player.setYaw(MathUtils.lerp(mc.player.getYaw(), MathUtils.getRotationsNeeded(coords[0],coords[1],coords[2])[0], 0.5f));
-                        mc.player.setPitch(MathUtils.lerp(mc.player.getPitch(), MathUtils.getRotationsNeeded(coords[0],coords[1],coords[2])[1], 0.5f));
+                        mc.player.setYaw(MathUtils.lerp(mc.player.getYaw(), MathUtils.getRotationsNeeded(coords[0],coords[1],coords[2])[0], 0.1f));
+                        mc.player.setPitch(MathUtils.lerp(mc.player.getPitch(), MathUtils.getRotationsNeeded(coords[0],coords[1],coords[2])[1], 0.1f));
                         mc.options.keyForward.setPressed(true);
                         mc.options.keySneak.setPressed(false);
 

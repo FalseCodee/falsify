@@ -27,7 +27,7 @@ public class GuiArrayList extends Module {
                     continue;
                 }
                 RenderUtils.AlignFill(mc.textRenderer.getWidth(module.name)+10,(mc.textRenderer.fontHeight+6)*count, 0,(mc.textRenderer.fontHeight+6)*(count+1), 0x70000000, Alignment.RIGHT);
-                RenderUtils.AlignText(module.name,5, (mc.textRenderer.fontHeight+3)*count+3, -1, Alignment.RIGHT);
+                RenderUtils.AlignText(module.name,5, (mc.textRenderer.fontHeight+6)*count+3, -1, Alignment.RIGHT);
                 count++;
             }
             RenderUtils.AlignCenteredText(Math.round(mc.player.getX())+", "+Math.round(mc.player.getY())+", "+Math.round(mc.player.getZ()),0,mc.textRenderer.fontHeight+10, 0xff6054, Alignment.XCENTER);
