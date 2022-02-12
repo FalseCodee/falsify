@@ -19,6 +19,7 @@ import java.util.ArrayList;
 public class TextBrush extends Module {
 
     public static String theString = "text";
+    public static long theDelay = 200;
     public static boolean run = false;
     ArrayList<FalseRunnable> runnables = new ArrayList<>();
     public TextBrush() {
@@ -46,23 +47,30 @@ public class TextBrush extends Module {
                                 runnables.add(new FalseRunnable() {
                                     @Override
                                     public void run() {
-                                        mc.player.setYaw(MathUtils.lerp(mc.player.getYaw(), MathUtils.getRotationsNeeded(finalX + finalJ, y, z + finalI)[0], 1f));
-                                        mc.player.setPitch(MathUtils.lerp(mc.player.getPitch(), MathUtils.getRotationsNeeded(finalX + finalJ, y, z + finalI)[1], 1f));
-                                        while (Math.sqrt(mc.player.squaredDistanceTo(finalX + finalJ, y, z + finalI)) > 3) {
+                                        mc.player.setYaw(MathUtils.lerp(mc.player.getYaw(), MathUtils.getRotationsNeeded(finalX + finalJ, y, z + finalI - activities.getOffset())[0], 1f));
+                                        mc.player.setPitch(MathUtils.lerp(mc.player.getPitch(), MathUtils.getRotationsNeeded(finalX + finalJ, y, z + finalI - activities.getOffset())[1], 1f));
+                                        while (Math.sqrt(mc.player.squaredDistanceTo(finalX + finalJ, y, z + finalI - activities.getOffset())) > 2) {
                                             mc.options.keyAttack.setPressed(false);
                                             mc.options.keyForward.setPressed(true);
-                                            mc.player.setYaw(MathUtils.lerp(mc.player.getYaw(), MathUtils.getRotationsNeeded(finalX + finalJ, y, z + finalI)[0], 1f));
-                                            mc.player.setPitch(MathUtils.lerp(mc.player.getPitch(), MathUtils.getRotationsNeeded(finalX + finalJ, y, z + finalI)[1], 1f));
+                                            mc.player.setYaw(MathUtils.lerp(mc.player.getYaw(), MathUtils.getRotationsNeeded(finalX + finalJ, y, z + finalI - activities.getOffset())[0], 1f));
+                                            mc.player.setPitch(MathUtils.lerp(mc.player.getPitch(), MathUtils.getRotationsNeeded(finalX + finalJ, y, z + finalI - activities.getOffset())[1], 1f));
                                         }
-                                        mc.options.keyUse.setPressed(true);
+                                        mc.options.keyAttack.setPressed(true);
                                         mc.options.keyForward.setPressed(false);
                                         new FalseRunnable() {
                                             @Override
                                             public void run() {
-                                                mc.options.keyUse.setPressed(false);
+                                                mc.player.setYaw(MathUtils.lerp(mc.player.getYaw(), MathUtils.getRotationsNeeded(finalX + finalJ, y, z + finalI - activities.getOffset())[0], 1f));
+                                                mc.player.setPitch(MathUtils.lerp(mc.player.getPitch(), MathUtils.getRotationsNeeded(finalX + finalJ, y, z + finalI - activities.getOffset())[1], 1f));
+                                            }
+                                        }.runTaskLater(20);
+                                        new FalseRunnable() {
+                                            @Override
+                                            public void run() {
+                                                mc.options.keyAttack.setPressed(false);
                                                 TextBrush.this.runNext();
                                             }
-                                        }.runTaskLater(300);
+                                        }.runTaskLater(theDelay);
 
                                     }
                                 });
@@ -74,6 +82,7 @@ public class TextBrush extends Module {
                     x += 5;
                 }
             }
+
             runNext();
             this.toggle();
         }
@@ -82,25 +91,31 @@ public class TextBrush extends Module {
     @Override
     public void onEnable() {
         run = false;
+        if(runnables.size() > 0) {
+            runnables.get(0).cancel();
+            runnables.clear();
+        }
         mc.setScreen(new TextBrushGUI(mc.currentScreen));
     }
 
     private void runNext() {
-        if(runnables.size() > 1) {
+        if(runnables.size() > 0) {
             runnables.remove(0);
-            runnables.get(0).run();
+            if(runnables.size() > 0) {
+                runnables.get(0).run();
+            }
         }
     }
 
     enum Characters {
-        A(new boolean[][] {
+        A((byte)0,new boolean[][] {
                 {false,true,true,true,false},
                 {false,false,false,false,true},
                 {false,true,true,true,true},
                 {true,false,false,false,true},
                 {false,true,true,true,true}
         }),
-        B(new boolean[][] {
+        B((byte)1,new boolean[][] {
                 {true,false,false,false,false},
                 {true,false,false,false,false},
                 {true,false,true,true,false},
@@ -108,7 +123,7 @@ public class TextBrush extends Module {
                 {true,false,false,false,true},
                 {true,true,true,true,false}
         }),
-        C(new boolean[][] {
+        C((byte)0,new boolean[][] {
                 {false,true,true,true,false},
                 {true,false,false,false,true},
                 {true,false,false,false,false},
@@ -116,7 +131,7 @@ public class TextBrush extends Module {
                 {false,true,true,true,false}
         }),
 
-        D(new boolean[][] {
+        D((byte)1,new boolean[][] {
                 {false,false,false,false,true},
                 {false,false,false,false,true},
                 {false,true,true,false,true},
@@ -124,21 +139,22 @@ public class TextBrush extends Module {
                 {true,false,false,false,true},
                 {false,true,true,true,true}
         }),
-        E(new boolean[][] {
+        E((byte)0,new boolean[][] {
                 {false,true,true,true,false},
                 {true,false,false,false,true},
                 {true,true,true,true,true},
                 {true,false,false,false,false},
                 {false,true,true,true,true}
         }),
-        F(new boolean[][] {
+        F((byte)1,new boolean[][] {
                 {false,false,true,true},
                 {false,true,false,false},
                 {true,true,true,true},
                 {false,true,false,false},
+                {false,true,false,false},
                 {false,true,false,false}
         }),
-        G(new boolean[][] {
+        G((byte)0,new boolean[][] {
                 {false,true,true,true,true},
                 {true,false,false,false,true},
                 {true,false,false,false,true},
@@ -146,15 +162,16 @@ public class TextBrush extends Module {
                 {false,false,false,false,true},
                 {true,true,true,true,false}
         }),
-        H(new boolean[][] {
+        H((byte)2,new boolean[][] {
                 {true,false,false,false,false},
                 {true,false,false,false,false},
                 {true,false,true,true,false},
                 {true,true,false,false,true},
                 {true,false,false,false,true},
+                {true,false,false,false,true},
                 {true,false,false,false,true}
         }),
-        I(new boolean[][] {
+        I((byte)1,new boolean[][] {
                 {true},
                 {false},
                 {true},
@@ -162,7 +179,7 @@ public class TextBrush extends Module {
                 {true},
                 {true}
         }),
-        J(new boolean[][] {
+        J((byte)1,new boolean[][] {
                 {false,false,false,true},
                 {false,false,false,false},
                 {false,false,false,true},
@@ -171,7 +188,7 @@ public class TextBrush extends Module {
                 {true,false,false,true},
                 {false,true,true,false}
         }),
-        K(new boolean[][] {
+        K((byte)1,new boolean[][] {
                 {true,false,false,false},
                 {true,false,false,true},
                 {true,false,true,false},
@@ -179,7 +196,7 @@ public class TextBrush extends Module {
                 {true,false,true,false},
                 {true,false,false,true}
         }),
-        L(new boolean[][] {
+        L((byte)1,new boolean[][] {
                 {true,false},
                 {true,false},
                 {true,false},
@@ -187,36 +204,36 @@ public class TextBrush extends Module {
                 {true,false},
                 {false,true}
         }),
-        M(new boolean[][] {
+        M((byte)0,new boolean[][] {
                 {true,true,false,true,false},
                 {true,false,true,false,true},
                 {true,false,true,false,true},
                 {true,false,false,false,true},
                 {true,false,false,false,true}
         }),
-        N(new boolean[][] {
+        N((byte)0,new boolean[][] {
                 {true,true,true,true,false},
                 {true,false,false,false,true},
                 {true,false,false,false,true},
                 {true,false,false,false,true},
                 {true,false,false,false,true}
         }),
-        O(new boolean[][] {
+        O((byte)0,new boolean[][] {
                 {false,true,true,true,false},
                 {true,false,false,false,true},
                 {true,false,false,false,true},
                 {true,false,false,false,true},
                 {false,true,true,true,false}
         }),
-        P(new boolean[][] {
+        P((byte)0,new boolean[][] {
                 {true,false,true,true,false},
                 {true,true,false,false,true},
                 {true,false,false,false,true},
-                {true,true,true,true,true},
+                {true,true,true,true,false},
                 {true,false,false,false,false},
                 {true,false,false,false,false}
         }),
-        Q(new boolean[][] {
+        Q((byte)0,new boolean[][] {
                 {false,true,true,false,true},
                 {true,false,false,true,true},
                 {true,false,false,false,true},
@@ -224,65 +241,66 @@ public class TextBrush extends Module {
                 {false,false,false,false,true},
                 {false,false,false,false,true}
         }),
-        R(new boolean[][] {
+        R((byte)0,new boolean[][] {
                 {true,false,true,true,false},
                 {true,true,false,false,true},
                 {true,false,false,false,false},
                 {true,false,false,false,false},
                 {true,false,false,false,false}
         }),
-        S(new boolean[][] {
+        S((byte)0,new boolean[][] {
                 {false,true,true,true,true},
                 {true,false,false,false,false},
                 {false,true,true,true,false},
                 {false,false,false,false,true},
                 {true,true,true,true,false}
         }),
-        T(new boolean[][] {
+        T((byte)2,new boolean[][] {
                 {false,true,false},
                 {false,true,false},
                 {true,true,true},
                 {false,true,false},
                 {false,true,false},
+                {false,true,false},
                 {false,false,true}
         }),
-        U(new boolean[][] {
+        U((byte)0,new boolean[][] {
                 {true,false,false,false,true},
                 {true,false,false,false,true},
                 {true,false,false,false,true},
                 {true,false,false,false,true},
                 {false,true,true,true,true}
         }),
-        V(new boolean[][] {
+        V((byte)0,new boolean[][] {
                 {true,false,false,false,true},
                 {true,false,false,false,true},
                 {true,false,false,false,true},
                 {false,true,false,true,false},
                 {false,false,true,false,false}
         }),
-        W(new boolean[][] {
+        W((byte)0,new boolean[][] {
                 {true,false,false,false,true},
                 {true,false,false,false,true},
                 {true,false,true,false,true},
                 {true,false,true,false,true},
                 {false,true,true,true,true}
         }),
-        X(new boolean[][] {
+        X((byte)0,new boolean[][] {
                 {true,false,false,false,true},
                 {false,true,false,true,false},
                 {false,false,true,false,false},
                 {false,true,false,true,false},
                 {true,false,false,false,true}
         }),
-        Y(new boolean[][] {
+        Y((byte)0,new boolean[][] {
                 {true,false,false,false,true},
                 {true,false,false,false,true},
                 {true,false,false,false,true},
-                {true,true,true,true,true},
+                {false,true,true,true,true},
                 {false,false,false,false,true},
                 {true,true,true,true,false}
         }),
-        Z(new boolean[][] {
+        Z((byte)0,new boolean[][] {
                 {true,true,true,true,true},
                 {false,false,false,true,false},
                 {false,false,true,false,false},
@@ -293,11 +311,15 @@ public class TextBrush extends Module {
 
 
 
-        boolean[][] active;
-        Characters(boolean[][] active) {
+        private boolean[][] active;
+        private byte offset;
+        Characters(byte offset, boolean[][] active) {
+            this.offset = offset;
             this.active = active;
         }
-
+        public byte getOffset() {
+            return offset;
+        }
         public boolean[][] getActive() {
             return active;
         }

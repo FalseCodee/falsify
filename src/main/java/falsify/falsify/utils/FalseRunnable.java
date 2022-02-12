@@ -6,15 +6,24 @@ import java.util.concurrent.TimeUnit;
 
 public abstract class FalseRunnable implements Runnable{
 
+    private ScheduledExecutorService service;
     public void runTaskLater(long delay) {
-        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
-        executor.schedule(this, delay, TimeUnit.MILLISECONDS);
-        executor.shutdown();
+        this.service = Executors.newSingleThreadScheduledExecutor();
+        this.service.schedule(this, delay, TimeUnit.MILLISECONDS);
+        this.service.shutdown();
     }
 
     public ScheduledExecutorService runTaskTimer(long delay, long period) {
-        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
-        executor.scheduleAtFixedRate(this, delay, period, TimeUnit.MILLISECONDS);
-        return executor;
+        this.service = Executors.newSingleThreadScheduledExecutor();
+        this.service.scheduleAtFixedRate(this, delay, period, TimeUnit.MILLISECONDS);
+        return this.service;
+    }
+
+    public void cancel() {
+        try {
+            this.service.shutdownNow();
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        }
     }
 }

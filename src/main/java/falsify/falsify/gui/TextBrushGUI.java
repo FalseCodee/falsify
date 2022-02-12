@@ -12,6 +12,7 @@ import net.minecraft.text.TranslatableText;
 public class TextBrushGUI extends Screen {
 
     private TextFieldWidget argField;
+    private TextFieldWidget delayField;
 
 
     private final Screen parent;
@@ -36,19 +37,35 @@ public class TextBrushGUI extends Screen {
         this.argField.setEditable(true);
         this.argField.setMaxLength(128);
         this.argField.setText(TextBrush.theString);
-        this.argField.setChangedListener(this::onClose);
+        this.argField.setChangedListener(this::onChangeArg);
         this.addSelectableChild(this.argField);
 
-        this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, this.height / 4 + 120 + 18, 200, 20, Text.of("Go Back"), (buttonWidget) -> {
+        this.delayField = new TextFieldWidget(this.textRenderer, width/2-100, this.height / 4 + 120 + 18, 200, 20, new TranslatableText("addServer.enterIp"));
+        this.delayField.setEditable(true);
+        this.delayField.setMaxLength(128);
+        this.delayField.setText(String.valueOf(TextBrush.theDelay));
+        this.delayField.setChangedListener(this::onChangeDelay);
+        this.addSelectableChild(this.delayField);
+
+        this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, this.height / 4 + 140 + 22, 200, 20, Text.of("Go Back"), (buttonWidget) -> {
             this.onClose();
         }));
     }
 
-    public void onClose(String text) {
+    public void onChangeArg(String text) {
         TextBrush.theString = argField.getText();
+    }
+    public void onChangeDelay(String text) {
+        try {
+            TextBrush.theDelay = Long.parseLong(text);
+        }  catch (NumberFormatException ignored) {}
     }
     public void onClose() {
         TextBrush.theString = argField.getText();
+        try {
+            TextBrush.theDelay = Long.parseLong(delayField.getText());
+        }  catch (NumberFormatException ignored) {}
+
         TextBrush.run = true;
         assert this.client != null;
         this.client.setScreen(this.parent);
@@ -59,6 +76,7 @@ public class TextBrushGUI extends Screen {
         drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 17, 16777215);
         drawTextWithShadow(matrices, this.textRenderer, Text.of("Enter Name of Recipient"), width/2-100, this.height / 4 + 120 - 34, 10526880);
         this.argField.render(matrices, mouseX, mouseY, delta);
+        this.delayField.render(matrices, mouseX, mouseY, delta);
 
         super.render(matrices, mouseX, mouseY, delta);
     }

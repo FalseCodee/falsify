@@ -1,9 +1,11 @@
 package falsify.falsify.mixin;
 
 import falsify.falsify.Falsify;
+import falsify.falsify.gui.clickgui.ClickGUI;
 import falsify.falsify.listeners.events.EventKey;
 import net.minecraft.client.Keyboard;
 import net.minecraft.client.MinecraftClient;
+import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -16,6 +18,10 @@ public class MixinKeyboard {
         if(MinecraftClient.getInstance().currentScreen == null){
             EventKey e = new EventKey(window, key, scancode, i, modifiers);
             Falsify.onEvent(e);
+
+            if(key == GLFW.GLFW_KEY_RIGHT_SHIFT) {
+                MinecraftClient.getInstance().setScreen(new ClickGUI());
+            }
         }
     }
 

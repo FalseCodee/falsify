@@ -5,5 +5,13 @@ public enum Category {
     COMBAT("Combat"),
     MISC("Misc"),
     PLAYER("Player");
-    Category(String name){}
+
+    private final String name;
+    Category(String name){
+        this.name = name;
+    }
+
+    public String getName() {
+        return this.name;
+    }
 }
