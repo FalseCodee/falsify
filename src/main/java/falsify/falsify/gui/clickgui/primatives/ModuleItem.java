@@ -10,7 +10,6 @@ import java.awt.*;
 
 public class ModuleItem extends Clickable implements Draggable {
     private final Module module;
-    private boolean isActive = false;
     public ModuleItem(Module module, double x, double y, double width, double height) {
         super(x, y, width, height);
 
@@ -23,10 +22,6 @@ public class ModuleItem extends Clickable implements Draggable {
         drawCenteredText(matrices, Falsify.mc.textRenderer, module.name, (int) x + (int) width/2, (int) y + (int) height/2, 0xffffff);
     }
 
-    public void toggleActive() {
-        this.isActive = !isActive;
-    }
-
     @Override
     public boolean onDrag(double x, double y, int button, double dx, double dy) {
         this.x += dx;
@@ -36,7 +31,7 @@ public class ModuleItem extends Clickable implements Draggable {
 
     @Override
     public boolean handleClick(double x, double y, int button) {
-        if(isActive && isHovering(x, y)) {
+        if(isHovering(x, y)) {
             module.toggle();
             return true;
         }

@@ -35,6 +35,8 @@ public class ClickGUI extends Screen {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         for(Tab tab : tabs) {
             if(tab.handleClick(mouseX, mouseY, button)) {
+                tabs.remove(tab);
+                tabs.add(0, tab);
                 return true;
             }
         }

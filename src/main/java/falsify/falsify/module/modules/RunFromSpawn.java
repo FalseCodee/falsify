@@ -5,6 +5,8 @@ import falsify.falsify.listeners.events.EventUpdate;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
 import falsify.falsify.utils.Timer;
+import net.minecraft.entity.MovementType;
+import net.minecraft.util.math.Vec3d;
 import org.lwjgl.glfw.GLFW;
 
 public class RunFromSpawn  extends Module {

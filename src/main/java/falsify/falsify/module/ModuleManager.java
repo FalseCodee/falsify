@@ -22,6 +22,7 @@ public class ModuleManager {
         modules.add(new TPAnnoy());
         modules.add(new AntiAdvertisement());
         modules.add(new TextBrush());
+        modules.add(new VClip());
 
     }
 

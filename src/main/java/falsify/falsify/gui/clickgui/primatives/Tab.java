@@ -7,6 +7,7 @@ import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
 import falsify.falsify.module.ModuleManager;
 import net.minecraft.client.util.math.MatrixStack;
+import org.lwjgl.glfw.GLFW;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -27,10 +28,10 @@ public class Tab extends Clickable implements Draggable {
 
     @Override
     public boolean handleClick(double x, double y, int button) {
-        if (isHovering(x, y)){
+        if (isHovering(x, y) && button == 1){
             this.toggleExtended();
             return true;
-        } else {
+        } else if(isExtended()){
             for(ModuleItem moduleItem : modules) {
                 if(moduleItem.handleClick(x, y, button)) {
                     return true;
@@ -46,9 +47,6 @@ public class Tab extends Clickable implements Draggable {
 
     private void toggleExtended() {
         this.extended = !this.extended;
-        for(ModuleItem moduleItem : modules) {
-            moduleItem.toggleActive();
-        }
     }
 
     public void init() {
@@ -61,7 +59,7 @@ public class Tab extends Clickable implements Draggable {
 
     @Override
     public boolean onDrag(double x, double y, int button, double dx, double dy) {
-        if(isHovering(x, y)) {
+        if(isHovering(x, y) && button == 0) {
             this.x += dx;
             this.y += dy;
             return true;
