@@ -10,6 +10,7 @@
     "MixinMultiplayerGUI",
     "MixinPacket",
     "MixinRender",
+    "special.MixinClientBrandRetriever",
     "special.MixinEntityTracker",
     "special.MixinFishingBobberEntity",
     "special.MixinHandshakeC2SPacket",

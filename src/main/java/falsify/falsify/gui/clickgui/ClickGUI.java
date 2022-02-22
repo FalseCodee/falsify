@@ -8,6 +8,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Stack;
 
 public class ClickGUI extends Screen {
@@ -15,20 +16,16 @@ public class ClickGUI extends Screen {
     private final ArrayList<Tab> tabs = new ArrayList<>();
     public ClickGUI() {
         super(Text.of(""));
-    }
-
-    @Override
-    public boolean shouldPause() {
-        return false;
-    }
-
-    @Override
-    protected void init() {
         int i = 0;
         for(Category category : Category.values()) {
             tabs.add(new Tab(category, 10 + 120 * i, 10));
             i++;
         }
+    }
+
+    @Override
+    public boolean shouldPause() {
+        return false;
     }
 
     @Override
@@ -44,6 +41,14 @@ public class ClickGUI extends Screen {
     }
 
     @Override
+    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        for(Tab tab : tabs) {
+            if(tab.isDragging()) tab.setDragging(false);
+        }
+        return super.mouseReleased(mouseX, mouseY, button);
+    }
+
+    @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
         for(Tab tab : tabs) {
             if(tab.onDrag(mouseX, mouseY, button, deltaX, deltaY)) {
@@ -55,8 +60,8 @@ public class ClickGUI extends Screen {
 
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        for(Tab tab : tabs) {
-            tab.render(matrices, mouseX, mouseY, delta);
+        for(int i = tabs.size()-1; i >= 0; i--) {
+            tabs.get(i).render(matrices, mouseX, mouseY, delta);
         }
     }
 }
