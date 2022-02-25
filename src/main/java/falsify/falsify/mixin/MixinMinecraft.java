@@ -5,10 +5,7 @@ import falsify.falsify.listeners.events.EventUpdate;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
 import net.minecraft.client.util.Session;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Mutable;
-import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.gen.Invoker;
 import org.spongepowered.asm.mixin.injection.At;
@@ -31,7 +28,4 @@ public class MixinMinecraft {
         EventUpdate e = new EventUpdate();
         Falsify.onEvent(e);
     }
-
-
-
 }

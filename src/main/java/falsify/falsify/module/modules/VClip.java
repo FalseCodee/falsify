@@ -25,8 +25,8 @@ public class VClip extends Module {
     }
 
     @Override
-    public void onEvent(Event<?> e) {
-        if(e instanceof EventPacketSend eventPacketSend) {
+    public void onEvent(Event<?> event) {
+        if(event instanceof EventPacketSend eventPacketSend) {
             if(eventPacketSend.packet instanceof ChatMessageC2SPacket packet) {
                 String[] args = packet.getChatMessage().split(" ");
                 if(args[0].equalsIgnoreCase(".clip") && args.length == 4) {

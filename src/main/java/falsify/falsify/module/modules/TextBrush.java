@@ -27,9 +27,9 @@ public class TextBrush extends Module {
     }
 
     @Override
-    public void onEvent(Event<?> e) {
+    public void onEvent(Event<?> event) {
         if(!run) return;
-        if(e instanceof EventUpdate) {
+        if(event instanceof EventUpdate) {
             int x = (int) mc.player.getX();
             int y = (int) mc.player.getY()-1;
             int z = (int) mc.player.getZ();

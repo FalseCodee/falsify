@@ -15,10 +15,10 @@ public class ChatModule extends Module {
 
 
 
-    public void onEvent(Event e){
-        if(e instanceof EventPacketRecieve){
-            if(((EventPacketRecieve) e).getPacket() instanceof net.minecraft.network.packet.s2c.play.GameMessageS2CPacket){
-                onChat(((EventPacketRecieve) e), ((GameMessageS2CPacket) ((EventPacketRecieve) e).getPacket()).getMessage().getString());
+    public void onEvent(Event event){
+        if(event instanceof EventPacketRecieve){
+            if(((EventPacketRecieve) event).getPacket() instanceof net.minecraft.network.packet.s2c.play.GameMessageS2CPacket){
+                onChat(((EventPacketRecieve) event), ((GameMessageS2CPacket) ((EventPacketRecieve) event).getPacket()).getMessage().getString());
             }
         }
     }

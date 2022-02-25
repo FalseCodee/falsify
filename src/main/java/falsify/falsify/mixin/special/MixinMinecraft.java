@@ -15,4 +15,8 @@ public interface MixinMinecraft {
     @Accessor("session")
     @Mutable
     void setSession(Session session);
+
+    @Accessor("itemUseCooldown")
+    @Mutable
+    void setCoolDown(int coolDown);
 }

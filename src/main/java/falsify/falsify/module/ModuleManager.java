@@ -1,8 +1,7 @@
 package falsify.falsify.module;
 
 import falsify.falsify.module.modules.*;
-import falsify.falsify.module.modules.chat.AntiAdvertisement;
-import falsify.falsify.module.modules.chat.TPAnnoy;
+import falsify.falsify.module.modules.chat.*;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -23,13 +22,24 @@ public class ModuleManager {
         modules.add(new AntiAdvertisement());
         modules.add(new TextBrush());
         modules.add(new VClip());
+        modules.add(new ClientBrand());
+        modules.add(new Aimbot());
+        modules.add(new AutoWalk());
+        modules.add(new AutoJump());
+        modules.add(new Sprint());
+        modules.add(new FastPlace());
+        modules.add(new Spectate());
 
     }
 
-    public static Module getModule(Module module){
+    public static <T extends Module> T getModule(Class<T> module){
         for(Module m : modules){
-            if(m.name.equalsIgnoreCase(module.name)){
-                return m;
+            if(m.getClass().equals(module)){
+                try {
+                    return module.cast(m);
+                } catch (ClassCastException e) {
+                    return null;
+                }
             }
         }
         return null;

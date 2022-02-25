@@ -31,6 +31,14 @@ public class Event<T> {
         this.eventDirection = eventDirection;
     }
 
+    public boolean isPre() {
+        return eventType == EventType.PRE;
+    }
+
+    public boolean isPost() {
+        return eventType == EventType.POST;
+    }
+
 
 
 

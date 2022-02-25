@@ -23,7 +23,7 @@ public class ModeSettingItem extends SettingItem<ModeSetting>{
 
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        drawRect(backgroundColor,matrices, (float)x, (float)y, (float)(x + width), (float)(y + height));
+        drawSmoothRect(backgroundColor, matrices, (float) x, (float) y, (float) (x + width), (float) (y + height),2, new int[] {5,5,5,5});
         drawCenteredText(matrices, Falsify.mc.textRenderer, setting.getName() + ": " + setting.getMode(), (int)(x + width/2), (int)(y + height/2 - Falsify.mc.textRenderer.fontHeight/2), textColor.getRGB());
     }
 }

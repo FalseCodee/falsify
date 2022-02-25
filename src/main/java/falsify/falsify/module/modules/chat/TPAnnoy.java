@@ -30,8 +30,8 @@ public class TPAnnoy extends ChatModule {
     }
 
     @Override
-    public void onEvent(Event e) {
-        if(e instanceof EventUpdate) {
+    public void onEvent(Event event) {
+        if(event instanceof EventUpdate) {
             if(run && timer.hasTimeElapsed(2500, true)) {
                 mc.player.sendChatMessage("/tpa " + playerToAnnoy);
                 new FalseRunnable() {

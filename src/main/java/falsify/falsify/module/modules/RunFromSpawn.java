@@ -16,8 +16,8 @@ public class RunFromSpawn  extends Module {
     Timer timer = new Timer();
 
     @Override
-    public void onEvent(Event e) {
-        if(e instanceof EventUpdate){
+    public void onEvent(Event event) {
+        if(event instanceof EventUpdate){
             if(mc.player.isDead()){
                 mc.player.requestRespawn();
             }

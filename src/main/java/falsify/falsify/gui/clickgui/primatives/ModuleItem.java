@@ -37,7 +37,7 @@ public class ModuleItem extends Clickable implements Draggable {
     public boolean handleClick(double x, double y, int button) {
         if(isHovering(x, y)) {
             if(button == 0) module.toggle();
-            else if(button == 1) Falsify.mc.setScreen(new SettingsGUI(module));
+            else if(button == 1) Falsify.mc.setScreen(new SettingsGUI(module, Falsify.mc.currentScreen));
             return true;
         }
         return false;

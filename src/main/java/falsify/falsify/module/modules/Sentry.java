@@ -43,13 +43,13 @@ public class Sentry extends Module {
     final int max = mc.textRenderer.getWidth("WWWWWWWWWWWWWWWW WWWWW");
 
     @Override
-    public void onEvent(Event e) {
-        if(e instanceof EventTrack){
+    public void onEvent(Event event) {
+        if(event instanceof EventTrack){
             rendered.forEach(entity -> entity.setGlowing(false));
             rendered = Lists.newArrayList(Lists.newArrayList(mc.world.getEntities()).stream().filter(entity -> entity instanceof PlayerEntity).sorted(Comparator.comparingInt(entity -> mc.textRenderer.getWidth(entity.getName()))).collect(Collectors.toList()));
             rendered.forEach(entity -> entity.setGlowing(true));
         }
-        if(e instanceof EventRender){
+        if(event instanceof EventRender){
             if(rendered != null && rendered.size() > 0){
                 AtomicInteger count = new AtomicInteger();
                 AtomicInteger count2 = new AtomicInteger();

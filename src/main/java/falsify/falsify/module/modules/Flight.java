@@ -23,8 +23,8 @@ public class Flight extends Module {
     }
 
     @Override
-    public void onEvent(Event e) {
-        if(e instanceof EventUpdate){
+    public void onEvent(Event event) {
+        if(event instanceof EventUpdate){
             assert mc.player != null;
             mc.player.getAbilities().flying = true;
         }

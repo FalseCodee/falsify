@@ -44,7 +44,7 @@ public class BungeeGUI extends Screen {
     @Override
     protected void init() {
         int offset = 4;
-        this.bungeeHack = (BungeeHack) ModuleManager.getModule(new BungeeHack());
+        this.bungeeHack = ModuleManager.getModule(BungeeHack.class);
         assert this.client != null;
         this.client.keyboard.setRepeatEvents(true);
         this.fakeIPField = new TextFieldWidget(this.textRenderer, width/2-205+50+ offset, 66, 200, 20, new TranslatableText("addServer.enterName"));

@@ -15,8 +15,8 @@ public class goTo extends Module {
     }
 
     @Override
-    public void onEvent(Event e) {
-        if(e instanceof EventUpdate){
+    public void onEvent(Event event) {
+        if(event instanceof EventUpdate){
             double[] coords = {69, 69 ,69};
             if(Math.sqrt((coords[0]-mc.player.getX())*(coords[0]-mc.player.getX())+(coords[2]-mc.player.getZ())*(coords[2]-mc.player.getZ())) >= 2){
                 mc.player.setYaw(MathUtils.lerp(mc.player.getYaw(), MathUtils.getRotationsNeeded(coords[0],coords[1],coords[2])[0], 0.5f));

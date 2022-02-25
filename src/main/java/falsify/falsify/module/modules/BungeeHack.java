@@ -25,10 +25,10 @@ public class BungeeHack extends Module {
     }
 
     @Override
-    public void onEvent(Event e) {
-        if(e instanceof EventPacketSend){
-            if(((EventPacketSend) e).getPacket() instanceof HandshakeC2SPacket){
-                HandshakeC2SPacket p = (HandshakeC2SPacket) ((EventPacketSend) e).packet;
+    public void onEvent(Event event) {
+        if(event instanceof EventPacketSend){
+            if(((EventPacketSend) event).getPacket() instanceof HandshakeC2SPacket){
+                HandshakeC2SPacket p = (HandshakeC2SPacket) ((EventPacketSend) event).packet;
                 if(p.getIntendedState().equals(NetworkState.LOGIN)){
                     ((MixinHandshakeC2SPacket)p).setAddress(((MixinHandshakeC2SPacket)p).getAddress() + "\000"+ip+"\000"+uuid);
                 }

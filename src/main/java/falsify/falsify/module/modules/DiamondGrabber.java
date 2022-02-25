@@ -39,8 +39,8 @@ public class DiamondGrabber extends Module {
     }
     boolean running = false;
     @Override
-    public void onEvent(Event e) {
-        if(e instanceof EventRender){
+    public void onEvent(Event event) {
+        if(event instanceof EventRender){
             assert mc.player != null;
             if(hasDiamond()){
                 if(timer.hasTimeElapsed(1000*11, true)){

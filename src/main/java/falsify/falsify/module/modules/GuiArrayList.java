@@ -18,8 +18,8 @@ public class GuiArrayList extends Module {
     }
 
     @Override
-    public void onEvent(Event e) {
-        if(e instanceof EventRender){
+    public void onEvent(Event event) {
+        if(event instanceof EventRender){
             int count = 0;
             ModuleManager.enabledModules.sort(Comparator.comparingInt(m -> mc.textRenderer.getWidth(((Module)m).name)).reversed());
             for(Module module : ModuleManager.enabledModules){

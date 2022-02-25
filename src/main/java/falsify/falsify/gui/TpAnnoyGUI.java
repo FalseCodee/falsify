@@ -18,7 +18,6 @@ public class TpAnnoyGUI extends Screen {
 
     private TextFieldWidget TpAnnoyField;
 
-
     private final Screen parent;
 
     public TpAnnoyGUI(Screen parent) {

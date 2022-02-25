@@ -26,10 +26,10 @@ public class AutoFish extends Module {
 
     Timer timer = new Timer();
     @Override
-    public void onEvent(Event e) {
-        if (e instanceof EventPacketRecieve) {
-            if (((EventPacketRecieve) e).getPacket() instanceof PlaySoundS2CPacket) {
-                if (((PlaySoundS2CPacket) ((EventPacketRecieve) e).getPacket()).getSound().equals(
+    public void onEvent(Event event) {
+        if (event instanceof EventPacketRecieve) {
+            if (((EventPacketRecieve) event).getPacket() instanceof PlaySoundS2CPacket) {
+                if (((PlaySoundS2CPacket) ((EventPacketRecieve) event).getPacket()).getSound().equals(
                         SoundEvents.ENTITY_FISHING_BOBBER_SPLASH)) {
                     if (timer.hasTimeElapsed(1000, true)) {
                         mc.options.keyUse.setPressed(true);
@@ -39,7 +39,7 @@ public class AutoFish extends Module {
                 }
             }
         }
-        if (e instanceof EventUpdate) {
+        if (event instanceof EventUpdate) {
             if (mc.player.getMainHandStack().getItem().equals(Items.FISHING_ROD)) {
                 if (mc.player.fishHook == null) {
                     if (timer.hasTimeElapsed(1000, true)) {
