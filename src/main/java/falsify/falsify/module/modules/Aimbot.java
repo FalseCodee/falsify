@@ -36,6 +36,9 @@ public class Aimbot extends Module {
     private final BooleanSetting frameSync = new BooleanSetting("Frame Sync", true);
     private final BooleanSetting antiBot = new BooleanSetting("Anti Bot", true);
     private final BooleanSetting hittable = new BooleanSetting("Hittable", true);
+    private final RangeSetting distMulti = new RangeSetting("Dist Multi", 1.8, 0, 5, new DecimalFormat("#.##"));
+    private final RangeSetting cursorMulti = new RangeSetting("Cursor Multi", 1, 0, 5, new DecimalFormat("#.##"));
+
 
     private float timing = 0.0f;
 
@@ -54,6 +57,8 @@ public class Aimbot extends Module {
         settings.add(frameSync);
         settings.add(antiBot);
         settings.add(hittable);
+        settings.add(distMulti);
+        settings.add(cursorMulti);
     }
 
     @Override
@@ -79,7 +84,7 @@ public class Aimbot extends Module {
             switch (sortType.getMode()){
                 case "Distance": entityList.sort(Comparator.comparingDouble(entity -> entity.distanceTo(mc.player))); break;
                 case "Cursor": entityList.sort(Comparator.comparingDouble(MathUtils::cursorDistanceTo)); break;
-                case "Smart": entityList.sort(Comparator.comparingDouble(entity -> entity.distanceTo(mc.player) + MathUtils.cursorDistanceTo(entity))); break;
+                case "Smart": entityList.sort(Comparator.comparingDouble(entity -> distMulti.getValue() * entity.distanceTo(mc.player) + cursorMulti.getValue() * MathUtils.cursorDistanceTo(entity))); break;
 
             }
             target = null;
