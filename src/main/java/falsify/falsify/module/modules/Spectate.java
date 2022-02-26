@@ -12,8 +12,8 @@ import falsify.falsify.utils.Timer;
 import java.text.DecimalFormat;
 
 public class Spectate extends Module {
-    private final RangeSetting horizontalCutoff = new RangeSetting("Horizontal", 7, 0, 30, new DecimalFormat("#.#"));
-    private final RangeSetting verticalCutoff = new RangeSetting("Vertical", 2, 0, 30, new DecimalFormat("#.#"));
+    private final RangeSetting horizontalCutoff = new RangeSetting("Horizontal", 7, 0, 30, 0.1);
+    private final RangeSetting verticalCutoff = new RangeSetting("Vertical", 2, 0, 30, 0.1);
     private final BooleanSetting returnToSpawn = new BooleanSetting("/spawn", true);
 
     private final Timer timer = new Timer();
@@ -30,7 +30,7 @@ public class Spectate extends Module {
         if(event instanceof EventUpdate) {
             if(Aimbot.target == null) {
                 if(returnToSpawn.getValue()) {
-                    if(timer.hasTimeElapsed(5000, true)) mc.player.sendChatMessage("/spawn");
+                    if(timer.hasTimeElapsed(5000, true)) mc.player.sendChatMessage("/home prime");
                 }
                 return;
             }

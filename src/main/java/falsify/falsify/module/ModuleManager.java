@@ -29,6 +29,7 @@ public class ModuleManager {
         modules.add(new Sprint());
         modules.add(new FastPlace());
         modules.add(new Spectate());
+        modules.add(new AutoClick());
 
     }
 

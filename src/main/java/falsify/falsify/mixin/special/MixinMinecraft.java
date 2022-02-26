@@ -5,6 +5,7 @@ import net.minecraft.client.util.Session;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.gen.Accessor;
+import org.spongepowered.asm.mixin.gen.Invoker;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -19,4 +20,7 @@ public interface MixinMinecraft {
     @Accessor("itemUseCooldown")
     @Mutable
     void setCoolDown(int coolDown);
+
+    @Invoker("doAttack")
+    void doAttack();
 }

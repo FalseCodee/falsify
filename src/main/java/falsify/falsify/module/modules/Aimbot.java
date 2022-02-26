@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import falsify.falsify.listeners.Event;
 import falsify.falsify.listeners.events.EventFrame;
 import falsify.falsify.listeners.events.EventRender;
+import falsify.falsify.listeners.events.EventUpdate;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
 import falsify.falsify.module.settings.BooleanSetting;
@@ -17,6 +18,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import org.lwjgl.glfw.GLFW;
@@ -27,17 +29,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Aimbot extends Module {
-    private final RangeSetting range = new RangeSetting("Range", 100, 0, 100, new DecimalFormat("#.#"));
-    private final RangeSetting tickSpeed = new RangeSetting("TickSpeed", 0, 0, 100, new DecimalFormat("#"));
-    private final RangeSetting speed = new RangeSetting("Speed", 0.25, 0, 1.5, new DecimalFormat("#.##"));
-    private final RangeSetting turnSpeed = new RangeSetting("Turn Speed", 0.75, 0, 1.5, new DecimalFormat("#.##"));
+    private final RangeSetting range = new RangeSetting("Range", 100, 0, 100, 1);
+    private final RangeSetting tickSpeed = new RangeSetting("TickSpeed", 0, 0, 100, 1);
+    private final RangeSetting speed = new RangeSetting("Speed", 0.25, 0, 1.5, 0.01);
+    private final RangeSetting turnSpeed = new RangeSetting("Turn Speed", 0.75, 0, 1.5, 0.01);
     private final ModeSetting type = new ModeSetting("Type", "Players", "All", "Players", "Mobs", "Animals");
     private final ModeSetting sortType = new ModeSetting("Sort By", "Smart", "Distance", "Cursor", "Smart");
     private final BooleanSetting frameSync = new BooleanSetting("Frame Sync", true);
     private final BooleanSetting antiBot = new BooleanSetting("Anti Bot", true);
-    private final BooleanSetting hittable = new BooleanSetting("Hittable", true);
-    private final RangeSetting distMulti = new RangeSetting("Dist Multi", 1.8, 0, 5, new DecimalFormat("#.##"));
-    private final RangeSetting cursorMulti = new RangeSetting("Cursor Multi", 1, 0, 5, new DecimalFormat("#.##"));
+    private final RangeSetting distMulti = new RangeSetting("Dist Multi", 1.8, 0, 5, 0.01);
+    private final RangeSetting cursorMulti = new RangeSetting("Cursor Multi", 1, 0, 5, 0.01);
 
 
     private float timing = 0.0f;
@@ -56,36 +57,31 @@ public class Aimbot extends Module {
         settings.add(tickSpeed);
         settings.add(frameSync);
         settings.add(antiBot);
-        settings.add(hittable);
         settings.add(distMulti);
         settings.add(cursorMulti);
     }
 
     @Override
     public void onEvent(Event<?> event) {
-        if(event instanceof EventFrame) {
+        if(event instanceof EventUpdate) {
             if(mc.world == null) return;
 
             List<Entity> entityList = Lists.newArrayList(mc.world.getEntities()).stream().filter(LivingEntity.class::isInstance).collect(Collectors.toList());
 
             switch (type.getMode()) {
-                case "All": break;
-                case "Players":
+                case "Players" -> {
                     entityList = entityList.stream().filter(PlayerEntity.class::isInstance).collect(Collectors.toList());
-                    if(antiBot.getValue()) entityList = entityList.stream().filter(entity -> ChatModuleUtils.isPlayer(((PlayerEntity)entity).getGameProfile().getId())).collect(Collectors.toList());
-
-                    break;
-
-                case "Mobs": entityList = entityList.stream().filter(HostileEntity.class::isInstance).collect(Collectors.toList()); break;
-                case "Animals": entityList = entityList.stream().filter(AnimalEntity.class::isInstance).collect(Collectors.toList()); break;
+                    if (antiBot.getValue())
+                        entityList = entityList.stream().filter(entity -> ChatModuleUtils.isPlayer(((PlayerEntity) entity).getGameProfile().getId())).collect(Collectors.toList());
+                }
+                case "Mobs" -> entityList = entityList.stream().filter(HostileEntity.class::isInstance).collect(Collectors.toList());
+                case "Animals" -> entityList = entityList.stream().filter(AnimalEntity.class::isInstance).collect(Collectors.toList());
             }
-            if(hittable.getValue()) entityList = entityList.stream().filter(Entity::isAttackable).collect(Collectors.toList());
             entityList = entityList.stream().filter(entity -> (entity.distanceTo(mc.player) < this.range.getValue() && entity != mc.player && entity.isAlive())).collect(Collectors.toList());
-            switch (sortType.getMode()){
-                case "Distance": entityList.sort(Comparator.comparingDouble(entity -> entity.distanceTo(mc.player))); break;
-                case "Cursor": entityList.sort(Comparator.comparingDouble(MathUtils::cursorDistanceTo)); break;
-                case "Smart": entityList.sort(Comparator.comparingDouble(entity -> distMulti.getValue() * entity.distanceTo(mc.player) + cursorMulti.getValue() * MathUtils.cursorDistanceTo(entity))); break;
-
+            switch (sortType.getMode()) {
+                case "Distance" -> entityList.sort(Comparator.comparingDouble(entity -> entity.distanceTo(mc.player)));
+                case "Cursor" -> entityList.sort(Comparator.comparingDouble(MathUtils::cursorDistanceTo));
+                case "Smart" -> entityList.sort(Comparator.comparingDouble(entity -> distMulti.getValue() * entity.distanceTo(mc.player) + cursorMulti.getValue() * MathUtils.cursorDistanceTo(entity)));
             }
             target = null;
             do {
@@ -100,8 +96,9 @@ public class Aimbot extends Module {
                     target = entityList.get(0);
                 }
             } while (target == null);
-
-            if (this.timer.hasTimeElapsed(tickSpeed.getValue().longValue(), true)) {
+        }
+        else if(event instanceof EventFrame) {
+            if (target != null && this.timer.hasTimeElapsed(tickSpeed.getValue().longValue(), true)) {
                 if (this.oldTarget != target)
                     this.timing = 0.0F;
                 this.timing += 0.015F;

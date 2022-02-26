@@ -11,7 +11,7 @@ public class MathUtils {
     }
 
     public static float[] getRotationsNeeded(Entity entity) {
-        return getRotationsNeeded(entity.getX(), entity.getY()+1, entity.getZ());
+        return getRotationsNeeded(entity.getX(), entity.getBoundingBox().getCenter().y, entity.getZ());
     }
     public static float[] getRotationsNeeded(double x, double y, double z) {
         double diffX = x - Falsify.mc.player.getX();
