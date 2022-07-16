@@ -6,9 +6,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.gen.Invoker;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(MinecraftClient.class)
 public interface MixinMinecraft {
@@ -22,5 +19,5 @@ public interface MixinMinecraft {
     void setCoolDown(int coolDown);
 
     @Invoker("doAttack")
-    void doAttack();
+    boolean doAttack();
 }

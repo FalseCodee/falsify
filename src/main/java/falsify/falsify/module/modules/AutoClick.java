@@ -10,18 +10,16 @@ import falsify.falsify.module.settings.RangeSetting;
 import falsify.falsify.utils.Timer;
 import net.minecraft.util.hit.HitResult;
 
-import java.text.DecimalFormat;
-
 public class AutoClick extends Module {
-    RangeSetting aps = new RangeSetting("CPS", 5, 0, 20, 1);
-    RangeSetting randomness = new RangeSetting("Randomness",1, 0, 5, 0.1);
-    RangeSetting windupTime = new RangeSetting("Wind-up",500, 0, 1000, 10);
-    BooleanSetting whileClicking = new BooleanSetting("While Click", true);
-    BooleanSetting trigger = new BooleanSetting("Trigger", false);
-    BooleanSetting waitForCharge = new BooleanSetting("Charge", false);
+    final RangeSetting aps = new RangeSetting("CPS", 5, 0, 20, 1);
+    final RangeSetting randomness = new RangeSetting("Randomness",1, 0, 5, 0.1);
+    final RangeSetting windupTime = new RangeSetting("Wind-up",500, 0, 1000, 10);
+    final BooleanSetting whileClicking = new BooleanSetting("While Click", true);
+    final BooleanSetting trigger = new BooleanSetting("Trigger", false);
+    final BooleanSetting waitForCharge = new BooleanSetting("Charge", false);
     double windup = 0.0d;
-    Timer timer = new Timer();
-    Timer windupTimer = new Timer();
+    final Timer timer = new Timer();
+    final Timer windupTimer = new Timer();
     public AutoClick() {
         super("Auto Click", Category.COMBAT, -1);
         settings.add(aps);
@@ -38,7 +36,7 @@ public class AutoClick extends Module {
             if(windupTime.getValue() == 0.0d) windup = 1.0;
             else if(windupTimer.hasTimeElapsed(1000/20, true)) {
                 if (whileClicking.getValue()) {
-                    if(mc.options.keyAttack.isPressed()) windup = (windup >= 1) ? 1.0d : windup + 20 / windupTime.getValue();
+                    if(mc.options.attackKey.isPressed()) windup = (windup >= 1) ? 1.0d : windup + 20 / windupTime.getValue();
                 } else {
                     windup = 1.0;
                 }
@@ -48,19 +46,19 @@ public class AutoClick extends Module {
                 if(mc.player.getAttackCooldownProgress(0.0f) >= 0.99) {
                     if(!trigger.getValue()) {
                         if (!whileClicking.getValue()) ((MixinMinecraft) mc).doAttack();
-                        else if (mc.options.keyAttack.isPressed()) ((MixinMinecraft) mc).doAttack();
+                        else if (mc.options.attackKey.isPressed()) ((MixinMinecraft) mc).doAttack();
                     } else if(mc.crosshairTarget.getType() == HitResult.Type.ENTITY) {
                         if (!whileClicking.getValue()) ((MixinMinecraft) mc).doAttack();
-                        else if (mc.options.keyAttack.isPressed()) ((MixinMinecraft) mc).doAttack();
+                        else if (mc.options.attackKey.isPressed()) ((MixinMinecraft) mc).doAttack();
                     }
                 }
             } else if(timer.hasTimeElapsed(1000 / ((randomTime == 0) ? 1 : randomTime), true)) {
                 if(!trigger.getValue()) {
                     if (!whileClicking.getValue()) ((MixinMinecraft) mc).doAttack();
-                    else if (mc.options.keyAttack.isPressed()) ((MixinMinecraft) mc).doAttack();
+                    else if (mc.options.attackKey.isPressed()) ((MixinMinecraft) mc).doAttack();
                 } else if(mc.crosshairTarget.getType() == HitResult.Type.ENTITY) {
                     if (!whileClicking.getValue()) ((MixinMinecraft) mc).doAttack();
-                    else if (mc.options.keyAttack.isPressed()) ((MixinMinecraft) mc).doAttack();
+                    else if (mc.options.attackKey.isPressed()) ((MixinMinecraft) mc).doAttack();
                 }
             }
         }

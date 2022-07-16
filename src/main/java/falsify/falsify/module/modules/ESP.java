@@ -2,30 +2,20 @@ package falsify.falsify.module.modules;
 
 import com.google.common.collect.Lists;
 import falsify.falsify.listeners.Event;
-import falsify.falsify.listeners.events.EventRender;
 import falsify.falsify.listeners.events.EventRender3d;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
-import falsify.falsify.module.settings.BooleanSetting;
 import falsify.falsify.module.settings.ModeSetting;
-import falsify.falsify.module.settings.RangeSetting;
-import falsify.falsify.utils.MathUtils;
 import falsify.falsify.utils.RenderUtils;
-import falsify.falsify.utils.Timer;
-import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Box;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
-import java.text.DecimalFormat;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 

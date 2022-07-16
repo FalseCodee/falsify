@@ -1,6 +1,5 @@
 package falsify.falsify.module.modules.chat;
 
-import falsify.falsify.gui.BungeeGUI;
 import falsify.falsify.gui.TpAnnoyGUI;
 import falsify.falsify.listeners.Event;
 import falsify.falsify.listeners.events.EventUpdate;

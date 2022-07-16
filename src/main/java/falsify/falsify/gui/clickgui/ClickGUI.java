@@ -1,6 +1,5 @@
 package falsify.falsify.gui.clickgui;
 
-import falsify.falsify.Falsify;
 import falsify.falsify.gui.clickgui.primatives.Tab;
 import falsify.falsify.module.Category;
 import net.minecraft.client.gui.screen.Screen;
@@ -8,8 +7,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Stack;
 
 public class ClickGUI extends Screen {
 

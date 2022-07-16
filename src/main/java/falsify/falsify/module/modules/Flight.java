@@ -26,6 +26,8 @@ public class Flight extends Module {
     public void onEvent(Event event) {
         if(event instanceof EventUpdate){
             assert mc.player != null;
+            mc.player.setOnGround(true);
+            mc.player.fallDistance = 0;
             mc.player.getAbilities().flying = true;
         }
     }

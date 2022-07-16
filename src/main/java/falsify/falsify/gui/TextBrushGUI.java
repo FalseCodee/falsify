@@ -1,13 +1,11 @@
 package falsify.falsify.gui;
 
 import falsify.falsify.module.modules.TextBrush;
-import falsify.falsify.module.modules.chat.TPAnnoy;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 
 public class TextBrushGUI extends Screen {
 
@@ -32,7 +30,7 @@ public class TextBrushGUI extends Screen {
         assert this.client != null;
         this.client.keyboard.setRepeatEvents(true);
 
-        this.argField = new TextFieldWidget(this.textRenderer, width/2-100, this.height / 4 + 120 - 18, 200, 20, new TranslatableText("addServer.enterIp"));
+        this.argField = new TextFieldWidget(this.textRenderer, width/2-100, this.height / 4 + 120 - 18, 200, 20, Text.translatable("addServer.enterIp"));
         this.argField.setTextFieldFocused(true);
         this.argField.setEditable(true);
         this.argField.setMaxLength(128);
@@ -40,7 +38,7 @@ public class TextBrushGUI extends Screen {
         this.argField.setChangedListener(this::onChangeArg);
         this.addSelectableChild(this.argField);
 
-        this.delayField = new TextFieldWidget(this.textRenderer, width/2-100, this.height / 4 + 120 + 18, 200, 20, new TranslatableText("addServer.enterIp"));
+        this.delayField = new TextFieldWidget(this.textRenderer, width/2-100, this.height / 4 + 120 + 18, 200, 20, Text.translatable("addServer.enterIp"));
         this.delayField.setEditable(true);
         this.delayField.setMaxLength(128);
         this.delayField.setText(String.valueOf(TextBrush.theDelay));

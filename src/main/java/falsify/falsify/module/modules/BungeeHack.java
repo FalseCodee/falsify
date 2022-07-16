@@ -12,7 +12,7 @@ import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket;
 import org.lwjgl.glfw.GLFW;
 
 public class BungeeHack extends Module {
-    MinecraftClient mc = MinecraftClient.getInstance();
+    final MinecraftClient mc = MinecraftClient.getInstance();
     public String ip = "1.2.3.4";
     public String uuid = mc.getSession().getUuid().replace("-","");
 

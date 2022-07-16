@@ -5,9 +5,6 @@ import falsify.falsify.listeners.events.EventUpdate;
 import falsify.falsify.mixin.special.MixinMinecraft;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
-import falsify.falsify.module.settings.RangeSetting;
-
-import java.text.DecimalFormat;
 
 public class FastPlace extends Module {
     public FastPlace() {

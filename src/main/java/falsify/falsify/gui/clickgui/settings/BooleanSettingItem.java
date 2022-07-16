@@ -4,8 +4,6 @@ import falsify.falsify.Falsify;
 import falsify.falsify.module.settings.BooleanSetting;
 import net.minecraft.client.util.math.MatrixStack;
 
-import java.awt.*;
-
 public class BooleanSettingItem extends SettingItem<BooleanSetting>{
     public BooleanSettingItem(BooleanSetting setting, double x, double y, double width, double height) {
         super(setting, x, y, width, height);

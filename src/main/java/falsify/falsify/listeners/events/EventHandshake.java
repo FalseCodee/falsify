@@ -2,8 +2,6 @@ package falsify.falsify.listeners.events;
 
 import falsify.falsify.listeners.Event;
 import net.minecraft.network.NetworkState;
-import net.minecraft.network.Packet;
-import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket;
 
 public class EventHandshake extends Event<EventHandshake> {
 

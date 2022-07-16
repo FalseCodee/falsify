@@ -5,15 +5,10 @@ import falsify.falsify.listeners.events.EventPacketSend;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
 import falsify.falsify.module.settings.BooleanSetting;
-import falsify.falsify.module.settings.ModeSetting;
-import falsify.falsify.module.settings.RangeSetting;
-import net.minecraft.entity.MovementType;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.glfw.GLFW;
-
-import java.text.DecimalFormat;
 
 public class VClip extends Module {
 

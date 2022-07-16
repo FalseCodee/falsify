@@ -9,7 +9,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Matrix4f;
 
 import java.awt.*;
-import java.util.Scanner;
 
 public class RenderHelper extends DrawableHelper {
 
@@ -46,8 +45,7 @@ public class RenderHelper extends DrawableHelper {
         bufferBuilder.vertex(matrix, x2, y1, 0.0F).color(f, g, h, i).next();
         bufferBuilder.vertex(matrix, x1, y1, 0.0F).color(f, g, h, i).next();
 
-        bufferBuilder.end();
-        BufferRenderer.draw(bufferBuilder);
+        BufferRenderer.drawWithShader(bufferBuilder.end());
         RenderSystem.enableTexture();
         RenderSystem.disableBlend();
     }
@@ -105,8 +103,7 @@ public class RenderHelper extends DrawableHelper {
                 bufferBuilder.vertex(matrix, center[0], center[1], 0.0F).color(f, g, h, i).next();
             }
         }
-        bufferBuilder.end();
-        BufferRenderer.draw(bufferBuilder);
+        BufferRenderer.drawWithShader(bufferBuilder.end());
         RenderSystem.enableTexture();
         RenderSystem.disableBlend();
     }

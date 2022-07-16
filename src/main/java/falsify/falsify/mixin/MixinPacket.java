@@ -3,17 +3,11 @@ package falsify.falsify.mixin;
 import falsify.falsify.Falsify;
 import falsify.falsify.listeners.events.EventPacketRecieve;
 import falsify.falsify.listeners.events.EventPacketSend;
-import io.netty.buffer.Unpooled;
-import io.netty.util.concurrent.Future;
-import io.netty.util.concurrent.GenericFutureListener;
 import net.minecraft.network.Packet;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.listener.PacketListener;
-import net.minecraft.network.packet.c2s.play.CustomPayloadC2SPacket;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(net.minecraft.network.ClientConnection.class)

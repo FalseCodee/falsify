@@ -6,8 +6,8 @@ import falsify.falsify.module.modules.chat.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ModuleManager {
-    public static CopyOnWriteArrayList<Module> modules = new CopyOnWriteArrayList<>();
-    public static CopyOnWriteArrayList<Module> enabledModules = new CopyOnWriteArrayList<>();
+    public static final CopyOnWriteArrayList<Module> modules = new CopyOnWriteArrayList<>();
+    public static final CopyOnWriteArrayList<Module> enabledModules = new CopyOnWriteArrayList<>();
 
     public static void init(){
         modules.add(new DiamondGrabber());
@@ -15,7 +15,6 @@ public class ModuleManager {
         modules.add(new Sentry());
         modules.add(new RunFromSpawn());
         modules.add(new AutoRespawn());
-        modules.add(new Echo());
         modules.add(new AutoFish());
         modules.add(new BungeeHack());
         modules.add(new TPAnnoy());
@@ -30,6 +29,7 @@ public class ModuleManager {
         modules.add(new FastPlace());
         modules.add(new Spectate());
         modules.add(new AutoClick());
+        modules.add(new AutoMath());
 
     }
 

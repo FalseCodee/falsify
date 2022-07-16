@@ -4,7 +4,7 @@ import falsify.falsify.listeners.Event;
 import net.minecraft.network.Packet;
 
 public class EventPacketRecieve extends Event<EventPacketRecieve> {
-    public Packet<?> packet;
+    public final Packet<?> packet;
 
     public EventPacketRecieve(Packet<?> packet) {
         this.packet = packet;

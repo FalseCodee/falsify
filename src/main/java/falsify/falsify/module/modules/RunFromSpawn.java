@@ -5,15 +5,13 @@ import falsify.falsify.listeners.events.EventUpdate;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
 import falsify.falsify.utils.Timer;
-import net.minecraft.entity.MovementType;
-import net.minecraft.util.math.Vec3d;
 import org.lwjgl.glfw.GLFW;
 
 public class RunFromSpawn  extends Module {
     public RunFromSpawn() {
         super("RUN!!!!", Category.MOVEMENT, GLFW.GLFW_KEY_G);
     }
-    Timer timer = new Timer();
+    final Timer timer = new Timer();
 
     @Override
     public void onEvent(Event event) {
@@ -21,9 +19,9 @@ public class RunFromSpawn  extends Module {
             if(mc.player.isDead()){
                 mc.player.requestRespawn();
             }
-            mc.options.keyForward.setPressed(true);
+            mc.options.forwardKey.setPressed(true);
             mc.player.setSprinting(mc.player.input.movementForward > 0 && mc.player.input.movementSideways != 0 || mc.player.input.movementForward > 0 && !mc.player.isSneaking());
-            mc.options.keyJump.setPressed(mc.player.isOnGround());
+            mc.options.jumpKey.setPressed(mc.player.isOnGround());
             if(mc.player.getHungerManager().getFoodLevel() <= 6){
                 if(timer.hasTimeElapsed(10000, true)){
                     mc.player.sendChatMessage("/sethome travel");
@@ -36,6 +34,6 @@ public class RunFromSpawn  extends Module {
 
     @Override
     public void onDisable() {
-        mc.options.keyForward.setPressed(false);
+        mc.options.forwardKey.setPressed(false);
     }
 }

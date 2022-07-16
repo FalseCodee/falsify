@@ -2,10 +2,6 @@ package falsify.falsify.listeners.events;
 
 import falsify.falsify.listeners.Event;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.network.ServerPlayerEntity;
-
-import java.util.ArrayList;
-import java.util.Set;
 
 public class EventTrack extends Event<EventTrack> {
     public EventTrack(PlayerEntity player, boolean start) {
@@ -26,6 +22,6 @@ public class EventTrack extends Event<EventTrack> {
     }
 
     PlayerEntity player;
-    boolean start;
+    final boolean start;
 
 }

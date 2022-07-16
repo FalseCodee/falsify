@@ -4,21 +4,13 @@ import falsify.falsify.Falsify;
 import falsify.falsify.mixin.special.MixinMinecraft;
 import falsify.falsify.module.ModuleManager;
 import falsify.falsify.module.modules.BungeeHack;
-import falsify.falsify.utils.ReflectionUtils;
-import it.unimi.dsi.fastutil.booleans.BooleanConsumer;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ScreenTexts;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.util.Session;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
-
-import java.lang.reflect.Field;
 
 public class BungeeGUI extends Screen {
     private TextFieldWidget fakeIPField;
@@ -47,14 +39,14 @@ public class BungeeGUI extends Screen {
         this.bungeeHack = ModuleManager.getModule(BungeeHack.class);
         assert this.client != null;
         this.client.keyboard.setRepeatEvents(true);
-        this.fakeIPField = new TextFieldWidget(this.textRenderer, width/2-205+50+ offset, 66, 200, 20, new TranslatableText("addServer.enterName"));
+        this.fakeIPField = new TextFieldWidget(this.textRenderer, width/2-205+50+ offset, 66, 200, 20, Text.translatable("addServer.enterName"));
         this.fakeIPField.setTextFieldFocused(true);
         this.fakeIPField.setEditable(true);
         this.fakeIPField.setText(bungeeHack.ip);
         this.fakeIPField.setChangedListener(this::onClose);
         this.addSelectableChild(this.fakeIPField);
 
-        this.fakeUUIDField = new TextFieldWidget(this.textRenderer, width/2-205+50+ offset, 106, 200, 20, new TranslatableText("addServer.enterIp"));
+        this.fakeUUIDField = new TextFieldWidget(this.textRenderer, width/2-205+50+ offset, 106, 200, 20, Text.translatable("addServer.enterIp"));
         this.fakeUUIDField.setMaxLength(128);
         this.fakeIPField.setEditable(true);
         this.fakeUUIDField.setText(bungeeHack.uuid);
@@ -62,7 +54,7 @@ public class BungeeGUI extends Screen {
         this.addSelectableChild(this.fakeUUIDField);
 
 
-        this.fakeUsername = new TextFieldWidget(this.textRenderer, width/2-205+50+ offset, 146, 200, 20, new TranslatableText("addServer.enterIp"));
+        this.fakeUsername = new TextFieldWidget(this.textRenderer, width/2-205+50+ offset, 146, 200, 20, Text.translatable("addServer.enterIp"));
         this.fakeUsername.setMaxLength(128);
         this.fakeIPField.setEditable(true);
         this.fakeUsername.setText(MinecraftClient.getInstance().getSession().getUsername());

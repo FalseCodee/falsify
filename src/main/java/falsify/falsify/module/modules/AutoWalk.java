@@ -13,12 +13,12 @@ public class AutoWalk extends Module {
     @Override
     public void onEvent(Event<?> event) {
        if(event instanceof EventUpdate) {
-           mc.options.keyForward.setPressed(true);
+           mc.options.forwardKey.setPressed(true);
        }
     }
 
     @Override
     public void onDisable() {
-       mc.options.keyForward.setPressed(false);
+       mc.options.forwardKey.setPressed(false);
     }
 }

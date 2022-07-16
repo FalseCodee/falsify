@@ -1,9 +1,8 @@
 package falsify.falsify.mixin;
 
 import falsify.falsify.gui.BungeeGUI;
+import falsify.falsify.gui.ServerPingGUI;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ScreenTexts;
-import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
@@ -23,6 +22,10 @@ public class MixinMultiplayerGUI extends Screen {
         this.addDrawableChild(new ButtonWidget(this.width / 2 + 4 + 76, 10, 75, 20, Text.of("bungee"), (buttonWidget) -> {
             assert this.client != null;
             this.client.setScreen(new BungeeGUI(client.currentScreen));
+        }));
+        this.addDrawableChild(new ButtonWidget(this.width / 2 - 4 - 76 -75, 10, 75, 20, Text.of("ping"), (buttonWidget) -> {
+            assert this.client != null;
+            this.client.setScreen(new ServerPingGUI());
         }));
     }
 }

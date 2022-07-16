@@ -8,14 +8,10 @@ import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
 import falsify.falsify.utils.Alignment;
 import falsify.falsify.utils.RenderUtils;
-import falsify.falsify.utils.Timer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.MessageType;
-import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 
-import java.awt.*;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;

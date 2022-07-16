@@ -1,7 +1,6 @@
 package falsify.falsify.module.settings;
 
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 
 public class RangeSetting extends Setting<Double> {
 

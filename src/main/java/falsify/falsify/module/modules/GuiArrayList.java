@@ -7,7 +7,6 @@ import falsify.falsify.module.Module;
 import falsify.falsify.module.ModuleManager;
 import falsify.falsify.utils.Alignment;
 import falsify.falsify.utils.RenderUtils;
-import net.minecraft.util.math.Direction;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.Comparator;

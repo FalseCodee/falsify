@@ -11,9 +11,4 @@ public class ClientMenuScreen extends Screen {
         super(Text.of("Menu Screen"));
         this.parent = parent;
     }
-
-    @Override
-    public void onClose() {
-        super.onClose();
-    }
 }

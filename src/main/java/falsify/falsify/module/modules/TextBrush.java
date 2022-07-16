@@ -1,17 +1,12 @@
 package falsify.falsify.module.modules;
 
 import falsify.falsify.gui.TextBrushGUI;
-import falsify.falsify.gui.TpAnnoyGUI;
 import falsify.falsify.listeners.Event;
 import falsify.falsify.listeners.events.EventUpdate;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
 import falsify.falsify.utils.FalseRunnable;
 import falsify.falsify.utils.MathUtils;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Position;
-import net.minecraft.util.math.PositionImpl;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
@@ -21,7 +16,7 @@ public class TextBrush extends Module {
     public static String theString = "text";
     public static long theDelay = 200;
     public static boolean run = false;
-    ArrayList<FalseRunnable> runnables = new ArrayList<>();
+    final ArrayList<FalseRunnable> runnables = new ArrayList<>();
     public TextBrush() {
         super("Text Brush", Category.MOVEMENT, GLFW.GLFW_KEY_EQUAL);
     }
@@ -50,13 +45,13 @@ public class TextBrush extends Module {
                                         mc.player.setYaw(MathUtils.lerp(mc.player.getYaw(), MathUtils.getRotationsNeeded(finalX + finalJ, y, z + finalI - activities.getOffset())[0], 1f));
                                         mc.player.setPitch(MathUtils.lerp(mc.player.getPitch(), MathUtils.getRotationsNeeded(finalX + finalJ, y, z + finalI - activities.getOffset())[1], 1f));
                                         while (Math.sqrt(mc.player.squaredDistanceTo(finalX + finalJ, y, z + finalI - activities.getOffset())) > 2) {
-                                            mc.options.keyAttack.setPressed(false);
-                                            mc.options.keyForward.setPressed(true);
+                                            mc.options.attackKey.setPressed(false);
+                                            mc.options.forwardKey.setPressed(true);
                                             mc.player.setYaw(MathUtils.lerp(mc.player.getYaw(), MathUtils.getRotationsNeeded(finalX + finalJ, y, z + finalI - activities.getOffset())[0], 1f));
                                             mc.player.setPitch(MathUtils.lerp(mc.player.getPitch(), MathUtils.getRotationsNeeded(finalX + finalJ, y, z + finalI - activities.getOffset())[1], 1f));
                                         }
-                                        mc.options.keyAttack.setPressed(true);
-                                        mc.options.keyForward.setPressed(false);
+                                        mc.options.attackKey.setPressed(true);
+                                        mc.options.forwardKey.setPressed(false);
                                         new FalseRunnable() {
                                             @Override
                                             public void run() {
@@ -67,7 +62,7 @@ public class TextBrush extends Module {
                                         new FalseRunnable() {
                                             @Override
                                             public void run() {
-                                                mc.options.keyAttack.setPressed(false);
+                                                mc.options.attackKey.setPressed(false);
                                                 TextBrush.this.runNext();
                                             }
                                         }.runTaskLater(theDelay);
@@ -311,8 +306,8 @@ public class TextBrush extends Module {
 
 
 
-        private boolean[][] active;
-        private byte offset;
+        private final boolean[][] active;
+        private final byte offset;
         Characters(byte offset, boolean[][] active) {
             this.offset = offset;
             this.active = active;

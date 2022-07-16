@@ -1,7 +1,5 @@
 package falsify.falsify.listeners;
 
-import falsify.falsify.Falsify;
-
 public class Event<T> {
     public boolean cancelled;
     public EventType eventType;

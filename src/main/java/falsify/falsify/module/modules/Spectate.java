@@ -9,8 +9,6 @@ import falsify.falsify.module.settings.RangeSetting;
 import falsify.falsify.utils.MathUtils;
 import falsify.falsify.utils.Timer;
 
-import java.text.DecimalFormat;
-
 public class Spectate extends Module {
     private final RangeSetting horizontalCutoff = new RangeSetting("Horizontal", 7, 0, 30, 0.1);
     private final RangeSetting verticalCutoff = new RangeSetting("Vertical", 2, 0, 30, 0.1);
@@ -34,19 +32,19 @@ public class Spectate extends Module {
                 }
                 return;
             }
-            mc.options.keyForward.setPressed(MathUtils.horizontalDistance(Aimbot.target) > horizontalCutoff.getValue());
+            mc.options.forwardKey.setPressed(MathUtils.horizontalDistance(Aimbot.target) > horizontalCutoff.getValue());
 
             if(Math.abs(MathUtils.verticalDistance(Aimbot.target)) > verticalCutoff.getValue()) {
                 if(MathUtils.verticalDistance(Aimbot.target) > 0) {
-                    mc.options.keySneak.setPressed(true);
-                    mc.options.keyJump.setPressed(false);
+                    mc.options.sneakKey.setPressed(true);
+                    mc.options.jumpKey.setPressed(false);
                 } else {
-                    mc.options.keyJump.setPressed(true);
-                    mc.options.keySneak.setPressed(false);
+                    mc.options.jumpKey.setPressed(true);
+                    mc.options.sneakKey.setPressed(false);
                 }
             } else {
-                mc.options.keySneak.setPressed(false);
-                mc.options.keyJump.setPressed(false);
+                mc.options.sneakKey.setPressed(false);
+                mc.options.jumpKey.setPressed(false);
             }
         }
     }

@@ -2,7 +2,6 @@ package falsify.falsify.gui.clickgui.settings;
 
 import falsify.falsify.Falsify;
 import falsify.falsify.gui.clickgui.Draggable;
-import falsify.falsify.module.settings.BooleanSetting;
 import falsify.falsify.module.settings.RangeSetting;
 import net.minecraft.client.util.math.MatrixStack;
 

@@ -1,7 +1,6 @@
 package falsify.falsify.gui.clickgui;
 
 import falsify.falsify.utils.RenderHelper;
-import net.minecraft.client.gui.DrawableHelper;
 
 public abstract class Clickable extends RenderHelper implements Renderable {
     protected double x;

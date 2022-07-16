@@ -1,18 +1,11 @@
 package falsify.falsify.gui;
 
-import falsify.falsify.Falsify;
-import falsify.falsify.mixin.special.MixinMinecraft;
-import falsify.falsify.module.ModuleManager;
-import falsify.falsify.module.modules.BungeeHack;
 import falsify.falsify.module.modules.chat.TPAnnoy;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.util.Session;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 
 public class TpAnnoyGUI extends Screen {
 
@@ -35,7 +28,7 @@ public class TpAnnoyGUI extends Screen {
         assert this.client != null;
         this.client.keyboard.setRepeatEvents(true);
 
-        this.TpAnnoyField = new TextFieldWidget(this.textRenderer, width/2-100, this.height / 4 + 120 - 18, 200, 20, new TranslatableText("addServer.enterIp"));
+        this.TpAnnoyField = new TextFieldWidget(this.textRenderer, width/2-100, this.height / 4 + 120 - 18, 200, 20, Text.translatable("addServer.enterIp"));
         this.TpAnnoyField.setTextFieldFocused(true);
         this.TpAnnoyField.setEditable(true);
         this.TpAnnoyField.setMaxLength(128);

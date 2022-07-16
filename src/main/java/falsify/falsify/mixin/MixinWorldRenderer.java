@@ -2,7 +2,6 @@ package falsify.falsify.mixin;
 
 import falsify.falsify.Falsify;
 import falsify.falsify.listeners.events.EventRender3d;
-import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import org.spongepowered.asm.mixin.Mixin;

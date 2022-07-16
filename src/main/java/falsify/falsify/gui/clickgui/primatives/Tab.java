@@ -7,7 +7,6 @@ import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
 import falsify.falsify.module.ModuleManager;
 import net.minecraft.client.util.math.MatrixStack;
-import org.lwjgl.glfw.GLFW;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -81,7 +80,7 @@ public class Tab extends Clickable implements Draggable {
             for(ModuleItem moduleItem : modules) {
                 moduleItem.setX(x);
                 moduleItem.setY(y + 20*i);
-                moduleItem.render(matrices, mouseX, mouseY, delta);
+                moduleItem.render(matrices, mouseX, mouseY, delta, (i == modules.size()));
                 i++;
             }
         } else {

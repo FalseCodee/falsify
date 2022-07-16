@@ -2,11 +2,9 @@ package falsify.falsify.gui.clickgui.settings;
 
 import falsify.falsify.Falsify;
 import falsify.falsify.gui.clickgui.Typable;
-import falsify.falsify.module.settings.BooleanSetting;
 import falsify.falsify.module.settings.KeybindSetting;
 import falsify.falsify.utils.ChatModuleUtils;
 import net.minecraft.client.util.math.MatrixStack;
-import org.lwjgl.glfw.GLFW;
 
 public class KeybindSettingItem extends SettingItem<KeybindSetting> implements Typable {
 

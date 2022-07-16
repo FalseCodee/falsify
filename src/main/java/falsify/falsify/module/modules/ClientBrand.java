@@ -4,15 +4,13 @@ import falsify.falsify.listeners.Event;
 import falsify.falsify.listeners.events.EventPacketSend;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
-import falsify.falsify.module.settings.BooleanSetting;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 import net.minecraft.text.Text;
-import net.minecraft.util.math.Vec3d;
 import org.lwjgl.glfw.GLFW;
 
 public class ClientBrand extends Module {
 
-    public String brand = "Feather Fabric";
+    public String brand = "chicken wing client";
 
     public ClientBrand() {
         super("Brand", Category.MISC, GLFW.GLFW_KEY_BACKSLASH, true);

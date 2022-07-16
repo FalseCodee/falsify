@@ -1,7 +1,6 @@
 package falsify.falsify.gui.clickgui.settings;
 
 import falsify.falsify.Falsify;
-import falsify.falsify.gui.clickgui.Clickable;
 import falsify.falsify.gui.clickgui.Draggable;
 import falsify.falsify.gui.clickgui.Typable;
 import falsify.falsify.module.Module;
@@ -18,7 +17,7 @@ import java.util.List;
 public class SettingsGUI extends Screen {
 
     private final Module module;
-    private Screen parent;
+    private final Screen parent;
     private final List<SettingItem<?>> settingItems = new ArrayList<>();
 
     public SettingsGUI(Module module, Screen parent) {
@@ -48,7 +47,7 @@ public class SettingsGUI extends Screen {
     }
 
     @Override
-    public void onClose() {
+    public void close() {
         Falsify.mc.setScreen(parent);
     }
 

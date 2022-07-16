@@ -20,4 +20,13 @@ public class ChatModuleUtils {
         if(text.contains("Unknown keyCode: ")) return "NONE";
         return text;
     }
+
+    public static String joinString(String[] arr, int start) {
+        StringBuilder sb = new StringBuilder();
+        for(int i = start; i < arr.length; i++) {
+            sb.append(arr[i]);
+            if(i != arr.length-1) sb.append(" ");
+        }
+        return sb.toString();
+    }
 }

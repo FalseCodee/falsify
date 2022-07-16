@@ -11,7 +11,7 @@ import net.minecraft.client.util.Session;
 import org.lwjgl.glfw.GLFW;
 
 public class Falsify {
-    public static MinecraftClient mc = MinecraftClient.getInstance();
+    public static final MinecraftClient mc = MinecraftClient.getInstance();
     public static Session session;
     public static void init(Session session) {
         ModuleManager.init();
