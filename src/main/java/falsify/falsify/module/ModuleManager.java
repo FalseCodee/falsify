@@ -30,6 +30,8 @@ public class ModuleManager {
         modules.add(new Spectate());
         modules.add(new AutoClick());
         modules.add(new AutoMath());
+        modules.add(new Trajectories());
+        modules.add(new Flight());
 
     }
 

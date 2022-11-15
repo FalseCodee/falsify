@@ -30,14 +30,13 @@ public class Falsify {
                 for(Module module : ModuleManager.modules){
                     if(((EventKey) e).getKey() == module.getKeyCode() && ((EventKey) e).getAction() == GLFW.GLFW_PRESS){
                         module.toggle();
-                        module.onEvent(e);
                     }
                 }
-            } else {
+            }
                 for(Module module : ModuleManager.enabledModules){
                     module.onEvent(e);
                 }
-            }
+
         }
     }
 }

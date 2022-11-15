@@ -38,6 +38,9 @@ public class MathUtils {
     public static float lerp(float a, float b, double t){
         return (float) (a+(b-a)*t);
     }
+    public static double lerp(double a, double b, double t){
+        return (a+(b-a)*t);
+    }
 
     public static Vec3d interpolateVec3d(Vec3d current, Vec3d last, float partialTicks) {
         return current.subtract(last).multiply(partialTicks).add(last);
@@ -90,5 +93,12 @@ public class MathUtils {
 
     public static double verticalDistance(Entity entity) {
         return Falsify.mc.player.getY() - entity.getY();
+    }
+
+    public static int getVerticalMov() {
+        if(Falsify.mc.player.input.jumping && Falsify.mc.player.input.sneaking) return 0;
+        else if(Falsify.mc.player.input.jumping) return 1;
+        else if(Falsify.mc.player.input.sneaking) return -1;
+        return 0;
     }
 }

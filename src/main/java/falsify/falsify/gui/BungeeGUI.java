@@ -45,7 +45,6 @@ public class BungeeGUI extends Screen {
         this.fakeIPField.setText(bungeeHack.ip);
         this.fakeIPField.setChangedListener(this::onClose);
         this.addSelectableChild(this.fakeIPField);
-
         this.fakeUUIDField = new TextFieldWidget(this.textRenderer, width/2-205+50+ offset, 106, 200, 20, Text.translatable("addServer.enterIp"));
         this.fakeUUIDField.setMaxLength(128);
         this.fakeIPField.setEditable(true);
