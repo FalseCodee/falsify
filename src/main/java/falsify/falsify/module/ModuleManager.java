@@ -32,6 +32,19 @@ public class ModuleManager {
         modules.add(new AutoMath());
         modules.add(new Trajectories());
         modules.add(new Flight());
+        modules.add(new SafeFarm());
+
+        modules.add(new AutoClick());
+        modules.add(new FPSModule());
+        modules.add(new TimeModule());
+        modules.add(new ServerAddressModule());
+        modules.add(new ServerPingModule());
+        modules.add(new PlayersOnlineModule());
+        modules.add(new BiomeModule());
+        modules.add(new LightLevelModule());
+        modules.add(new CPSModule());
+        modules.add(new ArmorModule());
+        modules.add(new TitleModule());
 
     }
 

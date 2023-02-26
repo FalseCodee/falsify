@@ -1,6 +1,7 @@
 package falsify.falsify.utils;
 
 import falsify.falsify.Falsify;
+import net.minecraft.text.Text;
 
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -24,7 +25,7 @@ public class MessageExecutor {
         new FalseRunnable() {
             @Override
             public void run() {
-                Falsify.mc.player.sendChatMessage(message);
+                Falsify.mc.player.sendMessage(Text.of(message));
             }
         }.runTaskLater(delay);
     }
@@ -32,7 +33,7 @@ public class MessageExecutor {
         return new FalseRunnable() {
             @Override
             public void run() {
-                Falsify.mc.player.sendChatMessage(message);
+                Falsify.mc.player.sendMessage(Text.of(message));
             }
         }.runTaskTimer(delay, period);
     }

@@ -8,6 +8,7 @@ import falsify.falsify.module.settings.BooleanSetting;
 import falsify.falsify.module.settings.RangeSetting;
 import falsify.falsify.utils.MathUtils;
 import falsify.falsify.utils.Timer;
+import net.minecraft.text.Text;
 
 public class Spectate extends Module {
     private final RangeSetting horizontalCutoff = new RangeSetting("Horizontal", 7, 0, 30, 0.1);
@@ -30,15 +31,15 @@ public class Spectate extends Module {
         if(event instanceof EventUpdate) {
             if (Aimbot.target == null) {
                 if (returnToSpawn.getValue()) {
-                    if (timer.hasTimeElapsed(5000, true)) mc.player.sendChatMessage("/home prime");
+                    if (timer.hasTimeElapsed(5000, true)) mc.player.sendMessage(Text.of("/home prime"));
                 }
                 return;
             }
-            mc.options.forwardKey.setPressed(MathUtils.horizontalDistance(Aimbot.target) > horizontalCutoff.getValue());
+            mc.options.forwardKey.setPressed(MathUtils.horizontalDistance(Aimbot.target.getEntity()) > horizontalCutoff.getValue());
 
             if (doVert.getValue()) {
-                if (Math.abs(MathUtils.verticalDistance(Aimbot.target)) > verticalCutoff.getValue()) {
-                    if (MathUtils.verticalDistance(Aimbot.target) > 0) {
+                if (Math.abs(MathUtils.verticalDistance(Aimbot.target.getEntity())) > verticalCutoff.getValue()) {
+                    if (MathUtils.verticalDistance(Aimbot.target.getEntity()) > 0) {
                         mc.options.sneakKey.setPressed(true);
                         mc.options.jumpKey.setPressed(false);
                     } else {

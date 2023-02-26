@@ -8,6 +8,7 @@ import falsify.falsify.utils.MathUtils;
 import falsify.falsify.utils.Timer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 
 public class DiamondGrabber extends Module {
@@ -33,13 +34,13 @@ public class DiamondGrabber extends Module {
             assert mc.player != null;
             if(hasDiamond()){
                 if(timer.hasTimeElapsed(1000*11, true)){
-                    mc.player.sendChatMessage("/home base");
+                    mc.player.sendMessage(Text.of("/home base"));
                     hometimer.reset();
                     fallback.reset();
                 }
                 if(hometimer.hasTimeElapsed(1000*10, false) && timer.hasTimeElapsed(1000*2, false)){
                     hometimer.reset();
-                    mc.player.sendChatMessage("/suicide");
+                    mc.player.sendMessage(Text.of("/suicide"));
                     fallback.reset();
                 }
             } else{
@@ -57,7 +58,7 @@ public class DiamondGrabber extends Module {
                     }
                     else {
                         if(fallback.hasTimeElapsed(1000*180, true)){
-                            mc.player.sendChatMessage("/suicide");
+                            mc.player.sendMessage(Text.of("/suicide"));
                         }
                         mc.options.sneakKey.setPressed(true);
 

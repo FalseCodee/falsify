@@ -20,8 +20,8 @@ public class ClientBrand extends Module {
     public void onEvent(Event<?> event) {
         if(event instanceof EventPacketSend eventPacketSend) {
             if(eventPacketSend.packet instanceof ChatMessageC2SPacket packet) {
-                if(packet.getChatMessage().toLowerCase().startsWith(".brand ")) {
-                    brand = packet.getChatMessage().substring(7);
+                if(packet.chatMessage().toLowerCase().startsWith(".brand ")) {
+                    brand = packet.chatMessage().substring(7);
                     mc.player.sendMessage(Text.of("Set client brand to: " + brand), false);
                     event.setCancelled(true);
                 }

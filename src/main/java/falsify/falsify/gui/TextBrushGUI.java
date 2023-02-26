@@ -28,7 +28,6 @@ public class TextBrushGUI extends Screen {
     @Override
     protected void init() {
         assert this.client != null;
-        this.client.keyboard.setRepeatEvents(true);
 
         this.argField = new TextFieldWidget(this.textRenderer, width/2-100, this.height / 4 + 120 - 18, 200, 20, Text.translatable("addServer.enterIp"));
         this.argField.setTextFieldFocused(true);
@@ -45,9 +44,7 @@ public class TextBrushGUI extends Screen {
         this.delayField.setChangedListener(this::onChangeDelay);
         this.addSelectableChild(this.delayField);
 
-        this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, this.height / 4 + 140 + 22, 200, 20, Text.of("Go Back"), (buttonWidget) -> {
-            this.onClose();
-        }));
+        this.addDrawableChild(ButtonWidget.builder(Text.of("Go Back"), button -> this.onClose()).dimensions(this.width / 2 - 100, this.height / 4 + 140 + 22, 200, 20).build());
     }
 
     public void onChangeArg(String text) {

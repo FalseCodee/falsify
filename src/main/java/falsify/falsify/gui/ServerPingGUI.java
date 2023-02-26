@@ -27,7 +27,6 @@ public class ServerPingGUI extends Screen {
     @Override
     protected void init() {
         assert this.client != null;
-        this.client.keyboard.setRepeatEvents(true);
 
         this.serverAddressField = new TextFieldWidget(this.textRenderer, width/2-100, this.height / 4 + 120 - 18, 200, 20, Text.translatable("addServer.enterIp"));
         this.serverAddressField.setTextFieldFocused(true);
@@ -36,9 +35,7 @@ public class ServerPingGUI extends Screen {
         this.serverAddressField.setText("mc.hypixel.net");
         this.addSelectableChild(this.serverAddressField);
 
-        this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, this.height / 4 + 120 + 18, 200, 20, Text.of("Ping Server"), (buttonWidget) -> {
-            this.pingServer();
-        }));
+        this.addDrawableChild(ButtonWidget.builder(Text.of("Ping Server"), button -> this.pingServer()).dimensions(this.width / 2 - 100, this.height / 4 + 120 + 18, 200, 20).build());
     }
 
     public void pingServer() {

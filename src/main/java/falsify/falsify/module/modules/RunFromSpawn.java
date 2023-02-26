@@ -5,6 +5,7 @@ import falsify.falsify.listeners.events.EventUpdate;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
 import falsify.falsify.utils.Timer;
+import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 
 public class RunFromSpawn  extends Module {
@@ -24,8 +25,8 @@ public class RunFromSpawn  extends Module {
             mc.options.jumpKey.setPressed(mc.player.isOnGround());
             if(mc.player.getHungerManager().getFoodLevel() <= 6){
                 if(timer.hasTimeElapsed(10000, true)){
-                    mc.player.sendChatMessage("/sethome travel");
-                    mc.player.sendChatMessage("/suicide");
+                    mc.player.sendMessage(Text.of("/sethome travel"));
+                    mc.player.sendMessage(Text.of("/suicide"));
                 }
 
             }

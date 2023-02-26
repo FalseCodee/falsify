@@ -5,6 +5,7 @@ import falsify.falsify.listeners.events.EventRender;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
 import falsify.falsify.module.ModuleManager;
+import falsify.falsify.module.settings.BooleanSetting;
 import falsify.falsify.utils.Alignment;
 import falsify.falsify.utils.RenderUtils;
 import org.lwjgl.glfw.GLFW;
@@ -12,6 +13,8 @@ import org.lwjgl.glfw.GLFW;
 import java.util.Comparator;
 
 public class GuiArrayList extends Module {
+
+    BooleanSetting wasd = new BooleanSetting("WASD", true);
     public GuiArrayList() {
         super("Arraylist", Category.MISC, GLFW.GLFW_KEY_F10, true);
     }

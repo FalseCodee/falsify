@@ -8,6 +8,7 @@ import falsify.falsify.module.settings.RangeSetting;
 import falsify.falsify.utils.ChatModuleUtils;
 import falsify.falsify.utils.FalseRunnable;
 import falsify.falsify.utils.MessageExecutor;
+import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 
 import java.text.DecimalFormat;
@@ -43,7 +44,7 @@ public class AutoMath extends ChatModule {
             new FalseRunnable() {
                 @Override
                 public void run() {
-                    mc.player.sendChatMessage(val + "");
+                    mc.player.sendMessage(Text.of(val + ""));
                 }
             }.runTaskLater((long) ((val > 200) ? (Math.random()*6000L) : (Math.random()*2000L))+500);
         } else if(chatBot.getValue()) {
@@ -57,10 +58,10 @@ public class AutoMath extends ChatModule {
                     @Override
                     public void run() {
                         try {
-                            if (showEquation.getValue()) mc.player.sendChatMessage(finalMessage + " = " + format.format(eval(finalMessage, vars, funcs)));
-                            else mc.player.sendChatMessage("" + format.format(eval(finalMessage, vars, funcs)));
+                            if (showEquation.getValue()) mc.player.sendMessage(Text.of(finalMessage + " = " + format.format(eval(finalMessage, vars, funcs))));
+                            else mc.player.sendMessage(Text.of("" + format.format(eval(finalMessage, vars, funcs))));
                         } catch (RuntimeException e) {
-                            mc.player.sendChatMessage(e.getMessage());
+                            mc.player.sendMessage(Text.of(e.getMessage()));
                         }
                     }
                 }.runTaskLater(500);
@@ -80,7 +81,7 @@ public class AutoMath extends ChatModule {
                     vars.put(var,val);
                     new MessageExecutor("loaded '" + var + "' as " + format.format(val), 500).runTaskLater();
                 } catch (Exception e) {
-                    mc.player.sendChatMessage(e.getMessage());
+                    mc.player.sendMessage(Text.of(e.getMessage()));
                 }
             }
             else if (message.toLowerCase().contains(mc.player.getGameProfile().getName().toLowerCase() + " pushfunc ")) {
@@ -99,7 +100,7 @@ public class AutoMath extends ChatModule {
                     funcs.put(var,val);
                     new MessageExecutor("loaded function '" + var + "(x)' as " + val, 500).runTaskLater();
                 } catch (Exception e) {
-                    mc.player.sendChatMessage(e.getMessage());
+                    mc.player.sendMessage(Text.of(e.getMessage()));
                 }
             }
             else if (message.toLowerCase().contains(mc.player.getGameProfile().getName().toLowerCase() + " graph ")) {
@@ -121,7 +122,7 @@ public class AutoMath extends ChatModule {
                         new MessageExecutor(graph[i], 500 + delay.getValue().longValue() * (graph.length-i)).runTaskLater();
                     }
                 } catch (Exception e) {
-                    mc.player.sendChatMessage(e.getMessage());
+                    mc.player.sendMessage(Text.of(e.getMessage()));
                 }
             }
         }
@@ -134,7 +135,7 @@ public class AutoMath extends ChatModule {
             from = to;
             to = x;
         }
-        int stepCountX = (int) (stepCount);
+        int stepCountX = stepCount;
         String[] arr = new String[stepCount];
         double step = (toY - fromY) / (stepCount-1.0);
         double stepX = (to - from) / (stepCountX-1.0);

@@ -19,13 +19,15 @@ public class MixinMultiplayerGUI extends Screen {
 
     @Inject(method = "init", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/multiplayer/MultiplayerScreen;updateButtonActivationStates()V", ordinal = 0, shift = At.Shift.BEFORE))
     public void onInit(CallbackInfo ci){
-        this.addDrawableChild(new ButtonWidget(this.width / 2 + 4 + 76, 10, 75, 20, Text.of("bungee"), (buttonWidget) -> {
+
+        this.addDrawableChild(ButtonWidget.builder(Text.of("bungee"), button -> {
             assert this.client != null;
             this.client.setScreen(new BungeeGUI(client.currentScreen));
-        }));
-        this.addDrawableChild(new ButtonWidget(this.width / 2 - 4 - 76 -75, 10, 75, 20, Text.of("ping"), (buttonWidget) -> {
+        }).dimensions(this.width / 2 + 4 + 76, 10, 75, 20).build());
+
+        this.addDrawableChild(ButtonWidget.builder(Text.of("ping"), button -> {
             assert this.client != null;
             this.client.setScreen(new ServerPingGUI());
-        }));
+        }).dimensions(this.width / 2 - 4 - 76 -75, 10, 75, 20).build());
     }
 }

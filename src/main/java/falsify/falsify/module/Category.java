@@ -4,7 +4,8 @@ public enum Category {
     MOVEMENT("Movement"),
     COMBAT("Combat"),
     MISC("Misc"),
-    PLAYER("Player");
+    PLAYER("Player"),
+    RENDER("Render");
 
     private final String name;
     Category(String name){

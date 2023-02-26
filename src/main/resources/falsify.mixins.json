@@ -19,6 +19,7 @@
     "special.MixinPlayerEntity"
   ],
   "client": [
+    "MixinMouse"
   ],
   "injectors": {
     "defaultRequire": 1

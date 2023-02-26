@@ -7,6 +7,7 @@ import falsify.falsify.module.Category;
 import falsify.falsify.module.ChatModule;
 import falsify.falsify.utils.FalseRunnable;
 import falsify.falsify.utils.Timer;
+import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 
 public class TPAnnoy extends ChatModule {
@@ -32,11 +33,11 @@ public class TPAnnoy extends ChatModule {
     public void onEvent(Event event) {
         if(event instanceof EventUpdate) {
             if(run && timer.hasTimeElapsed(2500, true)) {
-                mc.player.sendChatMessage("/tpa " + playerToAnnoy);
+                mc.player.sendMessage(Text.of("/tpa " + playerToAnnoy));
                 new FalseRunnable() {
                     @Override
                     public void run() {
-                        mc.player.sendChatMessage("/tpahere " + playerToAnnoy);
+                        mc.player.sendMessage(Text.of("/tpahere " + playerToAnnoy));
                     }
                 }.runTaskLater(200);
             }

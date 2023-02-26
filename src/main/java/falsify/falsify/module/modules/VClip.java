@@ -23,7 +23,7 @@ public class VClip extends Module {
     public void onEvent(Event<?> event) {
         if(event instanceof EventPacketSend eventPacketSend) {
             if(eventPacketSend.packet instanceof ChatMessageC2SPacket packet) {
-                String[] args = packet.getChatMessage().split(" ");
+                String[] args = packet.chatMessage().split(" ");
                 if(args[0].equalsIgnoreCase(".clip") && args.length == 4) {
                     try{
                         double x = Double.parseDouble(args[1]);

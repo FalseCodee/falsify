@@ -29,4 +29,34 @@ public class ChatModuleUtils {
         }
         return sb.toString();
     }
+
+    public static String concatArray(String[] array, String concat) {
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < array.length; i++) {
+            sb.append(array[i]);
+            if(i < array.length - 1) {
+                sb.append(concat);
+            }
+        }
+
+        return sb.toString();
+    }
+
+    public static String capitalize(String string) {
+        if(string.contains(" ")) {
+            String[] args = string.split(" ");
+
+            for (String str : args) {
+                capitalizeFirst(str);
+            }
+
+            return concatArray(args, " ");
+        } else {
+            return capitalizeFirst(string);
+        }
+    }
+
+    public static String capitalizeFirst(String string) {
+        return string.substring(0,1).toUpperCase() + string.substring(1);
+    }
 }

@@ -6,10 +6,10 @@ import falsify.falsify.listeners.events.EventFrame;
 import falsify.falsify.listeners.events.EventUpdate;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
-import falsify.falsify.module.ModuleManager;
 import falsify.falsify.module.settings.BooleanSetting;
 import falsify.falsify.module.settings.ModeSetting;
 import falsify.falsify.module.settings.RangeSetting;
+import falsify.falsify.utils.AimbotTarget;
 import falsify.falsify.utils.ChatModuleUtils;
 import falsify.falsify.utils.MathUtils;
 import falsify.falsify.utils.Timer;
@@ -20,6 +20,7 @@ import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.Vec3d;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.Comparator;
@@ -37,13 +38,15 @@ public class Aimbot extends Module {
     private final BooleanSetting antiBot = new BooleanSetting("Anti Bot", true);
     private final RangeSetting distMulti = new RangeSetting("Dist Multi", 1.8, 0, 5, 0.01);
     private final RangeSetting cursorMulti = new RangeSetting("Cursor Multi", 1, 0, 5, 0.01);
+    private final RangeSetting manPitch = new RangeSetting("Man Pitch", 0, -90, 90, 1);
+    private final RangeSetting manYaw = new RangeSetting("Man Yaw", 0, -180, 180, 1);
 
 
     private float timing = 0.0f;
 
     private final Timer timer = new Timer();
-    public static Entity target;
-    private Entity oldTarget;
+    public static AimbotTarget target;
+    private AimbotTarget oldTarget;
 
     public Aimbot() {
         super("Aimbot", Category.COMBAT, GLFW.GLFW_KEY_DOWN);
@@ -57,6 +60,8 @@ public class Aimbot extends Module {
         settings.add(antiBot);
         settings.add(distMulti);
         settings.add(cursorMulti);
+        settings.add(manYaw);
+        settings.add(manPitch);
     }
 
     @Override
@@ -91,29 +96,46 @@ public class Aimbot extends Module {
                     if (((LivingEntity) entityList.get(0)).getHealth() <= 0) {
                         entityList.remove(0);
                     } else {
-                        target = entityList.get(0);
+                        target = new AimbotTarget((LivingEntity) entityList.get(0));
                     }
                 } while (target == null);
+            } else {
+                target = new AimbotTarget(new Vec3d(manYaw.getValue(), manPitch.getValue(), 0));
             }
         }
         else if(event instanceof EventFrame) {
-            if (target != null && this.timer.hasTimeElapsed(tickSpeed.getValue().longValue(), true)) {
-                if(target.isRemoved()) {
-                    target = null;
-                    return;
+            if (this.timer.hasTimeElapsed(tickSpeed.getValue().longValue(), true)) {
+                if (!this.type.getMode().equals("Manual") && target != null && target.getEntity() != null) {
+                    if (target.getEntity().isRemoved()) {
+                        target = null;
+                        return;
+                    }
+                    if (this.oldTarget == null || this.oldTarget.getEntity() != target.getEntity())
+                        this.timing = 0.0F;
+                    this.timing += 0.015F;
+                    if (this.timing > 1.1D - this.turnSpeed.getValue())
+                        this.timing = (float) (1.100000023841858D - this.turnSpeed.getValue());
+                    double t = (this.timing / (1.1D - this.turnSpeed.getValue()));
+                    if (t > this.speed.getValue())
+                        t = this.speed.getValue();
+                    t = t * t * t * (t * (6.0F * t - 15.0F) + 10.0F);
+                    mc.player.setYaw(MathUtils.lerp(mc.player.getYaw(), MathUtils.getRotationsNeeded(target.getEntity())[0], t * ((frameSync.getValue()) ? mc.getLastFrameDuration() : 1)));
+                    if (mc.crosshairTarget.getType() != HitResult.Type.ENTITY || ((EntityHitResult) mc.crosshairTarget).getEntity() != target.getEntity())
+                        mc.player.setPitch(MathUtils.lerp(mc.player.getPitch(), MathUtils.getRotationsNeeded(target.getEntity())[1], (t / 2.0F * ((frameSync.getValue()) ? mc.getLastFrameDuration() : 1))));
+                } else if(this.type.getMode().equals("Manual")) {
+                    if (this.oldTarget == null || this.oldTarget.getLocation().equals(target.getLocation()))
+                        this.timing = 0.0F;
+                    this.timing += 0.015F;
+                    if (this.timing > 1.1D - this.turnSpeed.getValue())
+                        this.timing = (float) (1.100000023841858D - this.turnSpeed.getValue());
+                    double t = (this.timing / (1.1D - this.turnSpeed.getValue()));
+                    if (t > this.speed.getValue())
+                        t = this.speed.getValue();
+                    t = t * t * t * (t * (6.0F * t - 15.0F) + 10.0F);
+
+                    mc.player.setYaw((float) MathUtils.lerp(mc.player.getYaw(), manYaw.getValue(), t * ((frameSync.getValue()) ? mc.getLastFrameDuration() : 1)));
+                    mc.player.setPitch((float) MathUtils.lerp(mc.player.getPitch(), manPitch.getValue(), (t / 2.0F * ((frameSync.getValue()) ? mc.getLastFrameDuration() : 1))));
                 }
-                if (this.oldTarget != target)
-                    this.timing = 0.0F;
-                this.timing += 0.015F;
-                if (this.timing > 1.1D - this.turnSpeed.getValue())
-                    this.timing = (float)(1.100000023841858D - this.turnSpeed.getValue());
-                double t = (this.timing / (1.1D - this.turnSpeed.getValue()));
-                if (t > this.speed.getValue())
-                    t = this.speed.getValue();
-                t = t * t * t * (t * (6.0F * t - 15.0F) + 10.0F);
-                mc.player.setYaw(MathUtils.lerp(mc.player.getYaw(), MathUtils.getRotationsNeeded(target)[0], t * ((frameSync.getValue()) ? mc.getLastFrameDuration() : 1)));
-                if (mc.crosshairTarget.getType() != HitResult.Type.ENTITY || ((EntityHitResult)mc.crosshairTarget).getEntity() != target)
-                    mc.player.setPitch(MathUtils.lerp(mc.player.getPitch(), MathUtils.getRotationsNeeded(target)[1], (t / 2.0F * ((frameSync.getValue()) ? mc.getLastFrameDuration() : 1))));
                 this.oldTarget = target;
             }
         }

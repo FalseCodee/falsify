@@ -38,7 +38,6 @@ public class BungeeGUI extends Screen {
         int offset = 4;
         this.bungeeHack = ModuleManager.getModule(BungeeHack.class);
         assert this.client != null;
-        this.client.keyboard.setRepeatEvents(true);
         this.fakeIPField = new TextFieldWidget(this.textRenderer, width/2-205+50+ offset, 66, 200, 20, Text.translatable("addServer.enterName"));
         this.fakeIPField.setTextFieldFocused(true);
         this.fakeIPField.setEditable(true);
@@ -60,27 +59,18 @@ public class BungeeGUI extends Screen {
         this.fakeUsername.setChangedListener(this::onClose);
         this.addSelectableChild(this.fakeUsername);
 
-        this.toggle = (ButtonWidget)this.addDrawableChild(new ButtonWidget(this.width / 2+50+ offset, 106, 100, 20, Text.of("BungeeHack: " + ((bungeeHack.toggled) ? "On" : "Off")), (buttonWidget) -> {
+        this.toggle = this.addDrawableChild(ButtonWidget.builder(Text.of("BungeeHack: " + ((bungeeHack.toggled) ? "On" : "Off")), button -> {
             bungeeHack.toggle();
             this.toggle.setMessage(Text.of("BungeeHack: " + ((bungeeHack.toggled) ? "On" : "Off")));
-        }));
+        }).dimensions(this.width / 2+50+ offset, 106, 100, 20).build());
 
-        this.addDrawableChild(new ButtonWidget(width/2+50 + offset, 146, 50, 20, Text.of("Set"), (buttonWidget) -> {
-            ((MixinMinecraft)MinecraftClient.getInstance()).setSession(new Session(fakeUsername.getText(), "", "", null,null, Session.AccountType.MOJANG));
-        }));
+        this.addDrawableChild(ButtonWidget.builder(Text.of("Set"), button -> ((MixinMinecraft)MinecraftClient.getInstance()).setSession(new Session(fakeUsername.getText(), "", "", null,null, Session.AccountType.MOJANG))).dimensions(width/2+50 + offset, 146, 50, 20).build());
 
-        this.addDrawableChild(new ButtonWidget(width/2+50+50+ offset, 146, 50, 20, Text.of("Reset"), (buttonWidget) -> {
-            ((MixinMinecraft)MinecraftClient.getInstance()).setSession(Falsify.session);
+        this.addDrawableChild(ButtonWidget.builder(Text.of("Reset"), button -> ((MixinMinecraft)MinecraftClient.getInstance()).setSession(Falsify.session)).dimensions(width/2+50+50+ offset, 146, 50, 20).build());
 
-        }));
+        this.addDrawableChild(ButtonWidget.builder(Text.of("Random IP"), button -> this.fakeIPField.setText((int)(Math.random()*255) + "." + (int)(Math.random()*255) + "." + (int)(Math.random()*255) + "."+ (int)(Math.random()*255))).dimensions(width/2+50+ offset, 66, 100, 20).build());
 
-        this.addDrawableChild(new ButtonWidget(width/2+50+ offset, 66, 100, 20, Text.of("Random IP"), (buttonWidget) -> {
-            this.fakeIPField.setText((int)(Math.random()*255) + "." + (int)(Math.random()*255) + "." + (int)(Math.random()*255) + "."+ (int)(Math.random()*255));
-        }));
-
-        this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, this.height / 4 + 120 + 18, 200, 20, Text.of("Go Back"), (buttonWidget) -> {
-            this.onClose();
-        }));
+        this.addDrawableChild(ButtonWidget.builder(Text.of("Go Back"), button -> this.onClose()).dimensions(this.width / 2 - 100, this.height / 4 + 120 + 18, 200, 20).build());
     }
 
     public void onClose(String text) {

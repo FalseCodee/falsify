@@ -6,13 +6,25 @@ import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.Window;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.Matrix4f;
+import org.joml.Matrix4f;
 
 import java.awt.*;
 
 public class RenderHelper extends DrawableHelper {
 
     public static Window WINDOW = Falsify.mc.getWindow();
+    public static double SCALE = 2.0;
+
+    public static double getScaleFactor() {
+        return WINDOW.getScaleFactor() / SCALE;
+    }
+
+    public static void convertToScale(MatrixStack matrices) {
+        convertToScale(matrices, 1.0f);
+    }
+    public static void convertToScale(MatrixStack matrices, double scale) {
+        matrices.scale((float) (1 / getScaleFactor() * scale),(float) (1 / getScaleFactor() * scale),1);
+    }
 
     public static void drawRect(Color color, MatrixStack matrices, float x1, float y1, float x2, float y2) {
         RenderSystem.setShaderColor(1,1,1,1);
@@ -37,7 +49,7 @@ public class RenderHelper extends DrawableHelper {
         BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
         RenderSystem.enableBlend();
         RenderSystem.disableTexture();
-        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
         bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
 
         bufferBuilder.vertex(matrix, x1, y2, 0.0F).color(f, g, h, i).next();
@@ -45,7 +57,7 @@ public class RenderHelper extends DrawableHelper {
         bufferBuilder.vertex(matrix, x2, y1, 0.0F).color(f, g, h, i).next();
         bufferBuilder.vertex(matrix, x1, y1, 0.0F).color(f, g, h, i).next();
 
-        BufferRenderer.drawWithShader(bufferBuilder.end());
+        BufferRenderer.drawWithGlobalProgram(bufferBuilder.end());
         RenderSystem.enableTexture();
         RenderSystem.disableBlend();
     }
@@ -67,7 +79,7 @@ public class RenderHelper extends DrawableHelper {
         BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
         RenderSystem.enableBlend();
         RenderSystem.disableTexture();
-        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
         bufferBuilder.begin(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION_COLOR);
 
         for(int q = 0; q < 4; q++) {
@@ -103,8 +115,16 @@ public class RenderHelper extends DrawableHelper {
                 bufferBuilder.vertex(matrix, center[0], center[1], 0.0F).color(f, g, h, i).next();
             }
         }
-        BufferRenderer.drawWithShader(bufferBuilder.end());
+        BufferRenderer.drawWithGlobalProgram(bufferBuilder.end());
         RenderSystem.enableTexture();
         RenderSystem.disableBlend();
+    }
+    public static void enableScissor(int x1, int y1, int x2, int y2) {
+        RenderSystem.enableScissor((int) (x1 * Falsify.mc.getWindow().getScaleFactor()), (int) ((Falsify.mc.getWindow().getScaledHeight() - y2) * Falsify.mc.getWindow().getScaleFactor()), (int) ((x2-x1) * Falsify.mc.getWindow().getScaleFactor()), (int) ((y2-y1) * Falsify.mc.getWindow().getScaleFactor()));
+
+    }
+
+    public static void disableScissor() {
+        RenderSystem.disableScissor();
     }
 }

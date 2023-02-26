@@ -25,7 +25,7 @@ public class RangeSetting extends Setting<Double> {
             value = value + increment - (value % increment);
         }
 
-        super.setValue(value);
+        super.setValue(Math.min(max, Math.max(value, min)));
     }
 
     @Override

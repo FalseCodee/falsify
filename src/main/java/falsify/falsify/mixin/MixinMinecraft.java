@@ -1,6 +1,7 @@
 package falsify.falsify.mixin;
 
 import falsify.falsify.Falsify;
+import falsify.falsify.listeners.events.EventAttack;
 import falsify.falsify.listeners.events.EventUpdate;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
@@ -9,6 +10,7 @@ import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(MinecraftClient.class)
 public class MixinMinecraft {
@@ -25,5 +27,11 @@ public class MixinMinecraft {
     public void tick(CallbackInfo ci){
         EventUpdate e = new EventUpdate();
         Falsify.onEvent(e);
+    }
+    @Inject(method = "doAttack", at =@At("HEAD"), cancellable = true)
+    public void doAttack(CallbackInfoReturnable<Boolean> cir){
+        EventAttack e = new EventAttack();
+        Falsify.onEvent(e);
+        if(e.isCancelled()) cir.setReturnValue(false);
     }
 }

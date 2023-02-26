@@ -3,21 +3,17 @@ package falsify.falsify.module.modules;
 import com.google.common.collect.Lists;
 import falsify.falsify.listeners.Event;
 import falsify.falsify.listeners.events.EventPacketSend;
-import falsify.falsify.listeners.events.EventRender;
 import falsify.falsify.listeners.events.EventTrack;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
-import falsify.falsify.utils.Alignment;
-import falsify.falsify.utils.RenderUtils;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 
-import java.text.DecimalFormat;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 
@@ -53,20 +49,20 @@ public class Sentry extends Module {
         }
         if(event instanceof EventPacketSend packetSend) {
             if(packetSend.getPacket() instanceof ChatMessageC2SPacket packet) {
-                if(packet.getChatMessage().toLowerCase().startsWith(".target")) {
+                if(packet.chatMessage().toLowerCase().startsWith(".target")) {
                     packetSend.setCancelled(true);
-                    if(!packet.getChatMessage().contains(" ")) {
+                    if(!packet.chatMessage().contains(" ")) {
                         mc.player.sendMessage(Text.of("Enter a player."));
                         return;
                     }
-                    String user = packet.getChatMessage().substring(packet.getChatMessage().indexOf(" ")).trim();
+                    String user = packet.chatMessage().substring(packet.chatMessage().indexOf(" ")).trim();
                     Entity entity = rendered.stream().filter(entity1 -> entity1 instanceof PlayerEntity && ((PlayerEntity) entity1).getGameProfile().getName().equalsIgnoreCase(user)).findFirst().orElse(null);
                     if(entity == null) {
                         mc.player.sendMessage(Text.of("Player not found."));
                     } else {
                         mc.player.sendMessage(Text.of("Target set to " + user));
                     }
-                    Aimbot.target = entity;
+                    Aimbot.target.setEntity((LivingEntity) entity);
                 }
             }
         }
