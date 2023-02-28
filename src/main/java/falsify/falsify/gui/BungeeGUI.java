@@ -3,7 +3,7 @@ package falsify.falsify.gui;
 import falsify.falsify.Falsify;
 import falsify.falsify.mixin.special.MixinMinecraft;
 import falsify.falsify.module.ModuleManager;
-import falsify.falsify.module.modules.BungeeHack;
+import falsify.falsify.module.modules.misc.BungeeHack;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;

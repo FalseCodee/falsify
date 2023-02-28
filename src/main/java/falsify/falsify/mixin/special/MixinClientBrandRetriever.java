@@ -1,7 +1,7 @@
 package falsify.falsify.mixin.special;
 
 import falsify.falsify.module.ModuleManager;
-import falsify.falsify.module.modules.ClientBrand;
+import falsify.falsify.module.modules.misc.ClientBrand;
 import net.minecraft.client.ClientBrandRetriever;
 import net.minecraft.obfuscate.DontObfuscate;
 import org.spongepowered.asm.mixin.Mixin;

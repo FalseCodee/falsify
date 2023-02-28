@@ -1,7 +1,14 @@
 package falsify.falsify.module;
 
-import falsify.falsify.module.modules.*;
 import falsify.falsify.module.modules.chat.*;
+import falsify.falsify.module.modules.combat.Aimbot;
+import falsify.falsify.module.modules.combat.AutoClick;
+import falsify.falsify.module.modules.misc.*;
+import falsify.falsify.module.modules.movement.*;
+import falsify.falsify.module.modules.player.AutoFish;
+import falsify.falsify.module.modules.player.AutoRespawn;
+import falsify.falsify.module.modules.player.FastPlace;
+import falsify.falsify.module.modules.render.*;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 

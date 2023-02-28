@@ -13,6 +13,11 @@ public abstract class FalseRunnable implements Runnable{
         this.service.shutdown();
     }
 
+    public void runTaskAsync() {
+       Thread thread = new Thread(this);
+       thread.start();
+    }
+
     public ScheduledExecutorService runTaskTimer(long delay, long period) {
         this.service = Executors.newSingleThreadScheduledExecutor();
         this.service.scheduleAtFixedRate(this, delay, period, TimeUnit.MILLISECONDS);

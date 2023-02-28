@@ -1,6 +1,8 @@
 package falsify.falsify.module.modules.chat;
 
+import falsify.falsify.listeners.Event;
 import falsify.falsify.listeners.events.EventPacketRecieve;
+import falsify.falsify.listeners.events.EventUpdate;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.ChatModule;
 import falsify.falsify.module.settings.BooleanSetting;

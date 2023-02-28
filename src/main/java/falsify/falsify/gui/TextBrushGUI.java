@@ -1,6 +1,6 @@
 package falsify.falsify.gui;
 
-import falsify.falsify.module.modules.TextBrush;
+import falsify.falsify.module.modules.misc.TextBrush;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
