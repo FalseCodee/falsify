@@ -55,7 +55,6 @@ public class SafeFarm extends Module {
                     if(block.getBlock() instanceof CropBlock cropBlock && cropBlock.isMature(block)){
                         target = new Vec3d(x+0.5, mc.player.getY()+0.2, z+0.5);
                         plant = false;
-                        mc.player.sendMessage(Text.of(target.toString()));
                         return;
                     } else if (block.getBlock() instanceof AirBlock && mc.player.getInventory().main.stream().anyMatch(is -> is.getItem().isFood())){
                         if(!mc.player.getInventory().getMainHandStack().getItem().isFood()) {
@@ -70,7 +69,6 @@ public class SafeFarm extends Module {
                         if(underBlock.getBlock() instanceof FarmlandBlock) {
                             target = new Vec3d(x+0.5, mc.player.getY()-0.2, z+0.5);
                             plant = true;
-                            mc.player.sendMessage(Text.of(target.toString()));
                             return;
                         }
                     }

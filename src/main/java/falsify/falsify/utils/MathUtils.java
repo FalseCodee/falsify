@@ -83,7 +83,6 @@ public class MathUtils {
             int number = Integer.parseInt(s);
             //not fail
         }catch(NumberFormatException e){
-            return;
         }
     }
 

@@ -45,6 +45,7 @@ public class ModuleManager {
         modules.add(new CPSModule());
         modules.add(new ArmorModule());
         modules.add(new TitleModule());
+        modules.add(new WASDModule());
 
     }
 

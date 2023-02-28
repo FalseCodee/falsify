@@ -9,6 +9,8 @@ import falsify.falsify.utils.MathUtils;
 import falsify.falsify.utils.RenderHelper;
 import net.minecraft.client.util.math.MatrixStack;
 
+import java.util.ArrayList;
+
 public abstract class RenderModule<T extends DisplayModule<?>> extends Clickable implements Draggable {
     protected T module;
     public static final int gridSize = 500;
@@ -116,9 +118,11 @@ public abstract class RenderModule<T extends DisplayModule<?>> extends Clickable
     }
 
     public double[] snapToGrid(double x, double y) {
-        return new double[]{Math.round(x / (RenderHelper.getScaleFactor() * Falsify.mc.getWindow().getWidth()) * gridSize) / (0f + gridSize) * RenderHelper.getScaleFactor() * Falsify.mc.getWindow().getWidth()
-                , Math.round(y / (RenderHelper.getScaleFactor() * Falsify.mc.getWindow().getHeight()) * gridSize) / (0f + gridSize) * RenderHelper.getScaleFactor() * Falsify.mc.getWindow().getHeight()
-        };
+//        return new double[]{Math.round(x / (RenderHelper.getScaleFactor() * Falsify.mc.getWindow().getWidth()) * gridSize) / (0f + gridSize) * RenderHelper.getScaleFactor() * Falsify.mc.getWindow().getWidth()
+//                , Math.round(y / (RenderHelper.getScaleFactor() * Falsify.mc.getWindow().getHeight()) * gridSize) / (0f + gridSize) * RenderHelper.getScaleFactor() * Falsify.mc.getWindow().getHeight()
+//        };
+
+        return new double[] {x, y};
 
     }
 }
