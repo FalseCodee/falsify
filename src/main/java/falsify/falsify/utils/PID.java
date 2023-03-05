@@ -16,7 +16,7 @@ public class PID {
     public float calcPID(float error) {
         sum = sum + error;
         if((prev > 0 && error < 0) || (prev < 0 && error > 0)) {
-            sum = error;
+            sum /= 1.5;
         }
         float Ep = Kp * error;
         float Ei = Ki * sum;

@@ -1,5 +1,6 @@
 package falsify.falsify.gui.editor;
 
+import falsify.falsify.Falsify;
 import falsify.falsify.gui.editor.module.RenderModule;
 import falsify.falsify.module.DisplayModule;
 import falsify.falsify.module.ModuleManager;
@@ -41,8 +42,9 @@ public class EditGUI extends Screen {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        Falsify.mc.player.sendMessage(Text.of(RenderHelper.convertToScale(mouseX) + ", " + RenderHelper.convertToScale(mouseY) + ", " + renderModules.get(0).getModule().name + ", " + renderModules.get(0).getX() + ", " + renderModules.get(0).getY()));
         for(RenderModule<?> renderModule : renderModules) {
-            if(renderModule.handleClick(mouseX * RenderHelper.getScaleFactor(), mouseY * RenderHelper.getScaleFactor(), button)) {
+            if(renderModule.handleClick(RenderHelper.convertToScale(mouseX), RenderHelper.convertToScale(mouseY), button)) {
                 renderModules.remove(renderModule);
                 renderModules.add(0, renderModule);
                 return true;
@@ -55,7 +57,7 @@ public class EditGUI extends Screen {
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
         for(RenderModule<?> renderModule : renderModules) {
-            if(renderModule.onDrag(mouseX * RenderHelper.getScaleFactor(), mouseY * RenderHelper.getScaleFactor(), button, deltaX * RenderHelper.getScaleFactor(), deltaY * RenderHelper.getScaleFactor())) {
+            if(renderModule.onDrag(RenderHelper.convertToScale(mouseX), RenderHelper.convertToScale(mouseY), button, RenderHelper.convertToScale(deltaX), RenderHelper.convertToScale(deltaY))) {
 
                 return true;
             }

@@ -2,6 +2,7 @@ package falsify.falsify.gui.clickgui.primatives;
 
 import falsify.falsify.Falsify;
 import falsify.falsify.utils.MathUtils;
+import falsify.falsify.utils.Timer;
 
 import java.awt.*;
 
@@ -11,26 +12,28 @@ public class Animation {
     private State state;
     private double progress;
 
+    private Timer timer;
+
 
     public Animation(long duration, Type type) {
         this.duration = duration;
         this.type = type;
         this.state = State.INACTIVE;
-
+        this.timer = new Timer();
 
     }
 
     public void tick() {
         if(state == State.ACTIVE || state == State.INACTIVE) return;
         if(state == State.RISING) {
-            progress += Falsify.mc.getLastFrameDuration()/20.0/(duration/1000.0);
+            progress += timer.timeElapsed(true)/1000.0/(duration/1000.0);
             if(progress < 1.0) return;
 
             state = State.ACTIVE;
             progress = 1.0;
         }
         else if(state == State.LOWERING) {
-            progress -= Falsify.mc.getLastFrameDuration()/20.0/(duration/1000.0);
+            progress -= timer.timeElapsed(true)/1000.0/(duration/1000.0);
             if(progress > 0) return;
 
             state = State.INACTIVE;

@@ -39,7 +39,7 @@ public class DisplayModule<T extends RenderModule<?>> extends Module {
          if(event instanceof EventRender eventRender) {
              if(mc.currentScreen == null || mc.currentScreen.getClass() != EditGUI.class) {
                  eventRender.getMatrixStack().push();
-                 RenderHelper.convertToScale(eventRender.getMatrixStack());
+                 //RenderHelper.convertToScale(eventRender.getMatrixStack());
                  renderModule.render(eventRender.getMatrixStack(), 0, 0, eventRender.getTickDelta());
                  eventRender.getMatrixStack().pop();
              }

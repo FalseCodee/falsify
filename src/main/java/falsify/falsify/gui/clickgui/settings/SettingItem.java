@@ -12,6 +12,7 @@ public abstract class SettingItem<T extends Setting<?>> extends Clickable {
     protected final Color backgroundColor = new Color(54, 54, 54);
     protected final Color textColor = new Color(255, 255, 255);
 
+    private boolean isActive = false;
     public SettingItem(T setting, double x, double y, double width, double height) {
         super(x, y, width, height);
         this.setting = setting;
@@ -21,4 +22,12 @@ public abstract class SettingItem<T extends Setting<?>> extends Clickable {
 
 
     public abstract void render(MatrixStack matrices, int mouseX, int mouseY, float delta);
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
 }

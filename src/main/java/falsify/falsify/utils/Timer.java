@@ -15,4 +15,12 @@ public class Timer {
         }
         return false;
     }
+
+    public long timeElapsed(boolean reset) {
+        long time = System.currentTimeMillis()-lastMS;
+        if(reset){
+            reset();
+        }
+        return time;
+    }
 }

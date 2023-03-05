@@ -2,6 +2,9 @@ package falsify.falsify.gui.clickgui;
 
 import falsify.falsify.gui.clickgui.Renderable;
 import falsify.falsify.utils.RenderHelper;
+import net.minecraft.client.util.math.MatrixStack;
+
+import java.awt.*;
 
 public abstract class Clickable extends RenderHelper implements Renderable {
     protected double x;
@@ -93,5 +96,64 @@ public abstract class Clickable extends RenderHelper implements Renderable {
 
     public void setHeight(double height) {
         this.height = height;
+    }
+
+    public static class ButtonBuilder {
+        private double x;
+        private double y;
+        private double width;
+        private double height;
+        private ClickableRunnable onClick;
+        private RenderableRunnable onRender;
+        public ButtonBuilder() {
+            onClick = (clickable, x, y, button) -> clickable.isHovering(x, y);
+            onRender = (clickable, matrixStack, x, y, delta) -> RenderHelper.fill(matrixStack, (int)clickable.x, (int)clickable.y, (int)(clickable.x + clickable.width), (int)(clickable.y + clickable.height), Color.BLACK.getRGB());
+        }
+
+        public ButtonBuilder pos(double x, double y) {
+            this.x = x;
+            this.y = y;
+            return this;
+        }
+
+        public ButtonBuilder dimensions(double width, double height) {
+            this.width = width;
+            this.height = height;
+            return this;
+        }
+
+        public ButtonBuilder onClick(ClickableRunnable run) {
+            onClick = run;
+            return this;
+        }
+
+        public ButtonBuilder onRender(RenderableRunnable run) {
+            onRender = run;
+            return this;
+        }
+
+        public Clickable build() {
+            return new Clickable(this.x, this.y, this.width, this.height) {
+                @Override
+                public boolean handleClick(double x, double y, int button) {
+                    return onClick.run(this, x, y, button);
+                }
+
+                @Override
+                public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+                    onRender.run(this, matrices, mouseX, mouseY, delta);
+                }
+            };
+        }
+
+    }
+
+    @FunctionalInterface
+    public interface ClickableRunnable{
+        boolean run(Clickable clickable, double x, double y, double button);
+    }
+@FunctionalInterface
+    public interface RenderableRunnable{
+        void run(Clickable clickable, MatrixStack matrixStack, int mouseX, int mouseY, float delta);
     }
 }

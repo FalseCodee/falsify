@@ -14,7 +14,13 @@ public class RangeSettingItem extends SettingItem<RangeSetting> implements Dragg
 
     @Override
     public boolean handleClick(double x, double y, int button) {
-        return isHovering(x, y);
+        if(isHovering(x, y)) {
+            if(!isActive()) {
+                setActive(true);
+            }
+            return true;
+        }
+        return false;
     }
 
 
@@ -29,7 +35,7 @@ public class RangeSettingItem extends SettingItem<RangeSetting> implements Dragg
 
     @Override
     public boolean onDrag(double x, double y, int button, double dx, double dy) {
-        if(isHovering(x, y)) {
+        if(isActive()) {
 
             double mouseRatio = (x - this.x) / this.width;
             double mappedValue = setting.getMin() + (mouseRatio * (setting.getMax() - setting.getMin()));

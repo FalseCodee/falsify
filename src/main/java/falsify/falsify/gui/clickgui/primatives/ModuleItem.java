@@ -20,16 +20,19 @@ public class ModuleItem extends Clickable implements Draggable {
     }
 
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta, boolean last) {
-        Color inactive = new Color(255, 65, 65);
-        Color active = new Color(109, 206, 54);
+        Color inactive = new Color(59, 59, 59);
+        Color active = new Color(238, 238, 238);
         if(module.isEnabled()) fade.rise(); else fade.lower();
         Color color = fade.color(inactive, active);
         if(isHovering(mouseX, mouseY)) fade2.rise(); else fade2.lower();
         color = fade2.color(color, color.brighter());
         if(last) {
-            drawSmoothRect(color , matrices, (int) this.x, (int) this.y, (int) this.x + (int) this.width, (int) this.y + (int) this.height, 2, new int[] {5, 0, 0, 5});
+            drawSmoothRect(color.darker() , matrices, (int) this.x, (int) this.y, (int) this.x + (int) this.width, (int) this.y + (int) this.height, 2, new int[] {5, 0, 0, 5});
+            drawSmoothRect(color , matrices, (int) this.x+1, (int) this.y, (int) this.x + (int) this.width-1, (int) this.y + (int) this.height-1, 2, new int[] {5, 0, 0, 5});
         } else {
-            drawRect(color , matrices, (int) this.x, (int) this.y, (int) this.x + (int) this.width, (int) this.y + (int) this.height);
+            drawRect(color.darker() , matrices, (int) this.x, (int) this.y, (int) this.x + (int) this.width, (int) this.y + (int) this.height);
+            drawRect(color , matrices, (int) this.x+1, (int) this.y, (int) this.x + (int) this.width-1, (int) this.y + (int) this.height-1);
+
         }
         drawCenteredText(matrices, Falsify.mc.textRenderer, module.name, (int) x + (int) width/2, (int) y + (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, 0xffffff);
         fade.tick();

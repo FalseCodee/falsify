@@ -1,8 +1,10 @@
 package falsify.falsify.gui.clickgui.settings;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import falsify.falsify.Falsify;
 import falsify.falsify.gui.clickgui.Draggable;
 import falsify.falsify.gui.clickgui.Typable;
+import falsify.falsify.gui.editor.module.RenderModule;
 import falsify.falsify.module.Module;
 import falsify.falsify.module.settings.*;
 import falsify.falsify.utils.RenderHelper;
@@ -35,15 +37,28 @@ public class SettingsGUI extends Screen {
         double xStart = this.width / 4;
         double yStart = this.height / 4 + Falsify.mc.textRenderer.fontHeight + yPadding;
         double columns = 5;
-        while(((3*xStart)-xStart - 2 * xPadding) / columns - (columns-1)*xPadding < 100 && columns > 0) {
+        while(((3*xStart)-xStart - 2 * xPadding) / columns - (columns-1)*xPadding < 100 && columns > 1) {
             columns--;
         }
         double width = ((3*xStart)-xStart - ((columns+1) * xPadding)) / columns;
-        double height = 30;
+        double height = 60;
         for (int i = 0; i < module.settings.size(); i++) {
             Setting<?> setting = module.settings.get(i);
             addSettingItem(setting, xStart + xPadding + (width + xPadding) * (i % columns), yStart + yPadding + (height + yPadding) * (int) (i / columns), width, height);
         }
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
+        amount *= 3;
+        double top = settingItems.get(0).getY() + amount;
+        double bottom = settingItems.get(settingItems.size()-1).getY() + settingItems.get(settingItems.size()-1).getHeight() + amount;
+        if(bottom > 3*height/4-10 && top < height/4+Falsify.mc.textRenderer.fontHeight + 10) {
+            for (SettingItem<?> settingItem : settingItems) {
+                settingItem.setY(settingItem.getY() + amount);
+            }
+        }
+        return super.mouseScrolled(mouseX, mouseY, amount);
     }
 
     @Override
@@ -53,7 +68,7 @@ public class SettingsGUI extends Screen {
 
     @Override
     public boolean shouldPause() {
-       return false;
+        return false;
     }
 
     public void addSettingItem(Setting<?> setting, double x, double y, double width, double height) {
@@ -102,12 +117,24 @@ public class SettingsGUI extends Screen {
     }
 
     @Override
+    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        for(SettingItem<?> settingItem : settingItems) {
+            settingItem.setActive(false);
+        }
+        return super.mouseReleased(mouseX, mouseY, button);
+    }
+
+    @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        RenderHelper.drawSmoothRect(new Color(211, 211, 211), matrices, width/4, height/4, 3*width/4, 3*height/4, 5, new int[] {15,15,15,15});
+        int padding = 1;
+        RenderHelper.drawSmoothRect(new Color(255, 255, 255, 200), matrices, width/4-padding, height/4-padding, 3*width/4+padding, 3*height/4+padding, 5+padding, new int[] {15,15,15,15});
+        RenderHelper.drawSmoothRect(new Color(136, 136, 136), matrices, width/4, height/4, 3*width/4, 3*height/4, 5, new int[] {15,15,15,15});
         RenderHelper.drawRect(new Color(50,50,50, 100), matrices, 0, 0, width, height);
         drawCenteredText(matrices, Falsify.mc.textRenderer, module.name, width/2, height/4 + 5, new Color(255, 255, 255).getRGB());
+        RenderHelper.enableScissor(width/4, height/4 + Falsify.mc.textRenderer.fontHeight + 10, 3*width/4, 3*height/4);
         for(SettingItem<?> settingItem : settingItems) {
             settingItem.render(matrices, mouseX, mouseY, delta);
         }
+        RenderHelper.disableScissor();
     }
 }

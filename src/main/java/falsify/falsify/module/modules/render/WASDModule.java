@@ -1,6 +1,7 @@
 package falsify.falsify.module.modules.render;
 
 import falsify.falsify.Falsify;
+import falsify.falsify.gui.clickgui.primatives.Animation;
 import falsify.falsify.gui.editor.module.RenderModule;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.DisplayModule;
@@ -23,6 +24,11 @@ public class WASDModule extends DisplayModule<WASDRenderModule> {
 
 class WASDRenderModule extends RenderModule<WASDModule> {
 
+    private final Animation wFade = new Animation(100, Animation.Type.EASE_OUT);
+    private final Animation aFade = new Animation(100, Animation.Type.EASE_OUT);
+    private final Animation sFade = new Animation(100, Animation.Type.EASE_OUT);
+    private final Animation dFade = new Animation(100, Animation.Type.EASE_OUT);
+
     public WASDRenderModule(double x, double y, double width, double height) {
         super(x, y, width, height);
     }
@@ -35,20 +41,27 @@ class WASDRenderModule extends RenderModule<WASDModule> {
         this.width = sum*3-padding;
         this.height = sum*2-padding;
         //W
-        drawRect((Falsify.mc.options.forwardKey.isPressed()) ? Color.WHITE : module.getBackgroundColor(), matrices, (float) getX()+sum, (float) getY(), (float) (getX()+sum + size), (float) (getY() + size));
-        drawCenteredText(matrices, Falsify.mc.textRenderer, "W", (int) getX()+sum + size/2, (int) getY() + (int) size/2 - Falsify.mc.textRenderer.fontHeight/2, (Falsify.mc.options.forwardKey.isPressed()) ? Color.BLACK.getRGB() : module.getTextColor().getRGB());
+        if(Falsify.mc.options.forwardKey.isPressed()) wFade.rise(); else wFade.lower();
+        drawRect(wFade.color(module.getBackgroundColor(), module.getBackgroundColor().brighter().brighter()), matrices, (float) getX()+sum, (float) getY(), (float) (getX()+sum + size), (float) (getY() + size));
+        drawCenteredText(matrices, Falsify.mc.textRenderer, "W", (int) getX()+sum + size/2, (int) getY() + (int) size/2 - Falsify.mc.textRenderer.fontHeight/2, wFade.color(module.getTextColor(), module.getTextColor().darker().darker()).getRGB());
+        wFade.tick();
 
         //A
-        drawRect((Falsify.mc.options.leftKey.isPressed()) ? Color.WHITE : module.getBackgroundColor(), matrices, (float) getX(), (float) getY()+sum, (float) (getX() + size), (float) (getY()+sum + size));
-        drawCenteredText(matrices, Falsify.mc.textRenderer, "A", (int) getX() + (int) size/2, (int) getY()+sum + (int) size/2 - Falsify.mc.textRenderer.fontHeight/2, (Falsify.mc.options.leftKey.isPressed()) ? Color.BLACK.getRGB() : module.getTextColor().getRGB());
+        if(Falsify.mc.options.leftKey.isPressed()) aFade.rise(); else aFade.lower();
+        drawRect(aFade.color(module.getBackgroundColor(), module.getBackgroundColor().brighter().brighter()), matrices, (float) getX(), (float) getY()+sum, (float) (getX() + size), (float) (getY()+sum + size));
+        drawCenteredText(matrices, Falsify.mc.textRenderer, "A", (int) getX() + (int) size/2, (int) getY()+sum + (int) size/2 - Falsify.mc.textRenderer.fontHeight/2, aFade.color(module.getTextColor(), module.getTextColor().darker().darker()).getRGB());
+        aFade.tick();
 
         //S
-        drawRect((Falsify.mc.options.backKey.isPressed()) ? Color.WHITE : module.getBackgroundColor(), matrices, (float) getX()+sum, (float) getY()+sum, (float) (getX()+sum + size), (float) (getY()+sum + size));
-        drawCenteredText(matrices, Falsify.mc.textRenderer, "S", (int) getX()+sum + (int) size/2, (int) getY()+sum + (int) size/2 - Falsify.mc.textRenderer.fontHeight/2, (Falsify.mc.options.backKey.isPressed()) ? Color.BLACK.getRGB() : module.getTextColor().getRGB());
+        if(Falsify.mc.options.backKey.isPressed()) sFade.rise(); else sFade.lower();
+        drawRect(sFade.color(module.getBackgroundColor(), module.getBackgroundColor().brighter().brighter()), matrices, (float) getX()+sum, (float) getY()+sum, (float) (getX()+sum + size), (float) (getY()+sum + size));
+        drawCenteredText(matrices, Falsify.mc.textRenderer, "S", (int) getX()+sum + (int) size/2, (int) getY()+sum + (int) size/2 - Falsify.mc.textRenderer.fontHeight/2, sFade.color(module.getTextColor(), module.getTextColor().darker().darker()).getRGB());
+        sFade.tick();
 
         //D
-        drawRect((Falsify.mc.options.rightKey.isPressed()) ? Color.WHITE : module.getBackgroundColor(), matrices, (float) getX()+sum*2, (float) getY()+sum, (float) (getX()+sum*2 + size), (float) (getY()+sum + size));
-        drawCenteredText(matrices, Falsify.mc.textRenderer, "D", (int) getX()+sum*2 + (int) size/2, (int) getY()+sum + (int) size/2 - Falsify.mc.textRenderer.fontHeight/2, (Falsify.mc.options.rightKey.isPressed()) ? Color.BLACK.getRGB() : module.getTextColor().getRGB());
-
+        if(Falsify.mc.options.rightKey.isPressed()) dFade.rise(); else dFade.lower();
+        drawRect(dFade.color(module.getBackgroundColor(), module.getBackgroundColor().brighter().brighter()), matrices, (float) getX()+sum*2, (float) getY()+sum, (float) (getX()+sum*2 + size), (float) (getY()+sum + size));
+        drawCenteredText(matrices, Falsify.mc.textRenderer, "D", (int) getX()+sum*2 + (int) size/2, (int) getY()+sum + (int) size/2 - Falsify.mc.textRenderer.fontHeight/2, dFade.color(module.getTextColor(), module.getTextColor().darker().darker()).getRGB());
+        dFade.tick();
     }
 }

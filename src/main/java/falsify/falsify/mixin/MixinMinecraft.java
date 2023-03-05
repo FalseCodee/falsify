@@ -1,14 +1,16 @@
 package falsify.falsify.mixin;
 
 import falsify.falsify.Falsify;
+import falsify.falsify.gui.ClientMenuScreen;
 import falsify.falsify.listeners.events.EventAttack;
 import falsify.falsify.listeners.events.EventUpdate;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.util.Session;
 import org.spongepowered.asm.mixin.*;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -22,6 +24,13 @@ public class MixinMinecraft {
     @Inject(method = "<init>(Lnet/minecraft/client/RunArgs;)V", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;inGameHud:Lnet/minecraft/client/gui/hud/InGameHud;", ordinal = 0, shift = At.Shift.AFTER))
     public void init(RunArgs args, CallbackInfo ci){
         Falsify.init(session);
+    }
+
+    @ModifyVariable(method = "setScreen", at = @At("HEAD"), ordinal = 0, argsOnly = true)
+    public Screen setScreen(Screen screen) {
+        if(screen == null && Falsify.mc.world == null) return new ClientMenuScreen();
+        else if(screen instanceof TitleScreen) return new ClientMenuScreen();
+        else return screen;
     }
     @Inject(method = "tick", at =@At("TAIL"))
     public void tick(CallbackInfo ci){

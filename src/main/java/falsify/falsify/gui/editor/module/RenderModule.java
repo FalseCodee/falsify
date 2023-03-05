@@ -23,7 +23,7 @@ public abstract class RenderModule<T extends DisplayModule<?>> extends Clickable
 
     public RenderModule(double x, double y, double width, double height) {
         super(x, y, width, height);
-        scaleModule = new ScaleModule(this, x + width-5, y + height-5,5, 5);
+        scaleModule = new ScaleModule(this, x + width-5+2.5*scale, y + height-2.5,5, 5);
     }
 
     public RenderModule(double x, double y, double width, double height, T module) {
@@ -50,8 +50,8 @@ public abstract class RenderModule<T extends DisplayModule<?>> extends Clickable
         matrices.push();
         RenderHelper.convertToScale(matrices, scale);
         renderModule(matrices, mouseX, mouseY, delta);
-        scaleModule.setX(this.x + this.width-5);
-        scaleModule.setY(this.y + this.height-5);
+        scaleModule.setX(this.x + this.width-5+2.5*scale);
+        scaleModule.setY(this.y + this.height-5+2.5*scale);
         if(Falsify.mc.currentScreen != null && Falsify.mc.currentScreen.getClass() == EditGUI.class) scaleModule.render(matrices, mouseX, mouseY, delta);
         matrices.pop();
 

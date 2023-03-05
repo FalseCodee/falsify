@@ -13,19 +13,60 @@ import java.awt.*;
 public class RenderHelper extends DrawableHelper {
 
     public static Window WINDOW = Falsify.mc.getWindow();
-    public static double SCALE = 2.0;
+    public static double SCALE = 4.0;
 
     public static double getScaleFactor() {
-        return WINDOW.getScaleFactor() / SCALE;
+        return 1/WINDOW.getScaleFactor() * SCALE;
     }
 
     public static void convertToScale(MatrixStack matrices) {
-        convertToScale(matrices, 1.0f);
+        convertToScale(matrices, 1.0);
     }
     public static void convertToScale(MatrixStack matrices, double scale) {
-        matrices.scale((float) (1 / getScaleFactor() * scale),(float) (1 / getScaleFactor() * scale),1);
+        matrices.scale((float) (getScaleFactor() * scale),(float) (getScaleFactor() * scale),1);
     }
 
+    public static double convertToScale(double input, double scale) {
+        return input * 1 / (getScaleFactor() * getScaleFactor()) * scale;
+    }
+
+    public static double convertToScale(double input) {
+        return convertToScale(input, 1.0);
+    }
+
+    public static void drawLine(Color color, MatrixStack matrices, float x1, float y1, float x2, float y2) {
+        RenderSystem.setShaderColor(1,1,1,1);
+        if (x1 < x2) {
+            float i = x1;
+            x1 = x2;
+            x2 = i;
+        }
+
+        if (y1 < y2) {
+            float i = y1;
+            y1 = y2;
+            y2 = i;
+        }
+
+        Matrix4f matrix = matrices.peek().getPositionMatrix();
+
+        float i = (float) color.getAlpha() / 255.0F;
+        float f = (float) color.getRed()   / 255.0F;
+        float g = (float) color.getGreen() / 255.0F;
+        float h = (float) color.getBlue()  / 255.0F;
+        BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
+        RenderSystem.enableBlend();
+        RenderSystem.disableTexture();
+        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
+        bufferBuilder.begin(VertexFormat.DrawMode.LINE_STRIP, VertexFormats.POSITION_COLOR);
+
+        bufferBuilder.vertex(matrix, x1, y1, 0.0F).color(f, g, h, i).next();
+        bufferBuilder.vertex(matrix, x2, y2, 0.0F).color(f, g, h, i).next();
+
+        BufferRenderer.drawWithGlobalProgram(bufferBuilder.end());
+        RenderSystem.enableTexture();
+        RenderSystem.disableBlend();
+    }
     public static void drawRect(Color color, MatrixStack matrices, float x1, float y1, float x2, float y2) {
         RenderSystem.setShaderColor(1,1,1,1);
         if (x1 < x2) {
@@ -64,6 +105,7 @@ public class RenderHelper extends DrawableHelper {
 
     public static void drawSmoothRect(Color color, MatrixStack matrices, float x1, float y1, float x2, float y2, float r, int[] a) {
         RenderSystem.setShaderColor(1,1,1,1);
+
 
         x1 += r;
         y1 += r;
@@ -126,5 +168,14 @@ public class RenderHelper extends DrawableHelper {
 
     public static void disableScissor() {
         RenderSystem.disableScissor();
+    }
+
+    public static Color colorLerp(Color from, Color to, double t) {
+        return new Color(
+                (int) MathUtils.lerp(from.getRed(), to.getRed(), t),
+                (int) MathUtils.lerp(from.getGreen(), to.getGreen(), t),
+                (int) MathUtils.lerp(from.getBlue(), to.getBlue(), t),
+                (int) MathUtils.lerp(from.getAlpha(), to.getAlpha(), t)
+        );
     }
 }

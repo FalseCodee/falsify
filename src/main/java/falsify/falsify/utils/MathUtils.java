@@ -100,4 +100,8 @@ public class MathUtils {
         else if(Falsify.mc.player.input.sneaking) return -1;
         return 0;
     }
+
+    public static double random(double min, double max) {
+        return (Math.random() * (max-min)) + min;
+    }
 }
