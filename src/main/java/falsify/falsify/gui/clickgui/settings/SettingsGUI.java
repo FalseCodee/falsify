@@ -130,7 +130,7 @@ public class SettingsGUI extends Screen {
         RenderHelper.drawSmoothRect(new Color(255, 255, 255, 200), matrices, width/4-padding, height/4-padding, 3*width/4+padding, 3*height/4+padding, 5+padding, new int[] {15,15,15,15});
         RenderHelper.drawSmoothRect(new Color(136, 136, 136), matrices, width/4, height/4, 3*width/4, 3*height/4, 5, new int[] {15,15,15,15});
         RenderHelper.drawRect(new Color(50,50,50, 100), matrices, 0, 0, width, height);
-        drawCenteredText(matrices, Falsify.mc.textRenderer, module.name, width/2, height/4 + 5, new Color(255, 255, 255).getRGB());
+        drawCenteredTextWithShadow(matrices, Falsify.mc.textRenderer, module.name, width/2, height/4 + 5, new Color(255, 255, 255).getRGB());
         RenderHelper.enableScissor(width/4, height/4 + Falsify.mc.textRenderer.fontHeight + 10, 3*width/4, 3*height/4);
         for(SettingItem<?> settingItem : settingItems) {
             settingItem.render(matrices, mouseX, mouseY, delta);

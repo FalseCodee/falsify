@@ -2,6 +2,7 @@ package falsify.falsify.module;
 
 import falsify.falsify.listeners.Event;
 import falsify.falsify.listeners.events.EventPacketRecieve;
+import falsify.falsify.utils.ChatModuleUtils;
 import net.minecraft.network.packet.s2c.play.GameMessageS2CPacket;
 
 public class ChatModule extends Module {
@@ -17,7 +18,7 @@ public class ChatModule extends Module {
     public void onEvent(Event event){
         if(event instanceof EventPacketRecieve){
             if(((EventPacketRecieve) event).getPacket() instanceof net.minecraft.network.packet.s2c.play.GameMessageS2CPacket){
-                onChat(((EventPacketRecieve) event), ((GameMessageS2CPacket) ((EventPacketRecieve) event).getPacket()).content().getString());
+                onChat(((EventPacketRecieve) event), ChatModuleUtils.concatArray(((GameMessageS2CPacket) ((EventPacketRecieve) event).getPacket()).content().withoutStyle(), ""));
             }
         }
     }

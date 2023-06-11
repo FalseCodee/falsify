@@ -1,11 +1,10 @@
 package falsify.falsify.module.modules.misc;
 
-import com.google.common.collect.Lists;
 import falsify.falsify.listeners.Event;
 import falsify.falsify.listeners.events.EventUpdate;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
-import falsify.falsify.module.settings.BooleanSetting;
+import falsify.falsify.module.modules.movement.Trajectories;
 import falsify.falsify.module.settings.RangeSetting;
 import falsify.falsify.utils.AimbotTarget;
 import falsify.falsify.utils.FalseRunnable;
@@ -15,34 +14,25 @@ import net.minecraft.block.AirBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CropBlock;
 import net.minecraft.block.FarmlandBlock;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
+import net.minecraft.util.math.Vec3i;
 
 public class SafeFarm extends Module {
 
     RangeSetting dist = new RangeSetting("Distance", 25, 0, 50, 1);
     RangeSetting dur = new RangeSetting("Duration", 200, 0, 1000, 5);
-    BooleanSetting goToItem = new BooleanSetting("Get Items", true);
 
     Timer timer = new Timer();
     public SafeFarm() {
         super("Safe Farm", Category.PLAYER, -1);
         settings.add(dist);
         settings.add(dur);
-        settings.add(goToItem);
     }
 
-    public static Vec3d target;
     public boolean plant = false;
     @Override
     public void onEnable() {
@@ -62,14 +52,14 @@ public class SafeFarm extends Module {
             {
                 for (int i=0; i<s; i++)
                 {
-                    BlockState block = mc.world.getBlockState(new BlockPos(x, mc.player.getY()+0.2, z));
+                    BlockState block = mc.world.getBlockState(new BlockPos(x, (int) (mc.player.getY()+0.2), z));
 
                     if(block.getBlock() instanceof CropBlock cropBlock && cropBlock.isMature(block)){
-                        target = new Vec3d(x+0.5, mc.player.getY()+0.2, z+0.5);
+                        Trajectories.target = new AimbotTarget(new Vec3d(x+0.5, mc.player.getY()+0.2, z+0.5));
                         plant = false;
                         return;
-                    } else if (block.getBlock() instanceof AirBlock && mc.player.getInventory().main.stream().anyMatch(is -> PlayerUtils.isFarmable(is.getItem()))){
-                        if(!PlayerUtils.isFarmable(mc.player.getInventory().getMainHandStack().getItem())) {
+                    } else if (block.getBlock() instanceof AirBlock && mc.player.getInventory().main.stream().anyMatch(is -> is.getItem().isFood())){
+                        if(!mc.player.getInventory().getMainHandStack().getItem().isFood()) {
                             for (int p = 0; p < 8; p++) {
                                 if (mc.player.getInventory().main.get(p).getItem().isFood()) {
                                     mc.player.getInventory().selectedSlot = p;
@@ -77,9 +67,9 @@ public class SafeFarm extends Module {
                                 }
                             }
                         }
-                        BlockState underBlock = mc.world.getBlockState(new BlockPos(x, mc.player.getY()-0.2, z));
+                        BlockState underBlock = mc.world.getBlockState(new BlockPos(x, (int) (mc.player.getY()-0.2), z));
                         if(underBlock.getBlock() instanceof FarmlandBlock) {
-                            target = new Vec3d(x+0.5, mc.player.getY()-0.2, z+0.5);
+                            Trajectories.target = new AimbotTarget(new Vec3d(x+0.5, mc.player.getY()-0.2, z+0.5));
                             plant = true;
                             return;
                         }
@@ -99,28 +89,28 @@ public class SafeFarm extends Module {
 
     @Override
     public void onEvent(Event<?> event) {
-        if(event instanceof EventUpdate) {
-            if(target != null) {
-                if (mc.crosshairTarget.getType() != HitResult.Type.BLOCK) return;
+       if(event instanceof EventUpdate) {
+           if(Trajectories.target != null) {
+               if (mc.crosshairTarget.getType() != HitResult.Type.BLOCK) return;
 
-                BlockPos block = ((BlockHitResult) mc.crosshairTarget).getBlockPos();
-                if (block.equals(new BlockPos(target))) {
+               BlockPos block = ((BlockHitResult) mc.crosshairTarget).getBlockPos();
+               if (block.equals(new BlockPos(new Vec3i((int) Trajectories.target.getLocation().x, (int) Trajectories.target.getLocation().y, (int) Trajectories.target.getLocation().z)))) {
 //                   ((MixinMinecraft) mc).doAttack();
-                    if(plant) PlayerUtils.rightClick(dur.getValue().intValue());
-                    else PlayerUtils.leftClick(dur.getValue().intValue());
+                   if(plant) PlayerUtils.rightClick(dur.getValue().intValue());
+                   else PlayerUtils.leftClick(dur.getValue().intValue());
 
-                    new FalseRunnable() {
-                        @Override
-                        public void run() {
+                   new FalseRunnable() {
+                       @Override
+                       public void run() {
 //                           ((MixinMinecraft) mc).doItemUse();
-                            target = null;
-                            findNextTarget();
-                        }
-                    }.runTaskLater(50);
-                }
-            }else if(timer.hasTimeElapsed(10000, true)) {
-                findNextTarget();
-            }
-        }
+                           Trajectories.target = null;
+                           findNextTarget();
+                       }
+                   }.runTaskLater(50);
+               }
+           } else if(timer.hasTimeElapsed(10000, true)) {
+               findNextTarget();
+           }
+       }
     }
 }

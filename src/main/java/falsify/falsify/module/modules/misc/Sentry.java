@@ -59,6 +59,8 @@ public class Sentry extends Module {
                     String user = packet.chatMessage().substring(packet.chatMessage().indexOf(" ")).trim();
                     Entity entity = rendered.stream().filter(entity1 -> entity1 instanceof PlayerEntity && ((PlayerEntity) entity1).getGameProfile().getName().equalsIgnoreCase(user)).findFirst().orElse(null);
                     if(entity == null) {
+                        if(user.equalsIgnoreCase("none")) Aimbot.target = null;
+                        else
                         mc.player.sendMessage(Text.of("Player not found."));
                     } else {
                         mc.player.sendMessage(Text.of("Target set to " + user));

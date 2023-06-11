@@ -34,7 +34,7 @@ public class ModuleItem extends Clickable implements Draggable {
             drawRect(color , matrices, (int) this.x+1, (int) this.y, (int) this.x + (int) this.width-1, (int) this.y + (int) this.height-1);
 
         }
-        drawCenteredText(matrices, Falsify.mc.textRenderer, module.name, (int) x + (int) width/2, (int) y + (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, 0xffffff);
+        drawCenteredTextWithShadow(matrices, Falsify.mc.textRenderer, module.name, (int) x + (int) width/2, (int) y + (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, 0xffffff);
         fade.tick();
         fade2.tick();
     }

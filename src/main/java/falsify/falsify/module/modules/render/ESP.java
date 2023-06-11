@@ -23,20 +23,12 @@ public class ESP extends Module {
 
     private final ModeSetting type = new ModeSetting("Type", "All", "All", "Players", "Mobs", "Animals");
 
-    private int BOX;
-
     public ESP() {
         super("ESP", Category.PLAYER, GLFW.GLFW_KEY_DOWN);
         settings.add(type);
     }
 
-    @Override
-    public void onEnable() {
-        this.BOX = GL11.glGenLists(1);
-        GL11.glNewList(this.BOX, 4864);
-        RenderUtils.drawOutlinedBox(new Box(-0.5D, 0.0D, -0.5D, 0.5D, 1.0D, 0.5D));
-        GL11.glEndList();
-    }
+
 
     @Override
     public void onEvent(Event<?> event) {
@@ -52,23 +44,9 @@ public class ESP extends Module {
                 case "Animals": entityList = entityList.stream().filter(AnimalEntity.class::isInstance).collect(Collectors.toList()); break;
             }
 
-            GL11.glPushAttrib(24581);
-            GL11.glDisable(3553);
-            GL11.glDisable(2929);
-            GL11.glDisable(2896);
-            GL11.glEnable(3042);
-            GL11.glBlendFunc(770, 771);
-            GL11.glEnable(2848);
-            GL11.glLineWidth(2.0F);
-            GL11.glPushMatrix();
-            GL11.glTranslated(-mc.getEntityRenderDispatcher().camera.getPos().x,
-                    -mc.getEntityRenderDispatcher().camera.getPos().y,
-                    -mc.getEntityRenderDispatcher().camera.getPos().z);
-            
-            RenderUtils.drawESPBoxes(entityList, this.BOX, eventRender3d.getTickDelta());
-            GL11.glPopMatrix();
-            GL11.glPopAttrib();
-
+            for(Entity e : entityList) {
+                RenderUtils.drawESPTracer(mc.player, e, eventRender3d);
+            }
 
             }
         }

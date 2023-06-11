@@ -40,8 +40,11 @@ public class ModuleManager {
         modules.add(new Trajectories());
         modules.add(new Flight());
         modules.add(new SafeFarm());
+        modules.add(new BoatFly());
+        modules.add(new ESP());
+        modules.add(new DupeDrop());
+        modules.add(new BodyGuard());
 
-        modules.add(new AutoClick());
         modules.add(new FPSModule());
         modules.add(new TimeModule());
         modules.add(new ServerAddressModule());

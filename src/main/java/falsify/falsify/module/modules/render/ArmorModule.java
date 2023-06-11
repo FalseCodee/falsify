@@ -42,7 +42,7 @@ class ArmorRenderModule extends RenderModule<ArmorModule> {
             matrixStack.push();
             RenderHelper.convertToScale(matrixStack, scale);
             RenderSystem.applyModelViewMatrix();
-            Falsify.mc.getItemRenderer().renderInGui(itemStack, (int) x, (int) y);
+            Falsify.mc.getItemRenderer().renderInGui(matrices, itemStack, (int) x, (int) y);
             matrixStack.pop();
             RenderSystem.applyModelViewMatrix();
             drawTextWithShadow(matrices, Falsify.mc.textRenderer, Text.of("" + (itemStack.getMaxDamage() - itemStack.getDamage())), (int)x + 20, (int)y + Falsify.mc.textRenderer.fontHeight/2, module.getTextColor().getRGB());

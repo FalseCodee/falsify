@@ -28,7 +28,7 @@ public class TpAnnoyGUI extends Screen {
         assert this.client != null;
 
         this.TpAnnoyField = new TextFieldWidget(this.textRenderer, width/2-100, this.height / 4 + 120 - 18, 200, 20, Text.translatable("addServer.enterIp"));
-        this.TpAnnoyField.setTextFieldFocused(true);
+        this.TpAnnoyField.setFocused(true);
         this.TpAnnoyField.setEditable(true);
         this.TpAnnoyField.setMaxLength(128);
         this.TpAnnoyField.setText(client.getSession().getUsername());
@@ -50,7 +50,7 @@ public class TpAnnoyGUI extends Screen {
 
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrices);
-        drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 17, 16777215);
+        drawCenteredTextWithShadow(matrices, this.textRenderer, this.title, this.width / 2, 17, 16777215);
         drawTextWithShadow(matrices, this.textRenderer, Text.of("Enter Name of Recipient"), width/2-100, this.height / 4 + 120 - 34, 10526880);
         this.TpAnnoyField.render(matrices, mouseX, mouseY, delta);
 

@@ -22,6 +22,6 @@ class ServerPingRenderModule extends RenderModule<ServerPingModule> {
     @Override
     public void renderModule(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         drawRect(module.getBackgroundColor(), matrices, (float) getX(), (float) getY(), (float) (getX() + width), (float) (getY() + height));
-        drawCenteredText(matrices, Falsify.mc.textRenderer, (Falsify.mc.getNetworkHandler() == null) ? "Unknown" : "Ping: " + Falsify.mc.getNetworkHandler().getPlayerListEntry(Falsify.mc.player.getUuid()).getLatency() + " ms", (int) getX() + (int) width/2, (int) getY() + (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, module.getTextColor().getRGB());
+        drawCenteredTextWithShadow(matrices, Falsify.mc.textRenderer, (Falsify.mc.getNetworkHandler() == null) ? "Unknown" : "Ping: " + Falsify.mc.getNetworkHandler().getPlayerListEntry(Falsify.mc.player.getUuid()).getLatency() + " ms", (int) getX() + (int) width/2, (int) getY() + (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, module.getTextColor().getRGB());
     }
 }

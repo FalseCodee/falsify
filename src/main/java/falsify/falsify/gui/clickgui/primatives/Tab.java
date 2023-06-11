@@ -77,7 +77,7 @@ public class Tab extends Clickable implements Draggable {
         if(isExtended()) {
             scroll.rise();
             drawSmoothRect(new Color(54, 54, 54), matrices, (int) this.x, (int) this.y, (int) this.x + (int) this.width, (int) this.y + (int) this.height, 2, new int[] {0, 5, 5, 0});
-            drawCenteredText(matrices, Falsify.mc.textRenderer, category.getName(), (int) x + (int) width/2, (int) y + (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, 0xffffff);
+            drawCenteredTextWithShadow(matrices, Falsify.mc.textRenderer, category.getName(), (int) x + (int) width/2, (int) y + (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, 0xffffff);
             int i = 1;
             enableScissor((int) x, (int) (y+height), (int) (x+width), (int) (y+height + (20*modules.size()*scroll.run()) + 1));
             for(ModuleItem moduleItem : modules) {
@@ -90,7 +90,7 @@ public class Tab extends Clickable implements Draggable {
         } else {
             scroll.lower();
             drawSmoothRect(new Color(54, 54, 54), matrices, (int) this.x, (int) this.y, (int) this.x + (int) this.width, (int) this.y + (int) this.height, 2, new int[] {5, 5, 5, 5});
-            drawCenteredText(matrices, Falsify.mc.textRenderer, category.getName(), (int) x + (int) width/2, (int) y + (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, 0xffffff);
+            drawCenteredTextWithShadow(matrices, Falsify.mc.textRenderer, category.getName(), (int) x + (int) width/2, (int) y + (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, 0xffffff);
             if(scroll.run() != 0) {
                 int i = 1;
                 enableScissor((int) x, (int) (y+height), (int) (x+width), (int) (y+height + (20*modules.size()*scroll.run()) + 1));

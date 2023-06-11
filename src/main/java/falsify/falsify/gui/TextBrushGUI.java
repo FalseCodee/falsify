@@ -30,7 +30,7 @@ public class TextBrushGUI extends Screen {
         assert this.client != null;
 
         this.argField = new TextFieldWidget(this.textRenderer, width/2-100, this.height / 4 + 120 - 18, 200, 20, Text.translatable("addServer.enterIp"));
-        this.argField.setTextFieldFocused(true);
+        this.argField.setFocused(true);
         this.argField.setEditable(true);
         this.argField.setMaxLength(128);
         this.argField.setText(TextBrush.theString);
@@ -68,7 +68,7 @@ public class TextBrushGUI extends Screen {
 
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrices);
-        drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 17, 16777215);
+        drawCenteredTextWithShadow(matrices, this.textRenderer, this.title, this.width / 2, 17, 16777215);
         drawTextWithShadow(matrices, this.textRenderer, Text.of("Enter Name of Recipient"), width/2-100, this.height / 4 + 120 - 34, 10526880);
         this.argField.render(matrices, mouseX, mouseY, delta);
         this.delayField.render(matrices, mouseX, mouseY, delta);

@@ -25,7 +25,7 @@ public class MessageExecutor {
         new FalseRunnable() {
             @Override
             public void run() {
-                Falsify.mc.player.sendMessage(Text.of(message));
+                ChatModuleUtils.sendMessage(message, true);
             }
         }.runTaskLater(delay);
     }

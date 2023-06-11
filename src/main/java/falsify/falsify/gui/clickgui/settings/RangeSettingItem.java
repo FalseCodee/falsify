@@ -30,7 +30,7 @@ public class RangeSettingItem extends SettingItem<RangeSetting> implements Dragg
         drawSmoothRect(backgroundColor, matrices, (float) x, (float) y, (float) (x + width), (float) (y + height),2, new int[] {5,5,5,5});
         double ratio = (setting.getValue()-setting.getMin()) / (setting.getMax()-setting.getMin());
         drawRect(barColor,matrices, (float)x, (float)y, (float)(x + ratio*width), (float)(y + height));
-        drawCenteredText(matrices, Falsify.mc.textRenderer, setting.getName() + ": " + setting.getValue(), (int)(x + width/2), (int)(y + height/2 - Falsify.mc.textRenderer.fontHeight/2), textColor.getRGB());
+        drawCenteredTextWithShadow(matrices, Falsify.mc.textRenderer, setting.getName() + ": " + setting.getValue(), (int)(x + width/2), (int)(y + height/2 - Falsify.mc.textRenderer.fontHeight/2), textColor.getRGB());
     }
 
     @Override

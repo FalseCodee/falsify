@@ -58,17 +58,17 @@ public class AutoMath extends ChatModule {
                     @Override
                     public void run() {
                         try {
-                            if (showEquation.getValue()) mc.player.sendMessage(Text.of(finalMessage + " = " + format.format(eval(finalMessage, vars, funcs))));
-                            else mc.player.sendMessage(Text.of("" + format.format(eval(finalMessage, vars, funcs))));
+                            if (showEquation.getValue()) ChatModuleUtils.sendMessage(finalMessage + " = " + format.format(eval(finalMessage, vars, funcs)), true);
+                            else ChatModuleUtils.sendMessage("" + format.format(eval(finalMessage, vars, funcs)), true);
                         } catch (RuntimeException e) {
-                            mc.player.sendMessage(Text.of(e.getMessage()));
+                            ChatModuleUtils.sendMessage(e.getMessage(), true);
                         }
                     }
                 }.runTaskLater(500);
             } else if (message.toLowerCase().contains(mc.player.getGameProfile().getName().toLowerCase() + " push ")) {
                 String[] args = message.split(" ");
                 int startIndex = 0;
-                while (!args[startIndex].equalsIgnoreCase(mc.player.getGameProfile().getName())) startIndex++;
+                while (!args[startIndex].toLowerCase().contains(mc.player.getGameProfile().getName().toLowerCase())) startIndex++;
                 if(args.length < startIndex + 1 + 4) {
                     new MessageExecutor("Invalid Syntax", 500).runTaskLater();
                     return;
@@ -81,13 +81,13 @@ public class AutoMath extends ChatModule {
                     vars.put(var,val);
                     new MessageExecutor("loaded '" + var + "' as " + format.format(val), 500).runTaskLater();
                 } catch (Exception e) {
-                    mc.player.sendMessage(Text.of(e.getMessage()));
+                    ChatModuleUtils.sendMessage(e.getMessage(), true);
                 }
             }
             else if (message.toLowerCase().contains(mc.player.getGameProfile().getName().toLowerCase() + " pushfunc ")) {
                 String[] args = message.split(" ");
                 int startIndex = 0;
-                while (!args[startIndex].equalsIgnoreCase(mc.player.getGameProfile().getName())) startIndex++;
+                while (!args[startIndex].toLowerCase().contains(mc.player.getGameProfile().getName().toLowerCase())) startIndex++;
                 if(args.length < startIndex + 1 + 4) {
                     new MessageExecutor("Invalid Syntax", 500).runTaskLater();
                     return;
@@ -100,13 +100,13 @@ public class AutoMath extends ChatModule {
                     funcs.put(var,val);
                     new MessageExecutor("loaded function '" + var + "(x)' as " + val, 500).runTaskLater();
                 } catch (Exception e) {
-                    mc.player.sendMessage(Text.of(e.getMessage()));
+                    ChatModuleUtils.sendMessage(e.getMessage(), true);
                 }
             }
             else if (message.toLowerCase().contains(mc.player.getGameProfile().getName().toLowerCase() + " graph ")) {
                 String[] args = message.split(" ");
                 int startIndex = 0;
-                while (!args[startIndex].equalsIgnoreCase(mc.player.getGameProfile().getName())) startIndex++;
+                while (!args[startIndex].toLowerCase().contains(mc.player.getGameProfile().getName().toLowerCase())) startIndex++;
                 if(args.length < startIndex + 1 + 10) {
                     new MessageExecutor("Invalid Syntax", 500).runTaskLater();
                     return;
@@ -122,7 +122,7 @@ public class AutoMath extends ChatModule {
                         new MessageExecutor(graph[i], 500 + delay.getValue().longValue() * (graph.length-i)).runTaskLater();
                     }
                 } catch (Exception e) {
-                    mc.player.sendMessage(Text.of(e.getMessage()));
+                    ChatModuleUtils.sendMessage(e.getMessage(), true);
                 }
             }
         }

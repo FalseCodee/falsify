@@ -21,6 +21,6 @@ public class BooleanSettingItem extends SettingItem<BooleanSetting>{
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         drawSmoothRect(backgroundColor,matrices, (float)x, (float)y, (float)(x + width), (float)(y + height), 2, new int[] {5,5,5,5});
-        drawCenteredText(matrices, Falsify.mc.textRenderer, setting.getName() + ": " + ((setting.getValue()) ? "Enabled" : "Disabled"), (int)(x + width/2), (int)(y + height/2 - Falsify.mc.textRenderer.fontHeight/2), textColor.getRGB());
+        drawCenteredTextWithShadow(matrices, Falsify.mc.textRenderer, setting.getName() + ": " + ((setting.getValue()) ? "Enabled" : "Disabled"), (int)(x + width/2), (int)(y + height/2 - Falsify.mc.textRenderer.fontHeight/2), textColor.getRGB());
     }
 }

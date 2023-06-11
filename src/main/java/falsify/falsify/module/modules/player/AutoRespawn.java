@@ -12,20 +12,12 @@ public class AutoRespawn extends Module {
         super("Auto Respawn", Category.MISC, GLFW.GLFW_KEY_U, true);
     }
     public final Timer timer = new Timer();
-    public boolean dead = false;
     @Override
     public void onEvent(Event event) {
          if(event instanceof EventUpdate){
-             if(!dead && mc.player.isDead()){
-                 timer.reset();
-                 dead = true;
-             }
-            else if(timer.hasTimeElapsed(1000*45, true) && mc.player.isDead()){
+             if(timer.hasTimeElapsed(100, true) && mc.player.isDead()) {
                  mc.player.requestRespawn();
-            }
-             else if(dead && !mc.player.isDead()){
-                dead = false;
-            }
+             }
         }
     }
 }

@@ -39,7 +39,7 @@ public class BungeeGUI extends Screen {
         this.bungeeHack = ModuleManager.getModule(BungeeHack.class);
         assert this.client != null;
         this.fakeIPField = new TextFieldWidget(this.textRenderer, width/2-205+50+ offset, 66, 200, 20, Text.translatable("addServer.enterName"));
-        this.fakeIPField.setTextFieldFocused(true);
+        this.fakeIPField.setFocused(true);
         this.fakeIPField.setEditable(true);
         this.fakeIPField.setText(bungeeHack.ip);
         this.fakeIPField.setChangedListener(this::onClose);
@@ -86,7 +86,7 @@ public class BungeeGUI extends Screen {
 
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrices);
-        drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 17, 16777215);
+        drawCenteredTextWithShadow(matrices, this.textRenderer, this.title, this.width / 2, 17, 16777215);
         drawTextWithShadow(matrices, this.textRenderer, Text.of("Enter Fake IP"), width/2-150, 53, 10526880);
         drawTextWithShadow(matrices, this.textRenderer, Text.of("Enter Fake UUID"), width/2-150, 94, 10526880);
         drawTextWithShadow(matrices, this.textRenderer, Text.of("Enter Fake IGN, Current: " + Falsify.mc.getSession().getUsername()), width/2-150, 134, 10526880);

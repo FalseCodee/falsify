@@ -6,6 +6,7 @@ import falsify.falsify.listeners.events.EventFrame;
 import falsify.falsify.listeners.events.EventUpdate;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
+import falsify.falsify.module.modules.movement.Trajectories;
 import falsify.falsify.module.settings.BooleanSetting;
 import falsify.falsify.module.settings.ModeSetting;
 import falsify.falsify.module.settings.RangeSetting;
@@ -40,7 +41,7 @@ public class Aimbot extends Module {
     private final RangeSetting cursorMulti = new RangeSetting("Cursor Multi", 1, 0, 5, 0.01);
     private final RangeSetting manPitch = new RangeSetting("Man Pitch", 0, -90, 90, 1);
     private final RangeSetting manYaw = new RangeSetting("Man Yaw", 0, -180, 180, 1);
-
+    private final BooleanSetting trajectories = new BooleanSetting("Trajectories", false);
 
     private float timing = 0.0f;
 
@@ -62,6 +63,7 @@ public class Aimbot extends Module {
         settings.add(cursorMulti);
         settings.add(manYaw);
         settings.add(manPitch);
+        settings.add(trajectories);
     }
 
     @Override
@@ -110,6 +112,7 @@ public class Aimbot extends Module {
                         target = null;
                         return;
                     }
+                    if(trajectories.getValue()) Trajectories.target = target;
                     if (this.oldTarget == null || this.oldTarget.getEntity() != target.getEntity())
                         this.timing = 0.0F;
                     this.timing += 0.015F;

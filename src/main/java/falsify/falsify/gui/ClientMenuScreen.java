@@ -63,7 +63,7 @@ public class ClientMenuScreen extends Screen {
                    Color hover = (clickable.isHovering(mouseX, mouseY)) ? new Color(144, 144, 144) : new Color(60, 60, 60);
                    RenderHelper.drawSmoothRect(hover.darker().darker(),matrixStack, (int)clickable.getX()+1, (int)clickable.getY()+1, (int)(clickable.getX() + clickable.getWidth()-1), (int)(clickable.getY() + clickable.getHeight()-1), 3, new int[] {5, 5, 5, 5});
                    RenderHelper.drawSmoothRect(hover,matrixStack, (int)clickable.getX()+2, (int)clickable.getY()+2, (int)(clickable.getX() + clickable.getWidth()-2), (int)(clickable.getY() + clickable.getHeight()-2), 3, new int[] {5, 5, 5, 5});
-                   drawCenteredText(matrixStack, textRenderer, Text.of(name), (int)(clickable.getX() + clickable.getWidth()/2), (int)(clickable.getY() + clickable.getHeight()/2), Color.WHITE.getRGB());
+                   drawCenteredTextWithShadow(matrixStack, textRenderer, Text.of(name), (int)(clickable.getX() + clickable.getWidth()/2), (int)(clickable.getY() + clickable.getHeight()/2), Color.WHITE.getRGB());
                }).build());
     }
 
@@ -122,7 +122,7 @@ public class ClientMenuScreen extends Screen {
         }
         matrices.push();
         matrices.scale(3, 3, 1);
-        drawCenteredText(matrices, textRenderer, "Legacy Client", width/2/3, height/2/3, -1);
+        drawCenteredTextWithShadow(matrices, textRenderer, "Legacy Client", width/2/3, height/2/3, -1);
         matrices.pop();
     }
 }

@@ -31,7 +31,7 @@ public class ClickGUI extends Screen {
             @Override
             public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
                 drawSmoothRect(new Color(89, 89, 89, 255), matrices, (float) x, (float) y, (float) (x + width), (float) (y + height),25, new int[] {10,10,10,10});
-                drawCenteredText(matrices, Falsify.mc.textRenderer, "Edit", (int) x + (int) width/2, (int) y + (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, 0xffffff);
+                drawCenteredTextWithShadow(matrices, Falsify.mc.textRenderer, "Edit", (int) x + (int) width/2, (int) y + (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, 0xffffff);
 
             }
         };

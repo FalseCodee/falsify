@@ -3,7 +3,7 @@ package falsify.falsify.mixin;
 import falsify.falsify.Falsify;
 import falsify.falsify.listeners.events.EventPacketRecieve;
 import falsify.falsify.listeners.events.EventPacketSend;
-import net.minecraft.network.Packet;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.network.listener.PacketListener;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -20,7 +20,7 @@ public class MixinPacket {
             ci.cancel();
         }
     }
-    @Inject(method = "send(Lnet/minecraft/network/Packet;)V", at = @At(value = "HEAD"), cancellable = true)
+    @Inject(method = "send(Lnet/minecraft/network/packet/Packet;)V", at = @At(value = "HEAD"), cancellable = true)
     public void onSend(Packet<?> packet, CallbackInfo ci){
         EventPacketSend e = new EventPacketSend(packet);
         Falsify.onEvent(e);

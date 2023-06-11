@@ -29,7 +29,7 @@ public class ServerPingGUI extends Screen {
         assert this.client != null;
 
         this.serverAddressField = new TextFieldWidget(this.textRenderer, width/2-100, this.height / 4 + 120 - 18, 200, 20, Text.translatable("addServer.enterIp"));
-        this.serverAddressField.setTextFieldFocused(true);
+        this.serverAddressField.setFocused(true);
         this.serverAddressField.setEditable(true);
         this.serverAddressField.setMaxLength(128);
         this.serverAddressField.setText("mc.hypixel.net");
@@ -44,7 +44,7 @@ public class ServerPingGUI extends Screen {
 
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrices);
-        drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 17, 16777215);
+        drawCenteredTextWithShadow(matrices, this.textRenderer, this.title, this.width / 2, 17, 16777215);
         drawTextWithShadow(matrices, this.textRenderer, Text.of("Enter Name of Recipient"), width/2-100, this.height / 4 + 120 - 34, 10526880);
         this.serverAddressField.render(matrices, mouseX, mouseY, delta);
 

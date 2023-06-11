@@ -26,10 +26,10 @@ public class KeybindSettingItem extends SettingItem<KeybindSetting> implements T
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         if(!highlighted) {
             drawSmoothRect(backgroundColor, matrices, (float) x, (float) y, (float) (x + width), (float) (y + height),2, new int[] {5,5,5,5});
-            drawCenteredText(matrices, Falsify.mc.textRenderer, setting.getName() + ": " + ChatModuleUtils.keyCodeToString(setting.getValue()), (int) (x + width / 2), (int) (y + height / 2 - Falsify.mc.textRenderer.fontHeight / 2), textColor.getRGB());
+            drawCenteredTextWithShadow(matrices, Falsify.mc.textRenderer, setting.getName() + ": " + ChatModuleUtils.keyCodeToString(setting.getValue()), (int) (x + width / 2), (int) (y + height / 2 - Falsify.mc.textRenderer.fontHeight / 2), textColor.getRGB());
         } else {
             drawSmoothRect(backgroundColor.brighter(), matrices, (float) x, (float) y, (float) (x + width), (float) (y + height),2, new int[] {5,5,5,5});
-            drawCenteredText(matrices, Falsify.mc.textRenderer, "SELECT KEY", (int) (x + width / 2), (int) (y + height / 2 - Falsify.mc.textRenderer.fontHeight / 2), textColor.getRGB());
+            drawCenteredTextWithShadow(matrices, Falsify.mc.textRenderer, "SELECT KEY", (int) (x + width / 2), (int) (y + height / 2 - Falsify.mc.textRenderer.fontHeight / 2), textColor.getRGB());
         }
     }
 

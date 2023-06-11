@@ -87,18 +87,32 @@ public class MathUtils {
     }
 
     public static double horizontalDistance(Entity entity) {
-        return Math.sqrt((Falsify.mc.player.getX() - entity.getX()) * (Falsify.mc.player.getX() - entity.getX()) + (Falsify.mc.player.getZ() - entity.getZ()) * (Falsify.mc.player.getZ() - entity.getZ()));
+        return horizontalDistance(entity.getPos());
+    }
+
+    public static double horizontalDistance(Vec3d pos) {
+        return Math.sqrt((Falsify.mc.player.getX() - pos.getX()) * (Falsify.mc.player.getX() - pos.getX()) + (Falsify.mc.player.getZ() - pos.getZ()) * (Falsify.mc.player.getZ() - pos.getZ()));
     }
 
     public static double verticalDistance(Entity entity) {
-        return Falsify.mc.player.getY() - entity.getY();
+        return verticalDistance(entity.getPos());
+    }
+
+    public static double verticalDistance(Vec3d pos) {
+        return Falsify.mc.player.getY() - pos.getY();
     }
 
     public static int getVerticalMov() {
-        if(Falsify.mc.player.input.jumping && Falsify.mc.player.input.sneaking) return 0;
-        else if(Falsify.mc.player.input.jumping) return 1;
-        else if(Falsify.mc.player.input.sneaking) return -1;
+        if(Falsify.mc.options.jumpKey.isPressed() && Falsify.mc.options.sneakKey.isPressed()) return 0;
+        else if(Falsify.mc.options.jumpKey.isPressed()) return 1;
+        else if(Falsify.mc.options.sneakKey.isPressed()) return -1;
         return 0;
+    }
+
+    public static Vec3d pitchYawToVector3d(double pitch, double yaw) {
+        pitch = Math.toRadians(pitch);
+        yaw = Math.toRadians(yaw);
+        return new Vec3d(Math.cos(yaw)*Math.cos(pitch), Math.sin(pitch), Math.sin(yaw)*Math.cos(pitch));
     }
 
     public static double random(double min, double max) {
