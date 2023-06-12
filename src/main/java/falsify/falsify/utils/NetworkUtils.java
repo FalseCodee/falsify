@@ -24,16 +24,13 @@ public class NetworkUtils {
             new MultiplayerServerListPinger().add(serverInfo, () -> runnable.run(serverInfo));
         } catch (UnknownHostException var2) {
             serverInfo.ping = -1L;
-            serverInfo.label = Text.of("Cannot Resolve");
+            serverInfo.label = Text.of("Cannot Connect");
             runnable.run(serverInfo);
         } catch (Exception var3) {
             serverInfo.ping = -1L;
             serverInfo.label = Text.of("Cannot Connect");
             runnable.run(serverInfo);
         }
-        serverInfo.ping = -1L;
-        serverInfo.label = Text.of("Cannot Connect");
-        System.out.println("Do I get here?");
     }
 
     public static String postRequest(String urlString, String jsonInput) throws IOException {

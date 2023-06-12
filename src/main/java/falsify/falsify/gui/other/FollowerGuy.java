@@ -2,13 +2,9 @@ package falsify.falsify.gui.other;
 
 import falsify.falsify.Falsify;
 import falsify.falsify.gui.clickgui.Clickable;
-import falsify.falsify.gui.editor.Renderable;
 import falsify.falsify.utils.MathUtils;
-import falsify.falsify.utils.PID;
 import falsify.falsify.utils.RenderHelper;
-import falsify.falsify.utils.RenderUtils;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.client.util.math.Vector2f;
 import net.minecraft.util.math.Vec3d;
 
 import java.awt.*;

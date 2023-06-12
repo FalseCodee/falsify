@@ -44,6 +44,7 @@ public class ModuleManager {
         modules.add(new ESP());
         modules.add(new DupeDrop());
         modules.add(new BodyGuard());
+        modules.add(new Spawner());
 
         modules.add(new FPSModule());
         modules.add(new TimeModule());
