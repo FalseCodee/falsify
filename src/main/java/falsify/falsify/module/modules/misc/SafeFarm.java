@@ -14,7 +14,6 @@ import net.minecraft.block.AirBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CropBlock;
 import net.minecraft.block.FarmlandBlock;
-import net.minecraft.text.Text;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;

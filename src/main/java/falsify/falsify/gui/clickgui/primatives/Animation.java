@@ -2,7 +2,6 @@ package falsify.falsify.gui.clickgui.primatives;
 
 import falsify.falsify.Falsify;
 import falsify.falsify.utils.MathUtils;
-import falsify.falsify.utils.Timer;
 
 import java.awt.*;
 

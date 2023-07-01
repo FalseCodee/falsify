@@ -3,7 +3,6 @@ package falsify.falsify.listeners.events;
 import falsify.falsify.listeners.Event;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
-import net.minecraft.client.util.math.MatrixStack;
 
 public class EventRender extends Event<EventRender> {
     final float tickDelta;

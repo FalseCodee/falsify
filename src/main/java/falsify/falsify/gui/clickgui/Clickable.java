@@ -3,7 +3,6 @@ package falsify.falsify.gui.clickgui;
 import falsify.falsify.gui.clickgui.Renderable;
 import falsify.falsify.utils.RenderHelper;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.util.math.MatrixStack;
 
 import java.awt.*;
 

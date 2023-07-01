@@ -5,8 +5,6 @@ import falsify.falsify.listeners.events.EventPacketRecieve;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
 import falsify.falsify.utils.ChatModuleUtils;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.network.packet.s2c.play.ChatMessageS2CPacket;
 import org.lwjgl.glfw.GLFW;
 

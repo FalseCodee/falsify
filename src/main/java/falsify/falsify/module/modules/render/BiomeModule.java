@@ -6,7 +6,6 @@ import falsify.falsify.module.Category;
 import falsify.falsify.module.DisplayModule;
 import falsify.falsify.utils.ChatModuleUtils;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.util.math.MatrixStack;
 
 public class BiomeModule extends DisplayModule<BiomeRenderModule> {
     public BiomeModule() {

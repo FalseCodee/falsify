@@ -2,17 +2,14 @@ package falsify.falsify.gui;
 
 import falsify.falsify.Falsify;
 import falsify.falsify.gui.clickgui.Clickable;
-import falsify.falsify.gui.clickgui.primatives.Animation;
 import falsify.falsify.gui.other.FollowerGuy;
 import falsify.falsify.utils.MathUtils;
 import falsify.falsify.utils.RenderHelper;
-import falsify.falsify.utils.RenderUtils;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.screen.option.OptionsScreen;
 import net.minecraft.client.gui.screen.world.SelectWorldScreen;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
 import java.awt.*;

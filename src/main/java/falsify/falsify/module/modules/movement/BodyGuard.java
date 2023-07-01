@@ -6,8 +6,6 @@ import falsify.falsify.listeners.events.EventPacketSend;
 import falsify.falsify.listeners.events.EventUpdate;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
-import falsify.falsify.module.modules.combat.Aimbot;
-import falsify.falsify.module.settings.BooleanSetting;
 import falsify.falsify.module.settings.ModeSetting;
 import falsify.falsify.module.settings.RangeSetting;
 import falsify.falsify.utils.AimbotTarget;

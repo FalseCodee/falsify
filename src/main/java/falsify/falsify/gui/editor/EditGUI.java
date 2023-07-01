@@ -7,7 +7,6 @@ import falsify.falsify.module.ModuleManager;
 import falsify.falsify.utils.RenderHelper;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
 import java.awt.*;

@@ -6,8 +6,6 @@ import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
 import falsify.falsify.module.settings.RangeSetting;
 import falsify.falsify.utils.MathUtils;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import org.lwjgl.glfw.GLFW;
 
 public class BoatFly extends Module {

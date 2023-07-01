@@ -5,7 +5,6 @@ import falsify.falsify.gui.clickgui.Clickable;
 import falsify.falsify.utils.MathUtils;
 import falsify.falsify.utils.RenderHelper;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Vec3d;
 
 import java.awt.*;

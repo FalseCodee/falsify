@@ -12,9 +12,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.Box;
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.opengl.GL11;
 
 import java.util.List;
 import java.util.stream.Collectors;

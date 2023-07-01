@@ -7,9 +7,6 @@ import falsify.falsify.module.Category;
 import falsify.falsify.module.DisplayModule;
 import falsify.falsify.module.settings.RangeSetting;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.util.math.MatrixStack;
-
-import java.awt.*;
 
 public class WASDModule extends DisplayModule<WASDRenderModule> {
 

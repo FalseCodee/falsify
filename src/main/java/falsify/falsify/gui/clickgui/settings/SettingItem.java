@@ -2,7 +2,6 @@ package falsify.falsify.gui.clickgui.settings;
 
 import falsify.falsify.gui.clickgui.Clickable;
 import falsify.falsify.module.settings.Setting;
-import net.minecraft.client.util.math.MatrixStack;
 
 import java.awt.*;
 

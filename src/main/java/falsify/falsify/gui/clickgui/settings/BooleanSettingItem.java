@@ -3,7 +3,6 @@ package falsify.falsify.gui.clickgui.settings;
 import falsify.falsify.Falsify;
 import falsify.falsify.module.settings.BooleanSetting;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.util.math.MatrixStack;
 
 public class BooleanSettingItem extends SettingItem<BooleanSetting>{
     public BooleanSettingItem(BooleanSetting setting, double x, double y, double width, double height) {

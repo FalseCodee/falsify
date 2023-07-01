@@ -3,7 +3,6 @@ package falsify.falsify.gui.clickgui.settings;
 import falsify.falsify.Falsify;
 import falsify.falsify.module.settings.ModeSetting;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.util.math.MatrixStack;
 
 public class ModeSettingItem extends SettingItem<ModeSetting>{
     public ModeSettingItem(ModeSetting setting, double x, double y, double width, double height) {

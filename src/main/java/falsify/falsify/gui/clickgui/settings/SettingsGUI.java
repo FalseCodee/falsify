@@ -1,16 +1,13 @@
 package falsify.falsify.gui.clickgui.settings;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import falsify.falsify.Falsify;
 import falsify.falsify.gui.clickgui.Draggable;
 import falsify.falsify.gui.clickgui.Typable;
-import falsify.falsify.gui.editor.module.RenderModule;
 import falsify.falsify.module.Module;
 import falsify.falsify.module.settings.*;
 import falsify.falsify.utils.RenderHelper;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
 import java.awt.*;

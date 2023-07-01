@@ -6,7 +6,6 @@ import falsify.falsify.gui.clickgui.Draggable;
 import falsify.falsify.gui.clickgui.settings.SettingsGUI;
 import falsify.falsify.module.Module;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.util.math.MatrixStack;
 
 import java.awt.*;
 

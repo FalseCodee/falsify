@@ -7,7 +7,6 @@ import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
 import falsify.falsify.module.ModuleManager;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.util.math.MatrixStack;
 
 import java.awt.*;
 import java.util.ArrayList;

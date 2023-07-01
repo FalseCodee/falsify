@@ -7,7 +7,6 @@ import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
 import falsify.falsify.module.settings.BooleanSetting;
 import falsify.falsify.module.settings.RangeSetting;
-import falsify.falsify.utils.PlayerUtils;
 import falsify.falsify.utils.Timer;
 import net.minecraft.util.hit.HitResult;
 

@@ -5,7 +5,6 @@ import falsify.falsify.gui.editor.module.RenderModule;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.DisplayModule;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.world.LightType;
 
 public class LightLevelModule extends DisplayModule<LightLevelRenderModule> {

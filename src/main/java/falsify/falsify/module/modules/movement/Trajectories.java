@@ -4,8 +4,6 @@ import falsify.falsify.listeners.Event;
 import falsify.falsify.listeners.events.EventUpdate;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
-import falsify.falsify.module.modules.combat.Aimbot;
-import falsify.falsify.module.modules.misc.SafeFarm;
 import falsify.falsify.module.settings.BooleanSetting;
 import falsify.falsify.module.settings.RangeSetting;
 import falsify.falsify.utils.*;

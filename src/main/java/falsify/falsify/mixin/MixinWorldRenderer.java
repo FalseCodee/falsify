@@ -4,15 +4,11 @@ import falsify.falsify.Falsify;
 import falsify.falsify.listeners.events.EventRender3d;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
-import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.gen.Accessor;
-import org.spongepowered.asm.mixin.gen.Invoker;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(WorldRenderer.class)
 public class MixinWorldRenderer {

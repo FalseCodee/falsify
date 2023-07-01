@@ -6,7 +6,6 @@ import falsify.falsify.mixin.special.MixinMinecraft;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.DisplayModule;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.util.math.MatrixStack;
 
 public class FPSModule extends DisplayModule<FPSRenderModule> {
     public FPSModule() {

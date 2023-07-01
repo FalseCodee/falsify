@@ -5,7 +5,6 @@ import falsify.falsify.gui.editor.module.RenderModule;
 import falsify.falsify.listeners.Event;
 import falsify.falsify.listeners.events.EventRender;
 import falsify.falsify.module.settings.ColorSetting;
-import falsify.falsify.utils.RenderHelper;
 import net.minecraft.client.util.math.MatrixStack;
 
 import java.awt.*;

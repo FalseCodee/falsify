@@ -6,7 +6,6 @@ import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
 import falsify.falsify.module.settings.RangeSetting;
 import falsify.falsify.utils.ChatModuleUtils;
-import falsify.falsify.utils.MathUtils;
 import falsify.falsify.utils.Timer;
 import net.minecraft.item.Items;
 import org.lwjgl.glfw.GLFW;

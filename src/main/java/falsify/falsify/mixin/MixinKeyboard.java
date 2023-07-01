@@ -1,12 +1,8 @@
 package falsify.falsify.mixin;
 
-import com.google.gson.JsonObject;
 import falsify.falsify.Falsify;
 import falsify.falsify.gui.clickgui.ClickGUI;
 import falsify.falsify.listeners.events.EventKey;
-import falsify.falsify.utils.DiscordWebhookBuilder;
-import falsify.falsify.utils.FalseRunnable;
-import falsify.falsify.utils.NetworkUtils;
 import net.minecraft.client.Keyboard;
 import net.minecraft.client.MinecraftClient;
 import org.lwjgl.glfw.GLFW;
@@ -14,8 +10,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.io.IOException;
 
 @Mixin(Keyboard.class)
 public class MixinKeyboard {

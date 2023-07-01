@@ -1,23 +1,17 @@
 package falsify.falsify.gui;
 
-import falsify.falsify.Falsify;
-import falsify.falsify.gui.clickgui.settings.SettingItem;
 import falsify.falsify.gui.ping.PingResponseEntry;
 import falsify.falsify.utils.FalseRunnable;
 import falsify.falsify.utils.NetworkUtils;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.SliderWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.network.ServerInfo;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 public class ServerPingGUI extends Screen {
 

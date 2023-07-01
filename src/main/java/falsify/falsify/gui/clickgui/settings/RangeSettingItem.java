@@ -4,7 +4,6 @@ import falsify.falsify.Falsify;
 import falsify.falsify.gui.clickgui.Draggable;
 import falsify.falsify.module.settings.RangeSetting;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.util.math.MatrixStack;
 
 import java.awt.*;
 

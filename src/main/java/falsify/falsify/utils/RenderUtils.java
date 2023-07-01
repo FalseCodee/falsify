@@ -11,13 +11,11 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.*;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public class RenderUtils {

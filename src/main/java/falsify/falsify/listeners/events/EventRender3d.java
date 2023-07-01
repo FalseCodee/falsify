@@ -2,8 +2,6 @@ package falsify.falsify.listeners.events;
 
 import falsify.falsify.listeners.Event;
 import net.minecraft.client.render.Camera;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.util.math.MatrixStack;
 import org.joml.Matrix4f;
 

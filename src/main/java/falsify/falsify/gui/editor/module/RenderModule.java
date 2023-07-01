@@ -8,9 +8,6 @@ import falsify.falsify.module.DisplayModule;
 import falsify.falsify.utils.MathUtils;
 import falsify.falsify.utils.RenderHelper;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.util.math.MatrixStack;
-
-import java.util.ArrayList;
 
 public abstract class RenderModule<T extends DisplayModule<?>> extends Clickable implements Draggable {
     protected T module;

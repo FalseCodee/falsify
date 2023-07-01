@@ -6,7 +6,6 @@ import net.minecraft.util.StringHelper;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 

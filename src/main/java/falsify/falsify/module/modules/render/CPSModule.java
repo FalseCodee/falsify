@@ -7,7 +7,6 @@ import falsify.falsify.module.Category;
 import falsify.falsify.module.DisplayModule;
 import falsify.falsify.utils.FalseRunnable;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.util.math.MatrixStack;
 import falsify.falsify.gui.editor.module.RenderModule;
 
 public class CPSModule extends DisplayModule<CPSRenderModule> {
