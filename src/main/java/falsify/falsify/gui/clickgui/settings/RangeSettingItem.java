@@ -3,6 +3,7 @@ package falsify.falsify.gui.clickgui.settings;
 import falsify.falsify.Falsify;
 import falsify.falsify.gui.clickgui.Draggable;
 import falsify.falsify.module.settings.RangeSetting;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
 
 import java.awt.*;
@@ -26,11 +27,11 @@ public class RangeSettingItem extends SettingItem<RangeSetting> implements Dragg
 
     private final Color barColor = new Color(75, 75, 75);
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        drawSmoothRect(backgroundColor, matrices, (float) x, (float) y, (float) (x + width), (float) (y + height),2, new int[] {5,5,5,5});
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        drawSmoothRect(backgroundColor, context.getMatrices(), (float) x, (float) y, (float) (x + width), (float) (y + height),2, new int[] {5,5,5,5});
         double ratio = (setting.getValue()-setting.getMin()) / (setting.getMax()-setting.getMin());
-        drawRect(barColor,matrices, (float)x, (float)y, (float)(x + ratio*width), (float)(y + height));
-        drawCenteredTextWithShadow(matrices, Falsify.mc.textRenderer, setting.getName() + ": " + setting.getValue(), (int)(x + width/2), (int)(y + height/2 - Falsify.mc.textRenderer.fontHeight/2), textColor.getRGB());
+        drawRect(barColor,context.getMatrices(), (float)x, (float)y, (float)(x + ratio*width), (float)(y + height));
+        context.drawCenteredTextWithShadow(Falsify.mc.textRenderer, setting.getName() + ": " + setting.getValue(), (int)(x + width/2), (int)(y + height/2 - Falsify.mc.textRenderer.fontHeight/2), textColor.getRGB());
     }
 
     @Override

@@ -8,6 +8,7 @@ import falsify.falsify.gui.editor.module.RenderModule;
 import falsify.falsify.module.Module;
 import falsify.falsify.module.settings.*;
 import falsify.falsify.utils.RenderHelper;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
@@ -125,15 +126,15 @@ public class SettingsGUI extends Screen {
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         int padding = 1;
-        RenderHelper.drawSmoothRect(new Color(255, 255, 255, 200), matrices, width/4-padding, height/4-padding, 3*width/4+padding, 3*height/4+padding, 5+padding, new int[] {15,15,15,15});
-        RenderHelper.drawSmoothRect(new Color(136, 136, 136), matrices, width/4, height/4, 3*width/4, 3*height/4, 5, new int[] {15,15,15,15});
-        RenderHelper.drawRect(new Color(50,50,50, 100), matrices, 0, 0, width, height);
-        drawCenteredTextWithShadow(matrices, Falsify.mc.textRenderer, module.name, width/2, height/4 + 5, new Color(255, 255, 255).getRGB());
+        RenderHelper.drawSmoothRect(new Color(255, 255, 255, 200), context.getMatrices(), width/4-padding, height/4-padding, 3*width/4+padding, 3*height/4+padding, 5+padding, new int[] {15,15,15,15});
+        RenderHelper.drawSmoothRect(new Color(136, 136, 136), context.getMatrices(), width/4, height/4, 3*width/4, 3*height/4, 5, new int[] {15,15,15,15});
+        RenderHelper.drawRect(new Color(50,50,50, 100), context.getMatrices(), 0, 0, width, height);
+        context.drawCenteredTextWithShadow(Falsify.mc.textRenderer, module.name, width/2, height/4 + 5, new Color(255, 255, 255).getRGB());
         RenderHelper.enableScissor(width/4, height/4 + Falsify.mc.textRenderer.fontHeight + 10, 3*width/4, 3*height/4);
         for(SettingItem<?> settingItem : settingItems) {
-            settingItem.render(matrices, mouseX, mouseY, delta);
+            settingItem.render(context, mouseX, mouseY, delta);
         }
         RenderHelper.disableScissor();
     }

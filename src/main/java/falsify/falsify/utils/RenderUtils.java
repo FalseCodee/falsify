@@ -5,7 +5,7 @@ import falsify.falsify.Falsify;
 import falsify.falsify.listeners.events.EventRender3d;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
@@ -21,38 +21,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RenderUtils {
-    public static void AlignFill(int x1, int y1, int x2, int y2, int color, Alignment alignment) {
-        MatrixStack matrix = new MatrixStack();
+    public static void AlignFill(DrawContext context, int x1, int y1, int x2, int y2, int color, Alignment alignment) {
         switch (alignment) {
-            case LEFT -> DrawableHelper.fill(matrix, x1, y1, x2, y2, color);
-            case RIGHT -> DrawableHelper.fill(matrix, Falsify.mc.getWindow().getScaledWidth() - x1, y1, Falsify.mc.getWindow().getScaledWidth() - x2, y2, color);
-            case XCENTER -> DrawableHelper.fill(matrix, Falsify.mc.getWindow().getScaledWidth() / 2 - x1, y1, Falsify.mc.getWindow().getScaledWidth() / 2 + x2, y2, color);
-            case YCENTER -> DrawableHelper.fill(matrix, x1, Falsify.mc.getWindow().getScaledHeight() / 2 - y1, x2, Falsify.mc.getWindow().getScaledHeight() / 2 + y2, color);
-            case CENTER -> DrawableHelper.fill(matrix, Falsify.mc.getWindow().getScaledWidth() / 2 - x1, Falsify.mc.getWindow().getScaledHeight() / 2 - y1, Falsify.mc.getWindow().getScaledWidth() / 2 + x2, Falsify.mc.getWindow().getScaledHeight() / 2 + y2, color);
+            case LEFT -> context.fill(x1, y1, x2, y2, color);
+            case RIGHT -> context.fill(Falsify.mc.getWindow().getScaledWidth() - x1, y1, Falsify.mc.getWindow().getScaledWidth() - x2, y2, color);
+            case XCENTER -> context.fill(Falsify.mc.getWindow().getScaledWidth() / 2 - x1, y1, Falsify.mc.getWindow().getScaledWidth() / 2 + x2, y2, color);
+            case YCENTER -> context.fill(x1, Falsify.mc.getWindow().getScaledHeight() / 2 - y1, x2, Falsify.mc.getWindow().getScaledHeight() / 2 + y2, color);
+            case CENTER -> context.fill(Falsify.mc.getWindow().getScaledWidth() / 2 - x1, Falsify.mc.getWindow().getScaledHeight() / 2 - y1, Falsify.mc.getWindow().getScaledWidth() / 2 + x2, Falsify.mc.getWindow().getScaledHeight() / 2 + y2, color);
         }
     }
 
-    public static void AlignText(String text, int x1, int y1, int color, Alignment alignment) {
-        TextRenderer fr = Falsify.mc.textRenderer;
-        MatrixStack matrix = new MatrixStack();
+    public static void AlignText(DrawContext context, String text, int x1, int y1, int color, Alignment alignment) {
+        TextRenderer tr = MinecraftClient.getInstance().textRenderer;
         switch (alignment) {
-            case LEFT -> fr.draw(matrix, text, x1, y1, color);
-            case RIGHT -> fr.draw(matrix, text, Falsify.mc.getWindow().getScaledWidth() - x1 - fr.getWidth(text), y1, color);
-            case XCENTER -> fr.draw(matrix, text, Falsify.mc.getWindow().getScaledWidth() / 2 + x1, y1, color);
-            case YCENTER -> fr.draw(matrix, text, x1, Falsify.mc.getWindow().getScaledHeight() / 2 + y1, color);
-            case CENTER -> fr.draw(matrix, text, Falsify.mc.getWindow().getScaledWidth() / 2 + x1, Falsify.mc.getWindow().getScaledHeight() / 2 + y1, color);
+            case LEFT -> context.drawTextWithShadow(tr, text, x1, y1, color);
+            case RIGHT -> context.drawTextWithShadow(tr, text, Falsify.mc.getWindow().getScaledWidth() - x1 - tr.getWidth(text), y1, color);
+            case XCENTER -> context.drawTextWithShadow(tr, text, Falsify.mc.getWindow().getScaledWidth() / 2 + x1, y1, color);
+            case YCENTER -> context.drawTextWithShadow(tr, text, x1, Falsify.mc.getWindow().getScaledHeight() / 2 + y1, color);
+            case CENTER -> context.drawTextWithShadow(tr, text, Falsify.mc.getWindow().getScaledWidth() / 2 + x1, Falsify.mc.getWindow().getScaledHeight() / 2 + y1, color);
         }
     }
 
-    public static void AlignCenteredText(String text, int x1, int y1, int color, Alignment alignment) {
-        TextRenderer fr = Falsify.mc.textRenderer;
-        MatrixStack matrix = new MatrixStack();
+    public static void AlignCenteredText(DrawContext context, String text, int x1, int y1, int color, Alignment alignment) {
+        TextRenderer tr = Falsify.mc.textRenderer;
         switch (alignment) {
-            case LEFT -> DrawableHelper.drawCenteredTextWithShadow(matrix, fr, text, x1, y1, color);
-            case RIGHT -> DrawableHelper.drawCenteredTextWithShadow(matrix, fr, text, Falsify.mc.getWindow().getScaledWidth() - x1, y1, color);
-            case XCENTER -> DrawableHelper.drawCenteredTextWithShadow(matrix, fr, text, Falsify.mc.getWindow().getScaledWidth() / 2 + x1, y1, color);
-            case YCENTER -> DrawableHelper.drawCenteredTextWithShadow(matrix, fr, text, x1, Falsify.mc.getWindow().getScaledHeight() / 2 + y1, color);
-            case CENTER -> DrawableHelper.drawCenteredTextWithShadow(matrix, fr, text, Falsify.mc.getWindow().getScaledWidth() / 2 + x1, Falsify.mc.getWindow().getScaledHeight() / 2 + y1, color);
+            case LEFT -> context.drawCenteredTextWithShadow(tr, text, x1, y1, color);
+            case RIGHT -> context.drawCenteredTextWithShadow(tr, text, Falsify.mc.getWindow().getScaledWidth() - x1, y1, color);
+            case XCENTER -> context.drawCenteredTextWithShadow(tr, text, Falsify.mc.getWindow().getScaledWidth() / 2 + x1, y1, color);
+            case YCENTER -> context.drawCenteredTextWithShadow(tr, text, x1, Falsify.mc.getWindow().getScaledHeight() / 2 + y1, color);
+            case CENTER -> context.drawCenteredTextWithShadow(tr, text, Falsify.mc.getWindow().getScaledWidth() / 2 + x1, Falsify.mc.getWindow().getScaledHeight() / 2 + y1, color);
         }
     }
 

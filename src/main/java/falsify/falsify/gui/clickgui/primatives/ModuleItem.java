@@ -5,6 +5,7 @@ import falsify.falsify.gui.clickgui.Clickable;
 import falsify.falsify.gui.clickgui.Draggable;
 import falsify.falsify.gui.clickgui.settings.SettingsGUI;
 import falsify.falsify.module.Module;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
 
 import java.awt.*;
@@ -19,7 +20,7 @@ public class ModuleItem extends Clickable implements Draggable {
         this.module = module;
     }
 
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta, boolean last) {
+    public void render(DrawContext context, int mouseX, int mouseY, float delta, boolean last) {
         Color inactive = new Color(59, 59, 59);
         Color active = new Color(238, 238, 238);
         if(module.isEnabled()) fade.rise(); else fade.lower();
@@ -27,14 +28,14 @@ public class ModuleItem extends Clickable implements Draggable {
         if(isHovering(mouseX, mouseY)) fade2.rise(); else fade2.lower();
         color = fade2.color(color, color.brighter());
         if(last) {
-            drawSmoothRect(color.darker() , matrices, (int) this.x, (int) this.y, (int) this.x + (int) this.width, (int) this.y + (int) this.height, 2, new int[] {5, 0, 0, 5});
-            drawSmoothRect(color , matrices, (int) this.x+1, (int) this.y, (int) this.x + (int) this.width-1, (int) this.y + (int) this.height-1, 2, new int[] {5, 0, 0, 5});
+            drawSmoothRect(color.darker() , context.getMatrices(), (int) this.x, (int) this.y, (int) this.x + (int) this.width, (int) this.y + (int) this.height, 2, new int[] {5, 0, 0, 5});
+            drawSmoothRect(color , context.getMatrices(), (int) this.x+1, (int) this.y, (int) this.x + (int) this.width-1, (int) this.y + (int) this.height-1, 2, new int[] {5, 0, 0, 5});
         } else {
-            drawRect(color.darker() , matrices, (int) this.x, (int) this.y, (int) this.x + (int) this.width, (int) this.y + (int) this.height);
-            drawRect(color , matrices, (int) this.x+1, (int) this.y, (int) this.x + (int) this.width-1, (int) this.y + (int) this.height-1);
+            drawRect(color.darker() , context.getMatrices(), (int) this.x, (int) this.y, (int) this.x + (int) this.width, (int) this.y + (int) this.height);
+            drawRect(color , context.getMatrices(), (int) this.x+1, (int) this.y, (int) this.x + (int) this.width-1, (int) this.y + (int) this.height-1);
 
         }
-        drawCenteredTextWithShadow(matrices, Falsify.mc.textRenderer, module.name, (int) x + (int) width/2, (int) y + (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, 0xffffff);
+        context.drawCenteredTextWithShadow(Falsify.mc.textRenderer, module.name, (int) x + (int) width/2, (int) y + (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, 0xffffff);
         fade.tick();
         fade2.tick();
     }
@@ -57,7 +58,7 @@ public class ModuleItem extends Clickable implements Draggable {
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        render(matrices, mouseX, mouseY, delta, false);
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        render(context, mouseX, mouseY, delta, false);
     }
 }

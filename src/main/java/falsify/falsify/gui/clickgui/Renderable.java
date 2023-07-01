@@ -1,7 +1,8 @@
 package falsify.falsify.gui.clickgui;
 
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
 
 public interface Renderable {
-    void render(MatrixStack matrices, int mouseX, int mouseY, float delta);
+    void render(DrawContext context, int mouseX, int mouseY, float delta);
 }

@@ -4,6 +4,7 @@ import falsify.falsify.Falsify;
 import falsify.falsify.gui.clickgui.primatives.Tab;
 import falsify.falsify.gui.editor.EditGUI;
 import falsify.falsify.module.Category;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
@@ -29,9 +30,12 @@ public class ClickGUI extends Screen {
             }
 
             @Override
-            public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-                drawSmoothRect(new Color(89, 89, 89, 255), matrices, (float) x, (float) y, (float) (x + width), (float) (y + height),25, new int[] {10,10,10,10});
-                drawCenteredTextWithShadow(matrices, Falsify.mc.textRenderer, "Edit", (int) x + (int) width/2, (int) y + (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, 0xffffff);
+            public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+                drawSmoothRect(new Color(89, 89, 89, 255), context.getMatrices(), (float) x, (float) y, (float) (x + width), (float) (y + height),25, new int[] {10,10,10,10});
+                //context.getMatrices().push();
+                //.getMatrices().translate(0.0, 0.0, -0.03);
+                context.drawCenteredTextWithShadow(Falsify.mc.textRenderer, "Edit", (int) x + (int) width/2, (int) y + (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, 0xffffff);
+                //context.getMatrices().pop();
 
             }
         };
@@ -80,10 +84,13 @@ public class ClickGUI extends Screen {
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        editButton.render(matrices, mouseX, mouseY, delta);
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        editButton.render(context, mouseX, mouseY, delta);
         for(int i = tabs.size()-1; i >= 0; i--) {
-            tabs.get(i).render(matrices, mouseX, mouseY, delta);
+            context.getMatrices().push();
+            context.getMatrices().translate(0.0, 0.0, 0.03*tabs.size()-0.03*i);
+            tabs.get(i).render(context, mouseX, mouseY, delta);
+            context.getMatrices().pop();
         }
     }
 }

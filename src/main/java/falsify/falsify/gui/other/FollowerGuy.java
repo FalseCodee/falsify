@@ -4,6 +4,7 @@ import falsify.falsify.Falsify;
 import falsify.falsify.gui.clickgui.Clickable;
 import falsify.falsify.utils.MathUtils;
 import falsify.falsify.utils.RenderHelper;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Vec3d;
 
@@ -40,18 +41,17 @@ public class FollowerGuy extends Clickable {
         if(y+height > Falsify.mc.currentScreen.height) {
             y = 10;
         }
-            //if((mouseX-x)*(mouseX-x) + (mouseY-y)*(mouseY-y) > 5000) {
-                for (FollowerGuy guy : guys) {
-                    if (guy == this) continue;
-
-                    reverseGravity(new Vec3d(guy.getX(), guy.getY(), 0), guy.mass, delta);
-                }
-                reverseGravity(new Vec3d(0, y, 0), 5000, delta);
-                reverseGravity(new Vec3d(Falsify.mc.currentScreen.width, y, 0), 5000, delta);
-                reverseGravity(new Vec3d(x, 0, 0), 5000, delta);
-                reverseGravity(new Vec3d(x, Falsify.mc.currentScreen.height - 85, 0), 5000, delta);
-            //}
-            //reverseGravity(new Vec3d(Falsify.mc.currentScreen.width/2, Falsify.mc.currentScreen.height/2, 0),10000, delta);
+        //if((mouseX-x)*(mouseX-x) + (mouseY-y)*(mouseY-y) > 5000) {
+        for (int i = guys.size()-1; i >=0 ;i--) {
+            if (guys.get(i) == this) continue;
+            reverseGravity(new Vec3d(guys.get(i).getX(), guys.get(i).getY(), 0), guys.get(i).mass, delta);
+        }
+        reverseGravity(new Vec3d(0, y, 0), 5000, delta);
+        reverseGravity(new Vec3d(Falsify.mc.currentScreen.width, y, 0), 5000, delta);
+        reverseGravity(new Vec3d(x, 0, 0), 5000, delta);
+        reverseGravity(new Vec3d(x, Falsify.mc.currentScreen.height - 85, 0), 5000, delta);
+        //}
+        //reverseGravity(new Vec3d(Falsify.mc.currentScreen.width/2, Falsify.mc.currentScreen.height/2, 0),10000, delta);
         reverseGravity(new Vec3d(mouseX, mouseY, 0),10000, delta);
 
 
@@ -82,8 +82,7 @@ public class FollowerGuy extends Clickable {
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        drawSmoothRect(RenderHelper.colorLerp(Color.WHITE, Color.ORANGE, MathUtils.clamp((float) (inertia.length()), 0.0F, 1.0F)), matrices, (float) x, (float) y, (float) (x+width), (float) (y+height), (float) width/2.0f, new int[] {5, 5, 5, 5});
-        //drawRect(Color.WHITE, matrices, (float) x, (float) y, (float) (x+width), (float) (y+height));
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        drawSmoothRect(RenderHelper.colorLerp(Color.WHITE, Color.ORANGE, MathUtils.clamp((float) (inertia.length()), 0.0F, 1.0F)), context.getMatrices(), (float) x, (float) y, (float) (x+width), (float) (y+height), (float) width/2.0f, new int[] {5, 5, 5, 5});
     }
 }

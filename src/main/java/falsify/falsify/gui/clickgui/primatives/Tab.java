@@ -6,6 +6,7 @@ import falsify.falsify.gui.clickgui.Draggable;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
 import falsify.falsify.module.ModuleManager;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
 
 import java.awt.*;
@@ -73,31 +74,31 @@ public class Tab extends Clickable implements Draggable {
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         if(isExtended()) {
             scroll.rise();
-            drawSmoothRect(new Color(54, 54, 54), matrices, (int) this.x, (int) this.y, (int) this.x + (int) this.width, (int) this.y + (int) this.height, 2, new int[] {0, 5, 5, 0});
-            drawCenteredTextWithShadow(matrices, Falsify.mc.textRenderer, category.getName(), (int) x + (int) width/2, (int) y + (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, 0xffffff);
+            drawSmoothRect(new Color(54, 54, 54), context.getMatrices(), (int) this.x, (int) this.y, (int) this.x + (int) this.width, (int) this.y + (int) this.height, 2, new int[] {0, 5, 5, 0});
+            context.drawCenteredTextWithShadow(Falsify.mc.textRenderer, category.getName(), (int) x + (int) width/2, (int) y + (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, 0xffffff);
             int i = 1;
             enableScissor((int) x, (int) (y+height), (int) (x+width), (int) (y+height + (20*modules.size()*scroll.run()) + 1));
             for(ModuleItem moduleItem : modules) {
                 moduleItem.setX(x);
                 moduleItem.setY(y + 20*i - (20*modules.size()*(1-scroll.run())));
-                moduleItem.render(matrices, mouseX, mouseY, delta, (i == modules.size()));
+                moduleItem.render(context, mouseX, mouseY, delta, (i == modules.size()));
                 i++;
             }
             disableScissor();
         } else {
             scroll.lower();
-            drawSmoothRect(new Color(54, 54, 54), matrices, (int) this.x, (int) this.y, (int) this.x + (int) this.width, (int) this.y + (int) this.height, 2, new int[] {5, 5, 5, 5});
-            drawCenteredTextWithShadow(matrices, Falsify.mc.textRenderer, category.getName(), (int) x + (int) width/2, (int) y + (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, 0xffffff);
+            drawSmoothRect(new Color(54, 54, 54), context.getMatrices(), (int) this.x, (int) this.y, (int) this.x + (int) this.width, (int) this.y + (int) this.height, 2, new int[] {5, 5, 5, 5});
+            context.drawCenteredTextWithShadow(Falsify.mc.textRenderer, category.getName(), (int) x + (int) width/2, (int) y + (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, 0xffffff);
             if(scroll.run() != 0) {
                 int i = 1;
                 enableScissor((int) x, (int) (y+height), (int) (x+width), (int) (y+height + (20*modules.size()*scroll.run()) + 1));
                 for(ModuleItem moduleItem : modules) {
                     moduleItem.setX(x);
                     moduleItem.setY(y + 20*i - (20*modules.size()*(1-scroll.run())));
-                    moduleItem.render(matrices, mouseX, mouseY, delta, (i == modules.size()));
+                    moduleItem.render(context, mouseX, mouseY, delta, (i == modules.size()));
                     i++;
                 }
                 disableScissor();

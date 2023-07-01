@@ -2,7 +2,6 @@ package falsify.falsify.utils;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import falsify.falsify.Falsify;
-import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.Window;
 import net.minecraft.client.util.math.MatrixStack;
@@ -10,7 +9,7 @@ import org.joml.Matrix4f;
 
 import java.awt.*;
 
-public class RenderHelper extends DrawableHelper {
+public class RenderHelper {
 
     public static Window WINDOW = Falsify.mc.getWindow();
     public static double SCALE = 2.0;
@@ -58,7 +57,7 @@ public class RenderHelper extends DrawableHelper {
         RenderSystem.enableBlend();
         //RenderSystem.disableTexture();
         RenderSystem.setShader(GameRenderer::getPositionColorProgram);
-        bufferBuilder.begin(VertexFormat.DrawMode.LINE_STRIP, VertexFormats.POSITION_COLOR);
+        bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINES, VertexFormats.POSITION_COLOR);
 
         bufferBuilder.vertex(matrix, x1, y1, 0.0F).color(f, g, h, i).next();
         bufferBuilder.vertex(matrix, x2, y2, 0.0F).color(f, g, h, i).next();

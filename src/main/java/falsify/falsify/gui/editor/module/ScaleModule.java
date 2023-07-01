@@ -2,6 +2,7 @@ package falsify.falsify.gui.editor.module;
 
 import falsify.falsify.gui.clickgui.Clickable;
 import falsify.falsify.gui.clickgui.Draggable;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
 
 import java.awt.*;
@@ -42,7 +43,7 @@ public class ScaleModule extends Clickable implements Draggable {
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        drawSmoothRect(new Color(200,200,200), matrices, (float) x, (float) y, (float) (x + width ), (float) (y + height ), (float) (width  / 2), new int[] {10, 10, 10, 10});
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        drawSmoothRect(new Color(200,200,200), context.getMatrices(), (float) x, (float) y, (float) (x + width ), (float) (y + height ), (float) (width  / 2), new int[] {10, 10, 10, 10});
     }
 }

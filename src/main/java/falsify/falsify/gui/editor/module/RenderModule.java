@@ -7,6 +7,7 @@ import falsify.falsify.gui.editor.EditGUI;
 import falsify.falsify.module.DisplayModule;
 import falsify.falsify.utils.MathUtils;
 import falsify.falsify.utils.RenderHelper;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
 
 import java.util.ArrayList;
@@ -46,18 +47,18 @@ public abstract class RenderModule<T extends DisplayModule<?>> extends Clickable
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        matrices.push();
-        RenderHelper.convertToScale(matrices, scale);
-        renderModule(matrices, mouseX, mouseY, delta);
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        context.getMatrices().push();
+        RenderHelper.convertToScale(context.getMatrices(), scale);
+        renderModule(context, mouseX, mouseY, delta);
         scaleModule.setX(this.x + this.width-5+2.5*scale);
         scaleModule.setY(this.y + this.height-5+2.5*scale);
-        if(Falsify.mc.currentScreen != null && Falsify.mc.currentScreen.getClass() == EditGUI.class) scaleModule.render(matrices, mouseX, mouseY, delta);
-        matrices.pop();
+        if(Falsify.mc.currentScreen != null && Falsify.mc.currentScreen.getClass() == EditGUI.class) scaleModule.render(context, mouseX, mouseY, delta);
+        context.getMatrices().pop();
 
     }
 
-    public abstract void renderModule(MatrixStack matrices, int mouseX, int mouseY, float delta);
+    public abstract void renderModule(DrawContext context, int mouseX, int mouseY, float delta);
 
     @Override
     public boolean isHovering(double x, double y) {

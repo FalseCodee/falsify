@@ -2,6 +2,7 @@ package falsify.falsify.gui.clickgui;
 
 import falsify.falsify.gui.clickgui.Renderable;
 import falsify.falsify.utils.RenderHelper;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
 
 import java.awt.*;
@@ -107,7 +108,7 @@ public abstract class Clickable extends RenderHelper implements Renderable {
         private RenderableRunnable onRender;
         public ButtonBuilder() {
             onClick = (clickable, x, y, button) -> clickable.isHovering(x, y);
-            onRender = (clickable, matrixStack, x, y, delta) -> RenderHelper.fill(matrixStack, (int)clickable.x, (int)clickable.y, (int)(clickable.x + clickable.width), (int)(clickable.y + clickable.height), Color.BLACK.getRGB());
+            onRender = (clickable, context, x, y, delta) -> context.fill((int)clickable.x, (int)clickable.y, (int)(clickable.x + clickable.width), (int)(clickable.y + clickable.height), Color.BLACK.getRGB());
         }
 
         public ButtonBuilder pos(double x, double y) {
@@ -140,8 +141,8 @@ public abstract class Clickable extends RenderHelper implements Renderable {
                 }
 
                 @Override
-                public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-                    onRender.run(this, matrices, mouseX, mouseY, delta);
+                public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+                    onRender.run(this, context, mouseX, mouseY, delta);
                 }
             };
         }
@@ -154,6 +155,6 @@ public abstract class Clickable extends RenderHelper implements Renderable {
     }
 @FunctionalInterface
     public interface RenderableRunnable{
-        void run(Clickable clickable, MatrixStack matrixStack, int mouseX, int mouseY, float delta);
+        void run(Clickable clickable, DrawContext context, int mouseX, int mouseY, float delta);
     }
 }

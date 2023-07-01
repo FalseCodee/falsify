@@ -10,7 +10,7 @@ import org.lwjgl.glfw.GLFW;
 
 public class ClientBrand extends Module {
 
-    public String brand = "chicken wing client";
+    public String brand = "Legacy Client";
 
     public ClientBrand() {
         super("Brand", Category.MISC, GLFW.GLFW_KEY_BACKSLASH, true);

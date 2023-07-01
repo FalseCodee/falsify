@@ -6,6 +6,7 @@ import falsify.falsify.listeners.Event;
 import falsify.falsify.listeners.events.EventRender;
 import falsify.falsify.module.settings.ColorSetting;
 import falsify.falsify.utils.RenderHelper;
+import net.minecraft.client.util.math.MatrixStack;
 
 import java.awt.*;
 
@@ -38,10 +39,11 @@ public class DisplayModule<T extends RenderModule<?>> extends Module {
     public void onEvent(Event<?> event){
          if(event instanceof EventRender eventRender) {
              if(mc.currentScreen == null || mc.currentScreen.getClass() != EditGUI.class) {
-                 eventRender.getMatrixStack().push();
+                 MatrixStack matrices = eventRender.getDrawContext().getMatrices();
+                 matrices.push();
                  //RenderHelper.convertToScale(eventRender.getMatrixStack());
-                 renderModule.render(eventRender.getMatrixStack(), 0, 0, eventRender.getTickDelta());
-                 eventRender.getMatrixStack().pop();
+                 renderModule.render(eventRender.getDrawContext(), 0, 0, eventRender.getTickDelta());
+                 matrices.pop();
              }
          }
     }

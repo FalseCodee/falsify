@@ -5,6 +5,7 @@ import falsify.falsify.gui.editor.module.RenderModule;
 import falsify.falsify.mixin.special.MixinMinecraft;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.DisplayModule;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
 
 public class FPSModule extends DisplayModule<FPSRenderModule> {
@@ -21,8 +22,8 @@ class FPSRenderModule extends RenderModule<FPSModule> {
     }
 
     @Override
-    public void renderModule(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        drawRect(module.getBackgroundColor(), matrices, (float) getX(), (float) getY(), (float) (getX() + width), (float) (getY() + height));
-        drawCenteredTextWithShadow(matrices, Falsify.mc.textRenderer, "FPS: " + ((MixinMinecraft)Falsify.mc).getCurrentFps(), (int) getX() + (int) width/2, (int) getY() + (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, module.getTextColor().getRGB());
+    public void renderModule(DrawContext context, int mouseX, int mouseY, float delta) {
+        drawRect(module.getBackgroundColor(), context.getMatrices(), (float) getX(), (float) getY(), (float) (getX() + width), (float) (getY() + height));
+        context.drawCenteredTextWithShadow(Falsify.mc.textRenderer, "FPS: " + ((MixinMinecraft)Falsify.mc).getCurrentFps(), (int) getX() + (int) width/2, (int) getY() + (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, module.getTextColor().getRGB());
     }
 }

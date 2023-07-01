@@ -5,6 +5,7 @@ import falsify.falsify.gui.clickgui.settings.SettingItem;
 import falsify.falsify.gui.ping.PingResponseEntry;
 import falsify.falsify.utils.FalseRunnable;
 import falsify.falsify.utils.NetworkUtils;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.SliderWidget;
@@ -81,20 +82,20 @@ public class ServerPingGUI extends Screen {
         executor.shutdown();
     }
 
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        this.renderBackground(matrices);
-        drawCenteredTextWithShadow(matrices, this.textRenderer, this.title, this.width / 2, 17, 16777215);
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        this.renderBackground(context);
+        context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 17, 16777215);
         //drawTextWithShadow(matrices, this.textRenderer, Text.of("Enter Name of Recipient"), width/2-100, this.height / 4 + 120 - 34, 10526880);
-        this.serverAddressField.render(matrices, mouseX, mouseY, delta);
+        this.serverAddressField.render(context, mouseX, mouseY, delta);
 
-        super.render(matrices, mouseX, mouseY, delta);
-        enableScissor(0, 68, width, height);
+        super.render(context, mouseX, mouseY, delta);
+        context.enableScissor(0, 68, width, height);
         for(PingResponseEntry responseEntry : new ArrayList<>(responses)) {
-            responseEntry.render(matrices, mouseX, mouseY, delta);
+            responseEntry.render(context, mouseX, mouseY, delta);
         }
-        disableScissor();
+        context.disableScissor();
 
-        drawTextWithShadow(matrices, this.textRenderer, "Pings: " + completedMoves + "/" + queuedMoves, 200 + 10 + 10 + 75 + 75, 10, 16777215);
+        context.drawTextWithShadow(this.textRenderer, "Pings: " + completedMoves + "/" + queuedMoves, 200 + 10 + 10 + 75 + 75, 10, 16777215);
     }
 
     @Override

@@ -6,6 +6,7 @@ import falsify.falsify.listeners.events.EventMouse;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.DisplayModule;
 import falsify.falsify.utils.FalseRunnable;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
 import falsify.falsify.gui.editor.module.RenderModule;
 
@@ -58,8 +59,8 @@ class CPSRenderModule extends RenderModule<CPSModule> {
     }
 
     @Override
-    public void renderModule(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        drawRect(module.getBackgroundColor(), matrices, (float) getX(), (float) getY(), (float) (getX() + width), (float) (getY() + height));
-        drawCenteredTextWithShadow(matrices, Falsify.mc.textRenderer, module.getLmb() + " | " + module.getRmb(), (int) getX() + (int) width/2, (int) getY() + (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, module.getTextColor().getRGB());
+    public void renderModule(DrawContext context, int mouseX, int mouseY, float delta) {
+        drawRect(module.getBackgroundColor(), context.getMatrices(), (float) getX(), (float) getY(), (float) (getX() + width), (float) (getY() + height));
+        context.drawCenteredTextWithShadow(Falsify.mc.textRenderer, module.getLmb() + " | " + module.getRmb(), (int) getX() + (int) width/2, (int) getY() + (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, module.getTextColor().getRGB());
     }
 }

@@ -5,6 +5,7 @@ import falsify.falsify.gui.editor.module.RenderModule;
 import falsify.falsify.module.DisplayModule;
 import falsify.falsify.module.ModuleManager;
 import falsify.falsify.utils.RenderHelper;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
@@ -30,14 +31,14 @@ public class EditGUI extends Screen {
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        RenderHelper.drawRect(new Color(50,50,50, 100), matrices, 0, 0, width, height);
-        matrices.push();
-        RenderHelper.convertToScale(matrices);
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        RenderHelper.drawRect(new Color(50,50,50, 100), context.getMatrices(), 0, 0, width, height);
+        context.getMatrices().push();
+        RenderHelper.convertToScale(context.getMatrices());
         for(int i = renderModules.size()-1; i >= 0; i--) {
-            renderModules.get(i).render(matrices, mouseX, mouseY, delta);
+            renderModules.get(i).render(context, mouseX, mouseY, delta);
         }
-        matrices.pop();
+        context.getMatrices().pop();
     }
 
     @Override

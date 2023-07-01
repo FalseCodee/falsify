@@ -5,6 +5,7 @@ import falsify.falsify.mixin.special.MixinMinecraft;
 import falsify.falsify.module.ModuleManager;
 import falsify.falsify.module.modules.misc.BungeeHack;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -84,17 +85,17 @@ public class BungeeGUI extends Screen {
         this.client.setScreen(this.parent);
     }
 
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        this.renderBackground(matrices);
-        drawCenteredTextWithShadow(matrices, this.textRenderer, this.title, this.width / 2, 17, 16777215);
-        drawTextWithShadow(matrices, this.textRenderer, Text.of("Enter Fake IP"), width/2-150, 53, 10526880);
-        drawTextWithShadow(matrices, this.textRenderer, Text.of("Enter Fake UUID"), width/2-150, 94, 10526880);
-        drawTextWithShadow(matrices, this.textRenderer, Text.of("Enter Fake IGN, Current: " + Falsify.mc.getSession().getUsername()), width/2-150, 134, 10526880);
-        this.fakeIPField.render(matrices, mouseX, mouseY, delta);
-        this.fakeUUIDField.render(matrices, mouseX, mouseY, delta);
-        this.fakeUsername.render(matrices, mouseX, mouseY, delta);
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        this.renderBackground(context);
+        context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 17, 16777215);
+        context.drawTextWithShadow(this.textRenderer, Text.of("Enter Fake IP"), width/2-150, 53, 10526880);
+        context.drawTextWithShadow(this.textRenderer, Text.of("Enter Fake UUID"), width/2-150, 94, 10526880);
+        context.drawTextWithShadow(this.textRenderer, Text.of("Enter Fake IGN, Current: " + Falsify.mc.getSession().getUsername()), width/2-150, 134, 10526880);
+        this.fakeIPField.render(context, mouseX, mouseY, delta);
+        this.fakeUUIDField.render(context, mouseX, mouseY, delta);
+        this.fakeUsername.render(context, mouseX, mouseY, delta);
 
-        super.render(matrices, mouseX, mouseY, delta);
+        super.render(context, mouseX, mouseY, delta);
     }
 
 }

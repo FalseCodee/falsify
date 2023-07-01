@@ -6,6 +6,7 @@ import falsify.falsify.gui.editor.module.RenderModule;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.DisplayModule;
 import falsify.falsify.utils.RenderHelper;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
@@ -25,12 +26,12 @@ class ArmorRenderModule extends RenderModule<ArmorModule> {
     }
 
     @Override
-    public void renderModule(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        drawRect(module.getBackgroundColor(), matrices, (float) getX(), (float) getY(), (float) (getX() + width), (float) (getY() + height));
-        renderArmor(matrices);
+    public void renderModule(DrawContext context, int mouseX, int mouseY, float delta) {
+        drawRect(module.getBackgroundColor(), context.getMatrices(), (float) getX(), (float) getY(), (float) (getX() + width), (float) (getY() + height));
+        renderArmor(context);
     }
 
-    private void renderArmor(MatrixStack matrices) {
+    private void renderArmor(DrawContext context) {
         int padding = 3;
         double x = getX() + padding;
         double y = getY() + padding;
@@ -38,14 +39,8 @@ class ArmorRenderModule extends RenderModule<ArmorModule> {
         for(int i = Falsify.mc.player.getInventory().armor.size()-1; i >= 0; i--) {
             ItemStack itemStack = Falsify.mc.player.getInventory().armor.get(i);
             if(itemStack.isEmpty()) continue;
-            MatrixStack matrixStack = RenderSystem.getModelViewStack();
-            matrixStack.push();
-            RenderHelper.convertToScale(matrixStack, scale);
-            RenderSystem.applyModelViewMatrix();
-            Falsify.mc.getItemRenderer().renderInGui(matrices, itemStack, (int) x, (int) y);
-            matrixStack.pop();
-            RenderSystem.applyModelViewMatrix();
-            drawTextWithShadow(matrices, Falsify.mc.textRenderer, Text.of("" + (itemStack.getMaxDamage() - itemStack.getDamage())), (int)x + 20, (int)y + Falsify.mc.textRenderer.fontHeight/2, module.getTextColor().getRGB());
+            context.drawItem(itemStack, (int) x, (int) y);
+            context.drawTextWithShadow(Falsify.mc.textRenderer, Text.of("" + (itemStack.getMaxDamage() - itemStack.getDamage())), (int)x + 20, (int)y + Falsify.mc.textRenderer.fontHeight/2, module.getTextColor().getRGB());
             y += 16 + padding;
         }
         this.height = Math.max(y - this.y, 16 + padding);

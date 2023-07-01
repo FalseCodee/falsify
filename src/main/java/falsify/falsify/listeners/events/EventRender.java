@@ -1,18 +1,19 @@
 package falsify.falsify.listeners.events;
 
 import falsify.falsify.listeners.Event;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.math.MatrixStack;
 
 public class EventRender extends Event<EventRender> {
     final float tickDelta;
     final InGameHud hud;
-    final MatrixStack matrixStack;
+    final DrawContext drawContext;
 
-    public EventRender(float tickDelta, InGameHud hud, MatrixStack matrixStack) {
+    public EventRender(float tickDelta, InGameHud hud, DrawContext drawContext) {
         this.tickDelta = tickDelta;
         this.hud = hud;
-        this.matrixStack = matrixStack;
+        this.drawContext = drawContext;
     }
 
     public float getTickDelta() {
@@ -23,7 +24,7 @@ public class EventRender extends Event<EventRender> {
         return hud;
     }
 
-    public MatrixStack getMatrixStack() {
-        return matrixStack;
+    public DrawContext getDrawContext() {
+        return drawContext;
     }
 }

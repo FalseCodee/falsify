@@ -7,6 +7,7 @@ import falsify.falsify.gui.other.FollowerGuy;
 import falsify.falsify.utils.MathUtils;
 import falsify.falsify.utils.RenderHelper;
 import falsify.falsify.utils.RenderUtils;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.screen.option.OptionsScreen;
@@ -59,11 +60,11 @@ public class ClientMenuScreen extends Screen {
                    }
                    return false;
                }))
-               .onRender((clickable, matrixStack, mouseX, mouseY, delta) -> {
+               .onRender((clickable, context, mouseX, mouseY, delta) -> {
                    Color hover = (clickable.isHovering(mouseX, mouseY)) ? new Color(144, 144, 144) : new Color(60, 60, 60);
-                   RenderHelper.drawSmoothRect(hover.darker().darker(),matrixStack, (int)clickable.getX()+1, (int)clickable.getY()+1, (int)(clickable.getX() + clickable.getWidth()-1), (int)(clickable.getY() + clickable.getHeight()-1), 3, new int[] {5, 5, 5, 5});
-                   RenderHelper.drawSmoothRect(hover,matrixStack, (int)clickable.getX()+2, (int)clickable.getY()+2, (int)(clickable.getX() + clickable.getWidth()-2), (int)(clickable.getY() + clickable.getHeight()-2), 3, new int[] {5, 5, 5, 5});
-                   drawCenteredTextWithShadow(matrixStack, textRenderer, Text.of(name), (int)(clickable.getX() + clickable.getWidth()/2), (int)(clickable.getY() + clickable.getHeight()/2), Color.WHITE.getRGB());
+                   RenderHelper.drawSmoothRect(hover.darker().darker(),context.getMatrices(), (int)clickable.getX()+1, (int)clickable.getY()+1, (int)(clickable.getX() + clickable.getWidth()-1), (int)(clickable.getY() + clickable.getHeight()-1), 3, new int[] {5, 5, 5, 5});
+                   RenderHelper.drawSmoothRect(hover,context.getMatrices(), (int)clickable.getX()+2, (int)clickable.getY()+2, (int)(clickable.getX() + clickable.getWidth()-2), (int)(clickable.getY() + clickable.getHeight()-2), 3, new int[] {5, 5, 5, 5});
+                   context.drawCenteredTextWithShadow(textRenderer, Text.of(name), (int)(clickable.getX() + clickable.getWidth()/2), (int)(clickable.getY() + clickable.getHeight()/2), Color.WHITE.getRGB());
                }).build());
     }
 
@@ -96,33 +97,23 @@ public class ClientMenuScreen extends Screen {
 
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        super.render(matrices, mouseX, mouseY, delta);
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        super.render(context, mouseX, mouseY, delta);
         colorStart = RenderHelper.colorLerp(colorStart, new Color(Color.HSBtoRGB(mouseY/(float)height + 0.5f, 0.5f, 1.0f)), MathUtils.clamp(0.1f*Falsify.mc.getLastFrameDuration(), 0.0f, 1.0f));
         colorEnd = RenderHelper.colorLerp(colorEnd, new Color(Color.HSBtoRGB(mouseX/(float)width, 0.5f, 1.0f)), MathUtils.clamp(0.1f*Falsify.mc.getLastFrameDuration(), 0.0f, 1.0f));
-        fillGradient(matrices, 0, 0, width, height, colorStart.getRGB(), colorEnd.getRGB());
+        context.fillGradient(0, 0, width, height, colorStart.getRGB(), colorEnd.getRGB());
         for(Clickable button : buttons)  {
-            button.render(matrices, mouseX, mouseY, delta);
+            button.render(context, mouseX, mouseY, delta);
         }
 
         for(FollowerGuy guy : guys) {
             guy.update(mouseX, mouseY, delta, guys);
-            guy.render(matrices, mouseX, mouseY, delta);
-//            double dx = (guy.getX()-mouseX);
-//            double dy = (guy.getY()-mouseY);
-//            if(dx*dx+dy*dy < 100*100) {
-//                if(dx < dy) {
-//                    drawHorizontalLine(matrices, (int) guy.getX(), mouseX, mouseY, Color.WHITE.getRGB());
-//                    drawVerticalLine(matrices, (int) guy.getX(), mouseY, (int) guy.getY(), Color.WHITE.getRGB());
-//                } else {
-//                    drawHorizontalLine(matrices, (int) guy.getX(), mouseX, (int)guy.getY(), Color.WHITE.getRGB());
-//                    drawVerticalLine(matrices, mouseX, mouseY, (int) guy.getY(), Color.WHITE.getRGB());
-//                }
-//            }
+            guy.render(context, mouseX, mouseY, delta);
         }
-        matrices.push();
-        matrices.scale(3, 3, 1);
-        drawCenteredTextWithShadow(matrices, textRenderer, "Legacy Client", width/2/3, height/2/3, -1);
-        matrices.pop();
+
+        context.getMatrices().push();
+        context.getMatrices().scale(3, 3, 1);
+        context.drawCenteredTextWithShadow(textRenderer, "Legacy Client", width/2/3, height/2/3, -1);
+        context.getMatrices().pop();
     }
 }

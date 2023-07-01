@@ -20,9 +20,6 @@ public abstract class SettingItem<T extends Setting<?>> extends Clickable {
 
     public abstract boolean handleClick(double x, double y, int button);
 
-
-    public abstract void render(MatrixStack matrices, int mouseX, int mouseY, float delta);
-
     public boolean isActive() {
         return isActive;
     }

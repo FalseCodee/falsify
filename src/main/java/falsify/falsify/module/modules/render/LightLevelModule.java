@@ -4,6 +4,7 @@ import falsify.falsify.Falsify;
 import falsify.falsify.gui.editor.module.RenderModule;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.DisplayModule;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.world.LightType;
 
@@ -21,8 +22,8 @@ class LightLevelRenderModule extends RenderModule<LightLevelModule> {
     }
 
     @Override
-    public void renderModule(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        drawRect(module.getBackgroundColor(), matrices, (float) getX(), (float) getY(), (float) (getX() + width), (float) (getY() + height));
-        drawCenteredTextWithShadow(matrices, Falsify.mc.textRenderer, "Light Level: " + Falsify.mc.world.getLightLevel(LightType.BLOCK, Falsify.mc.player.getBlockPos()), (int) getX() + (int) width/2, (int) getY() + (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, module.getTextColor().getRGB());
+    public void renderModule(DrawContext context, int mouseX, int mouseY, float delta) {
+        drawRect(module.getBackgroundColor(), context.getMatrices(), (float) getX(), (float) getY(), (float) (getX() + width), (float) (getY() + height));
+        context.drawCenteredTextWithShadow(Falsify.mc.textRenderer, "Light Level: " + Falsify.mc.world.getLightLevel(LightType.BLOCK, Falsify.mc.player.getBlockPos()), (int) getX() + (int) width/2, (int) getY() + (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, module.getTextColor().getRGB());
     }
 }
