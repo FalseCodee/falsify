@@ -30,12 +30,10 @@ class TimeRenderModule extends RenderModule<TimeModule> {
 
     private String getTime() {
         int hr = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-        int min = Calendar.getInstance().get(Calendar.MINUTE);
+        //int min = Calendar.getInstance().get(Calendar.MINUTE);
 
         String afterNoonStatus = (hr >= 12) ? "PM" : "AM";
-        hr = (hr > 12) ? hr - 12 :
-                (hr == 0 || hr == 12) ? 12 : 0;
 
-        return String.format("%d:%02d %s", hr, min, afterNoonStatus);
+        return String.format("%tl:%tM %s",Calendar.getInstance(), Calendar.getInstance(), afterNoonStatus);
     }
 }

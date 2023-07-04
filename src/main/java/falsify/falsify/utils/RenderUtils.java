@@ -10,7 +10,9 @@ import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.*;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
@@ -18,14 +20,28 @@ import org.lwjgl.opengl.GL11;
 import java.awt.*;
 import java.util.List;
 
+import static falsify.falsify.Falsify.mc;
+
 public class RenderUtils {
+    public static float windowRatio = 16f/9f;
+
     public static void AlignFill(DrawContext context, int x1, int y1, int x2, int y2, int color, Alignment alignment) {
         switch (alignment) {
             case LEFT -> context.fill(x1, y1, x2, y2, color);
-            case RIGHT -> context.fill(Falsify.mc.getWindow().getScaledWidth() - x1, y1, Falsify.mc.getWindow().getScaledWidth() - x2, y2, color);
-            case XCENTER -> context.fill(Falsify.mc.getWindow().getScaledWidth() / 2 - x1, y1, Falsify.mc.getWindow().getScaledWidth() / 2 + x2, y2, color);
-            case YCENTER -> context.fill(x1, Falsify.mc.getWindow().getScaledHeight() / 2 - y1, x2, Falsify.mc.getWindow().getScaledHeight() / 2 + y2, color);
-            case CENTER -> context.fill(Falsify.mc.getWindow().getScaledWidth() / 2 - x1, Falsify.mc.getWindow().getScaledHeight() / 2 - y1, Falsify.mc.getWindow().getScaledWidth() / 2 + x2, Falsify.mc.getWindow().getScaledHeight() / 2 + y2, color);
+            case RIGHT -> context.fill(mc.getWindow().getScaledWidth() - x1, y1, mc.getWindow().getScaledWidth() - x2, y2, color);
+            case XCENTER -> context.fill(mc.getWindow().getScaledWidth() / 2 - x1, y1, mc.getWindow().getScaledWidth() / 2 + x2, y2, color);
+            case YCENTER -> context.fill(x1, mc.getWindow().getScaledHeight() / 2 - y1, x2, mc.getWindow().getScaledHeight() / 2 + y2, color);
+            case CENTER -> context.fill(mc.getWindow().getScaledWidth() / 2 - x1, mc.getWindow().getScaledHeight() / 2 - y1, mc.getWindow().getScaledWidth() / 2 + x2, mc.getWindow().getScaledHeight() / 2 + y2, color);
+        }
+    }
+
+    public static void AlignFillGradient(DrawContext context, int x1, int y1, int x2, int y2, int color, int color2, Alignment alignment) {
+        switch (alignment) {
+            case LEFT -> fillXGradient(context, x1, y1, x2, y2, color, color2);
+            case RIGHT -> fillXGradient(context, mc.getWindow().getScaledWidth() - x1, y1, mc.getWindow().getScaledWidth() - x2, y2, color, color2);
+            case XCENTER -> fillXGradient(context, mc.getWindow().getScaledWidth() / 2 - x1, y1, mc.getWindow().getScaledWidth() / 2 + x2, y2, color, color2);
+            case YCENTER -> fillXGradient(context, x1, mc.getWindow().getScaledHeight() / 2 - y1, x2, mc.getWindow().getScaledHeight() / 2 + y2, color, color2);
+            case CENTER -> fillXGradient(context, mc.getWindow().getScaledWidth() / 2 - x1, mc.getWindow().getScaledHeight() / 2 - y1, mc.getWindow().getScaledWidth() / 2 + x2, mc.getWindow().getScaledHeight() / 2 + y2, color, color2);
         }
     }
 
@@ -33,21 +49,21 @@ public class RenderUtils {
         TextRenderer tr = MinecraftClient.getInstance().textRenderer;
         switch (alignment) {
             case LEFT -> context.drawTextWithShadow(tr, text, x1, y1, color);
-            case RIGHT -> context.drawTextWithShadow(tr, text, Falsify.mc.getWindow().getScaledWidth() - x1 - tr.getWidth(text), y1, color);
-            case XCENTER -> context.drawTextWithShadow(tr, text, Falsify.mc.getWindow().getScaledWidth() / 2 + x1, y1, color);
-            case YCENTER -> context.drawTextWithShadow(tr, text, x1, Falsify.mc.getWindow().getScaledHeight() / 2 + y1, color);
-            case CENTER -> context.drawTextWithShadow(tr, text, Falsify.mc.getWindow().getScaledWidth() / 2 + x1, Falsify.mc.getWindow().getScaledHeight() / 2 + y1, color);
+            case RIGHT -> context.drawTextWithShadow(tr, text, mc.getWindow().getScaledWidth() - x1 - tr.getWidth(text), y1, color);
+            case XCENTER -> context.drawTextWithShadow(tr, text, mc.getWindow().getScaledWidth() / 2 + x1, y1, color);
+            case YCENTER -> context.drawTextWithShadow(tr, text, x1, mc.getWindow().getScaledHeight() / 2 + y1, color);
+            case CENTER -> context.drawTextWithShadow(tr, text, mc.getWindow().getScaledWidth() / 2 + x1, mc.getWindow().getScaledHeight() / 2 + y1, color);
         }
     }
 
     public static void AlignCenteredText(DrawContext context, String text, int x1, int y1, int color, Alignment alignment) {
-        TextRenderer tr = Falsify.mc.textRenderer;
+        TextRenderer tr = mc.textRenderer;
         switch (alignment) {
             case LEFT -> context.drawCenteredTextWithShadow(tr, text, x1, y1, color);
-            case RIGHT -> context.drawCenteredTextWithShadow(tr, text, Falsify.mc.getWindow().getScaledWidth() - x1, y1, color);
-            case XCENTER -> context.drawCenteredTextWithShadow(tr, text, Falsify.mc.getWindow().getScaledWidth() / 2 + x1, y1, color);
-            case YCENTER -> context.drawCenteredTextWithShadow(tr, text, x1, Falsify.mc.getWindow().getScaledHeight() / 2 + y1, color);
-            case CENTER -> context.drawCenteredTextWithShadow(tr, text, Falsify.mc.getWindow().getScaledWidth() / 2 + x1, Falsify.mc.getWindow().getScaledHeight() / 2 + y1, color);
+            case RIGHT -> context.drawCenteredTextWithShadow(tr, text, mc.getWindow().getScaledWidth() - x1, y1, color);
+            case XCENTER -> context.drawCenteredTextWithShadow(tr, text, mc.getWindow().getScaledWidth() / 2 + x1, y1, color);
+            case YCENTER -> context.drawCenteredTextWithShadow(tr, text, x1, mc.getWindow().getScaledHeight() / 2 + y1, color);
+            case CENTER -> context.drawCenteredTextWithShadow(tr, text, mc.getWindow().getScaledWidth() / 2 + x1, mc.getWindow().getScaledHeight() / 2 + y1, color);
         }
     }
 
@@ -69,82 +85,6 @@ public class RenderUtils {
         return new float[]{red, green, blue, alpha};
     }
 
-    public static void drawOutlinedBox(Box bb) {
-        GL11.glBegin(1);
-        GL11.glVertex3d(bb.minX, bb.maxY, bb.minZ);
-        GL11.glVertex3d(bb.maxX, bb.maxY, bb.minZ);
-        GL11.glVertex3d(bb.maxX, bb.maxY, bb.minZ);
-        GL11.glVertex3d(bb.maxX, bb.maxY, bb.maxZ);
-        GL11.glVertex3d(bb.maxX, bb.maxY, bb.maxZ);
-        GL11.glVertex3d(bb.minX, bb.maxY, bb.maxZ);
-        GL11.glVertex3d(bb.minX, bb.maxY, bb.maxZ);
-        GL11.glVertex3d(bb.minX, bb.maxY, bb.minZ);
-        GL11.glVertex3d(bb.minX, bb.minY, bb.minZ);
-        GL11.glVertex3d(bb.maxX, bb.minY, bb.minZ);
-        GL11.glVertex3d(bb.maxX, bb.minY, bb.minZ);
-        GL11.glVertex3d(bb.maxX, bb.minY, bb.maxZ);
-        GL11.glVertex3d(bb.maxX, bb.minY, bb.maxZ);
-        GL11.glVertex3d(bb.minX, bb.minY, bb.maxZ);
-        GL11.glVertex3d(bb.minX, bb.minY, bb.maxZ);
-        GL11.glVertex3d(bb.minX, bb.minY, bb.minZ);
-        GL11.glVertex3d(bb.minX, bb.minY, bb.minZ);
-        GL11.glVertex3d(bb.minX, bb.maxY, bb.minZ);
-        GL11.glVertex3d(bb.maxX, bb.minY, bb.minZ);
-        GL11.glVertex3d(bb.maxX, bb.maxY, bb.minZ);
-        GL11.glVertex3d(bb.maxX, bb.minY, bb.maxZ);
-        GL11.glVertex3d(bb.maxX, bb.maxY, bb.maxZ);
-        GL11.glVertex3d(bb.minX, bb.minY, bb.maxZ);
-        GL11.glVertex3d(bb.minX, bb.maxY, bb.maxZ);
-        GL11.glEnd();
-    }
-
-    public static void drawSolidBox(Box bb) {
-        GL11.glBegin(7);
-        GL11.glVertex3d(bb.minX, bb.minY, bb.minZ);
-        GL11.glVertex3d(bb.minX, bb.maxY, bb.minZ);
-        GL11.glVertex3d(bb.maxX, bb.maxY, bb.minZ);
-        GL11.glVertex3d(bb.maxX, bb.minY, bb.minZ);
-        GL11.glVertex3d(bb.maxX, bb.minY, bb.minZ);
-        GL11.glVertex3d(bb.maxX, bb.maxY, bb.minZ);
-        GL11.glVertex3d(bb.maxX, bb.maxY, bb.maxZ);
-        GL11.glVertex3d(bb.maxX, bb.minY, bb.maxZ);
-        GL11.glVertex3d(bb.minX, bb.minY, bb.maxZ);
-        GL11.glVertex3d(bb.maxX, bb.minY, bb.maxZ);
-        GL11.glVertex3d(bb.maxX, bb.maxY, bb.maxZ);
-        GL11.glVertex3d(bb.minX, bb.maxY, bb.maxZ);
-        GL11.glVertex3d(bb.minX, bb.minY, bb.minZ);
-        GL11.glVertex3d(bb.minX, bb.minY, bb.maxZ);
-        GL11.glVertex3d(bb.minX, bb.maxY, bb.maxZ);
-        GL11.glVertex3d(bb.minX, bb.maxY, bb.minZ);
-        GL11.glVertex3d(bb.minX, bb.minY, bb.minZ);
-        GL11.glVertex3d(bb.maxX, bb.minY, bb.minZ);
-        GL11.glVertex3d(bb.maxX, bb.minY, bb.maxZ);
-        GL11.glVertex3d(bb.minX, bb.minY, bb.maxZ);
-        GL11.glVertex3d(bb.minX, bb.maxY, bb.minZ);
-        GL11.glVertex3d(bb.minX, bb.maxY, bb.maxZ);
-        GL11.glVertex3d(bb.maxX, bb.maxY, bb.maxZ);
-        GL11.glVertex3d(bb.maxX, bb.maxY, bb.minZ);
-        GL11.glEnd();
-    }
-
-    public static void drawESPBoxes(List<Entity> entities, int box, float partialTicks) {
-        GL11.glLineWidth(2.0F);
-        for (Entity entity : entities) {
-            GL11.glPushMatrix();
-            Vec3d interpolated = MathUtils.getInterpolatedPos(entity, partialTicks);
-            GL11.glTranslated(interpolated.x, interpolated.y, interpolated.z);
-            GL11.glScaled(entity.getWidth() + 0.1D, entity.getHeight() + 0.1D, entity.getWidth() + 0.1D);
-            if (entity instanceof ItemEntity) {
-                GL11.glColor4f(0.5F, 0.5F, 1.0F, 0.5F);
-            } else {
-                float intensity = Falsify.mc.player.distanceTo(entity) / 20.0F;
-                GL11.glColor4f(2.0F - intensity, intensity, 0.0F, 0.5F);
-            }
-            GL11.glCallList(box);
-            GL11.glPopMatrix();
-        }
-    }
-
     public static void drawESPTracers(PlayerEntity player, List<Entity> entityList, EventRender3d eventRender3d) {
         for (Entity entity : entityList) {
             drawESPTracer(player, entity, eventRender3d);
@@ -152,12 +92,15 @@ public class RenderUtils {
     }
 
     public static void drawESPTracer(PlayerEntity player, Entity entity, EventRender3d eventRender3d) {
-        float intensity = Falsify.mc.player.distanceTo(entity) / 20.0F;
-        Vec3d pos = MathUtils.interpolateVec3d(entity.getPos(), new Vec3d(entity.prevX, entity.prevY, entity.prevZ), 0.5f);
+        float intensity = mc.player.distanceTo(entity) / 20.0F;
+        Vec3d pos = MathUtils.getInterpolatedPos(entity, eventRender3d.getTickDelta());
         Box box = new Box(pos.subtract(entity.getWidth()/2, 0, entity.getWidth()/2), pos.add(entity.getWidth()/2, entity.getHeight(), entity.getWidth()/2));
-        drawBoundingBox(box, eventRender3d, Color.WHITE);
-        renderLabel("poop", entity.getEyePos().add(0.0, 0.5,0.0), eventRender3d);
+        drawBoundingBox(box, eventRender3d, Color.RED);
         //RenderSystem.enableTexture();
+    }
+
+    public static void drawCenteredText(DrawContext context, TextRenderer textRenderer, String text, int centerX, int y, int color) {
+        context.drawTextWithShadow(textRenderer, text, centerX - textRenderer.getWidth(text) / 2, y, color);
     }
 
     public static void drawBoundingBox(Box bb, EventRender3d eventRender3d, Color color) {
@@ -196,7 +139,7 @@ public class RenderUtils {
     }
 
     public RenderUtils outline(double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
-        return internal_outline(minX - Falsify.mc.player.getX(), minY - Falsify.mc.player.getY(), minZ - Falsify.mc.player.getZ(), maxX - Falsify.mc.player.getX(), maxY - Falsify.mc.player.getY(), maxZ - Falsify.mc.player.getZ());
+        return internal_outline(minX - mc.player.getX(), minY - mc.player.getY(), minZ - mc.player.getZ(), maxX - mc.player.getX(), maxY - mc.player.getY(), maxZ - mc.player.getZ());
     }
 
     protected RenderUtils internal_outline(double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
@@ -300,6 +243,49 @@ public class RenderUtils {
         //RenderSystem.enableTexture();
     }
 
+    public static void fillXGradient(DrawContext context, int startX, int startY, int endX, int endY, int colorStart, int colorEnd) {
+        VertexConsumer vertexConsumer = context.getVertexConsumers().getBuffer(RenderLayer.getGui());
+        float f = (float) ColorHelper.Argb.getAlpha(colorStart) / 255.0F;
+        float g = (float) ColorHelper.Argb.getRed(colorStart) / 255.0F;
+        float h = (float) ColorHelper.Argb.getGreen(colorStart) / 255.0F;
+        float i = (float) ColorHelper.Argb.getBlue(colorStart) / 255.0F;
+        float j = (float) ColorHelper.Argb.getAlpha(colorEnd) / 255.0F;
+        float k = (float) ColorHelper.Argb.getRed(colorEnd) / 255.0F;
+        float l = (float) ColorHelper.Argb.getGreen(colorEnd) / 255.0F;
+        float m = (float) ColorHelper.Argb.getBlue(colorEnd) / 255.0F;
+        Matrix4f matrix4f = context.getMatrices().peek().getPositionMatrix();
+        vertexConsumer.vertex(matrix4f, (float)startX, (float)startY, (float)0).color(g, h, i, f).next();
+        vertexConsumer.vertex(matrix4f, (float)startX, (float)endY, (float)0).color(g, h, i, f).next();
+        vertexConsumer.vertex(matrix4f, (float)endX, (float)endY, (float)0).color(k, l, m, j).next();
+        vertexConsumer.vertex(matrix4f, (float)endX, (float)startY, (float)0).color(k, l, m, j).next();
+        context.draw();
+    }
+    public static void fillCornerGradient(DrawContext context, int startX, int startY, int endX, int endY, int color1, int color2, int color3, int color4) {
+        VertexConsumer vertexConsumer = context.getVertexConsumers().getBuffer(RenderLayer.getGui());
+        float f = (float) ColorHelper.Argb.getAlpha(color1) / 255.0F;
+        float g = (float) ColorHelper.Argb.getRed(color1) / 255.0F;
+        float h = (float) ColorHelper.Argb.getGreen(color1) / 255.0F;
+        float i = (float) ColorHelper.Argb.getBlue(color1) / 255.0F;
+        float j = (float) ColorHelper.Argb.getAlpha(color2) / 255.0F;
+        float k = (float) ColorHelper.Argb.getRed(color2) / 255.0F;
+        float l = (float) ColorHelper.Argb.getGreen(color2) / 255.0F;
+        float m = (float) ColorHelper.Argb.getBlue(color2) / 255.0F;
+        float f2 = (float) ColorHelper.Argb.getAlpha(color3) / 255.0F;
+        float g2 = (float) ColorHelper.Argb.getRed(color3) / 255.0F;
+        float h2 = (float) ColorHelper.Argb.getGreen(color3) / 255.0F;
+        float i2 = (float) ColorHelper.Argb.getBlue(color3) / 255.0F;
+        float j2 = (float) ColorHelper.Argb.getAlpha(color4) / 255.0F;
+        float k2 = (float) ColorHelper.Argb.getRed(color4) / 255.0F;
+        float l2 = (float) ColorHelper.Argb.getGreen(color4) / 255.0F;
+        float m2 = (float) ColorHelper.Argb.getBlue(color4) / 255.0F;
+        Matrix4f matrix4f = context.getMatrices().peek().getPositionMatrix();
+        vertexConsumer.vertex(matrix4f, (float)startX, (float)startY, (float)0).color(g, h, i, f).next();
+        vertexConsumer.vertex(matrix4f, (float)startX, (float)endY, (float)0).color(k, l, m, j).next();
+        vertexConsumer.vertex(matrix4f, (float)endX, (float)endY, (float)0).color(g2, h2, i2, f2).next();
+        vertexConsumer.vertex(matrix4f, (float)endX, (float)startY, (float)0).color(k2, l2, m2, j2).next();
+        context.draw();
+    }
+
     public static void renderLabel(String text, Vec3d pos, EventRender3d eventRender3d) {
         MatrixStack matrices = eventRender3d.getMatrices();
         Camera camera = eventRender3d.getCamera();
@@ -320,12 +306,10 @@ public class RenderUtils {
             matrices.translate(-camera.getPos().x, -camera.getPos().y, -camera.getPos().z);
             matrices.translate(pos.x, pos.y, pos.z);
 
-            matrices.multiply(camera.getRotation());
-            matrices.scale(-0.025F, -0.025F, 0.025F);
             Matrix4f matrix4f = matrices.peek().getPositionMatrix();
             float g = MinecraftClient.getInstance().options.getTextBackgroundOpacity(0.25F);
             int j = (int)(g * 255.0F) << 24;
-            TextRenderer textRenderer = Falsify.mc.textRenderer;
+            TextRenderer textRenderer = mc.textRenderer;
             float h = (float)(-textRenderer.getWidth(text) / 2);
             textRenderer.draw(text, h, (float)0, 553648127, false, matrix4f, (VertexConsumerProvider) buffer, TextRenderer.TextLayerType.SEE_THROUGH, j, 15);
 
@@ -337,8 +321,8 @@ public class RenderUtils {
         }
     }
     public static void invertBob(MatrixStack matrices, float tickDelta) {
-        if (Falsify.mc.getCameraEntity() instanceof PlayerEntity) {
-            PlayerEntity playerEntity = (PlayerEntity)Falsify.mc.getCameraEntity();
+        if (mc.getCameraEntity() instanceof PlayerEntity) {
+            PlayerEntity playerEntity = (PlayerEntity) mc.getCameraEntity();
             float f = playerEntity.horizontalSpeed - playerEntity.prevHorizontalSpeed;
             float g = -(playerEntity.horizontalSpeed + f * tickDelta);
             float h = MathHelper.lerp(tickDelta, playerEntity.prevStrideDistance, playerEntity.strideDistance);

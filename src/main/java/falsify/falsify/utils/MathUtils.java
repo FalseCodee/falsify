@@ -1,9 +1,12 @@
 package falsify.falsify.utils;
 
 import falsify.falsify.Falsify;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import org.joml.Vector2d;
 
 public class MathUtils {
     public static float clamp(float val, float min, float max) {
@@ -11,14 +14,17 @@ public class MathUtils {
     }
 
     public static float[] getRotationsNeeded(Entity entity) {
-        return getRotationsNeeded(entity.getX(), entity.getBoundingBox().getCenter().y, entity.getZ());
+        return getRotationsNeeded(entity.getX(), entity.getBoundingBox().getCenter().getY(), entity.getZ());
+    }
+    public static float[] getRotationsNeeded(Vec3d pos) {
+        return getRotationsNeeded(pos.getX(), pos.getY(), pos.getZ());
     }
     public static float[] getRotationsNeeded(double x, double y, double z) {
-        double diffX = x - Falsify.mc.player.getX();
+        double diffX = x - Falsify.mc.player.getCameraPosVec(Falsify.mc.getTickDelta()).getX();
         double diffY;
 
-       diffY = y - (Falsify.mc.player.getY()+Falsify.mc.player.getEyeHeight(Falsify.mc.player.getPose()));
-        double diffZ = z - Falsify.mc.player.getZ();
+       diffY = y - Falsify.mc.player.getCameraPosVec(Falsify.mc.getTickDelta()).getY() + Falsify.mc.player.getEyeHeight(Falsify.mc.player.getPose());
+        double diffZ = z - Falsify.mc.player.getCameraPosVec(Falsify.mc.getTickDelta()).getZ();
         double dist = Math.sqrt(diffX * diffX + diffZ * diffZ);
         float yaw = (float) (Math.atan2(diffZ, diffX) * 180.0D / Math.PI) - 90.0F;
         float pitch = (float) -(Math.atan2(diffY, dist) * 180.0D / Math.PI);
@@ -27,16 +33,19 @@ public class MathUtils {
 
     }
 
-    public static float cursorDistanceTo(Entity entity) {
+    public static float squaredCursorDistanceTo(Entity entity) {
         float[] rotation = getRotationsNeeded(entity);
         rotation[0] -= Falsify.mc.player.getYaw();
         rotation[1] -= Falsify.mc.player.getPitch();
 
-        return (float) Math.sqrt(rotation[0]*rotation[0] + rotation[1]*rotation[1]);
+        return rotation[0]*rotation[0] + rotation[1]*rotation[1];
+    }
+    public static float cursorDistanceTo(Entity entity) {
+        return (float) Math.sqrt(squaredCursorDistanceTo(entity));
     }
 
-    public static float lerp(float a, float b, double t){
-        return (float) (a+(b-a)*t);
+    public static float lerp(float a, float b, float t){
+        return  (a+(b-a)*t);
     }
     public static double lerp(double a, double b, double t){
         return (a+(b-a)*t);
@@ -113,6 +122,20 @@ public class MathUtils {
         pitch = Math.toRadians(pitch);
         yaw = Math.toRadians(yaw);
         return new Vec3d(Math.cos(yaw)*Math.cos(pitch), Math.sin(pitch), Math.sin(yaw)*Math.cos(pitch));
+    }
+
+    public static float[] toScreenXY(Vec3d pos) {
+        float[] rotation = getRotationsNeeded(pos);
+        rotation[0] -= Falsify.mc.player.getYaw();
+        rotation[1] -= Falsify.mc.player.getPitch();
+
+        rotation[0] /= Falsify.mc.options.getFov().getValue();
+        rotation[1] /= ((Falsify.mc.options.getFov().getValue())/RenderUtils.windowRatio);
+
+        rotation[0] = (rotation[0]-0.5f) * Falsify.mc.getWindow().getScaledWidth()/2.0f + 3.0f*Falsify.mc.getWindow().getScaledWidth()/4.0f;
+        rotation[1] = (rotation[1]-0.5f) * Falsify.mc.getWindow().getScaledHeight()/2.0f + 3.0f*Falsify.mc.getWindow().getScaledHeight()/4.0f;
+
+        return rotation;
     }
 
     public static double random(double min, double max) {

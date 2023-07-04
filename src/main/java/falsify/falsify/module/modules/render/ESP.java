@@ -33,7 +33,7 @@ public class ESP extends Module {
         if(event instanceof EventRender3d eventRender3d) {
             if(mc.world == null) return;
 
-            List<Entity> entityList = Lists.newArrayList(mc.world.getEntities()).stream().filter(LivingEntity.class::isInstance).collect(Collectors.toList());
+            List<Entity> entityList = Lists.newArrayList(mc.world.getEntities()).stream().filter(entity -> entity instanceof LivingEntity && entity != mc.player).collect(Collectors.toList());
 
             switch (type.getMode()) {
                 case "All": break;

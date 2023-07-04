@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "falsify",
+  "id": "legacy",
   "version": "${version}",
   "name": "Falsify",
   "description": "falsify",
@@ -9,16 +9,17 @@
   ],
   "contact": {},
   "license": "MIT",
-  "icon": "assets/falsify/icon.png",
+  "icon": "assets/legacy/icon.png",
   "environment": "client",
   "entrypoints": {
-    "main": []
+    "client": []
   },
   "mixins": [
     "falsify.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.14.17",
-    "minecraft": "1.20.1"
+    "fabricloader": ">=0.14.21",
+    "minecraft": "1.20.1",
+    "java": ">=17"
   }
 }

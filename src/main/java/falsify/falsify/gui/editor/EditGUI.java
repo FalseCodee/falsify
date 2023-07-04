@@ -42,7 +42,6 @@ public class EditGUI extends Screen {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        Falsify.mc.player.sendMessage(Text.of(RenderHelper.convertToScale(mouseX) + ", " + RenderHelper.convertToScale(mouseY) + ", " + renderModules.get(0).getModule().name + ", " + renderModules.get(0).getX() + ", " + renderModules.get(0).getY()));
         for(RenderModule<?> renderModule : renderModules) {
             if(renderModule.handleClick(RenderHelper.convertToScale(mouseX), RenderHelper.convertToScale(mouseY), button)) {
                 renderModules.remove(renderModule);

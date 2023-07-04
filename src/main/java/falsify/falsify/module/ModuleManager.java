@@ -45,6 +45,9 @@ public class ModuleManager {
         modules.add(new DupeDrop());
         modules.add(new BodyGuard());
         modules.add(new ChatBot());
+        modules.add(new ElytraFly());
+        modules.add(new NoFall());
+        modules.add(new EntityInfo());
 
         modules.add(new FPSModule());
         modules.add(new TimeModule());

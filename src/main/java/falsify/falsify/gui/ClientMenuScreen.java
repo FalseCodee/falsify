@@ -5,6 +5,7 @@ import falsify.falsify.gui.clickgui.Clickable;
 import falsify.falsify.gui.other.FollowerGuy;
 import falsify.falsify.utils.MathUtils;
 import falsify.falsify.utils.RenderHelper;
+import falsify.falsify.utils.RenderUtils;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
@@ -18,8 +19,10 @@ import java.util.ArrayList;
 public class ClientMenuScreen extends Screen {
 
     public final ArrayList<Clickable> buttons = new ArrayList<>();
-    private Color colorStart = new Color(255, 255, 255);
-    private Color colorEnd = new Color(255, 255, 255);
+    private Color color1 = new Color(255, 255, 255);
+    private Color color2 = new Color(255, 255, 255);
+    private Color color3 = new Color(255, 255, 255);
+    private Color color4 = new Color(255, 255, 255);
     private ArrayList<FollowerGuy> guys;
     public ClientMenuScreen() {
         super(Text.of("Menu Screen"));
@@ -33,7 +36,7 @@ public class ClientMenuScreen extends Screen {
     protected void init() {
         super.init();
         guys.clear();
-        for(int i = 0; i < (int) (0.00065*width*height); i++) {
+        for(int i = 0; i < (int) (0.00082*width*height); i++) {
             guys.add(new FollowerGuy(MathUtils.random(10, width-10), MathUtils.random(10, height-10)));
         }
 
@@ -58,9 +61,9 @@ public class ClientMenuScreen extends Screen {
                    return false;
                }))
                .onRender((clickable, context, mouseX, mouseY, delta) -> {
-                   Color hover = (clickable.isHovering(mouseX, mouseY)) ? new Color(144, 144, 144) : new Color(60, 60, 60);
-                   RenderHelper.drawSmoothRect(hover.darker().darker(),context.getMatrices(), (int)clickable.getX()+1, (int)clickable.getY()+1, (int)(clickable.getX() + clickable.getWidth()-1), (int)(clickable.getY() + clickable.getHeight()-1), 3, new int[] {5, 5, 5, 5});
-                   RenderHelper.drawSmoothRect(hover,context.getMatrices(), (int)clickable.getX()+2, (int)clickable.getY()+2, (int)(clickable.getX() + clickable.getWidth()-2), (int)(clickable.getY() + clickable.getHeight()-2), 3, new int[] {5, 5, 5, 5});
+                   Color hover = (clickable.isHovering(mouseX, mouseY)) ? new Color(144, 144, 144, 75) : new Color(60, 60, 60,75);
+                   RenderHelper.drawSmoothRect(hover.darker().darker(),context.getMatrices(), (int)clickable.getX()+1, (int)clickable.getY()+1, (int)(clickable.getX() + clickable.getWidth()-1), (int)(clickable.getY() + clickable.getHeight()-1), 7, new int[] {5, 5, 5, 5});
+                   RenderHelper.drawSmoothRect(hover,context.getMatrices(), (int)clickable.getX()+2, (int)clickable.getY()+2, (int)(clickable.getX() + clickable.getWidth()-2), (int)(clickable.getY() + clickable.getHeight()-2), 7, new int[] {5, 5, 5, 5});
                    context.drawCenteredTextWithShadow(textRenderer, Text.of(name), (int)(clickable.getX() + clickable.getWidth()/2), (int)(clickable.getY() + clickable.getHeight()/2), Color.WHITE.getRGB());
                }).build());
     }
@@ -96,21 +99,33 @@ public class ClientMenuScreen extends Screen {
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         super.render(context, mouseX, mouseY, delta);
-        colorStart = RenderHelper.colorLerp(colorStart, new Color(Color.HSBtoRGB(mouseY/(float)height + 0.5f, 0.5f, 1.0f)), MathUtils.clamp(0.1f*Falsify.mc.getLastFrameDuration(), 0.0f, 1.0f));
-        colorEnd = RenderHelper.colorLerp(colorEnd, new Color(Color.HSBtoRGB(mouseX/(float)width, 0.5f, 1.0f)), MathUtils.clamp(0.1f*Falsify.mc.getLastFrameDuration(), 0.0f, 1.0f));
-        context.fillGradient(0, 0, width, height, colorStart.getRGB(), colorEnd.getRGB());
+        color1 = RenderHelper.colorLerp(color1, new Color(Color.HSBtoRGB((mouseY/(float)height*1.5f + 0.23f), 1.00f, 0.25f)), MathUtils.clamp(0.1f*Falsify.mc.getLastFrameDuration(), 0.0f, 1.0f));
+        color2 = RenderHelper.colorLerp(color2, new Color(Color.HSBtoRGB((mouseX/(float)width*0.5f  + 0.86f), 1.00f, 0.25f)), MathUtils.clamp(0.1f*Falsify.mc.getLastFrameDuration(), 0.0f, 1.0f));
+        color3 = RenderHelper.colorLerp(color3, new Color(Color.HSBtoRGB((mouseY/(float)height*0.8f + 0.45f), 1.00f, 0.25f)), MathUtils.clamp(0.1f*Falsify.mc.getLastFrameDuration(), 0.0f, 1.0f));
+        color4 = RenderHelper.colorLerp(color4, new Color(Color.HSBtoRGB((mouseX/(float)width*0.9f  + 0.33f), 1.00f, 0.25f)), MathUtils.clamp(0.1f*Falsify.mc.getLastFrameDuration(), 0.0f, 1.0f));
+        RenderUtils.fillCornerGradient(context,0, 0, width, height, color1.getRGB(), color2.getRGB(),color3.getRGB(), color4.getRGB());
+        int size = guys.size();
+        for(int i = guys.size()-1; i >=0 ;i--) {
+            if(i >= guys.size()) i -= 1 + i-guys.size();
+            FollowerGuy guy = guys.get(i);
+            boolean flag = guys.size() == size;
+            guy.update(mouseX, mouseY, delta, guys, flag);
+            guy.render(context, mouseX, mouseY, delta);
+        }
+
         for(Clickable button : buttons)  {
             button.render(context, mouseX, mouseY, delta);
         }
 
-        for(FollowerGuy guy : guys) {
-            guy.update(mouseX, mouseY, delta, guys);
-            guy.render(context, mouseX, mouseY, delta);
-        }
-
         context.getMatrices().push();
-        context.getMatrices().scale(3, 3, 1);
-        context.drawCenteredTextWithShadow(textRenderer, "Legacy Client", width/2/3, height/2/3, -1);
+        int scale = 3;
+        context.getMatrices().scale(scale, scale, 1);
+        context.getMatrices().translate(width/2f/scale, height/2f/scale, 0);
+        int titleWidth = textRenderer.getWidth(Falsify.title);
+        int titleHeight = textRenderer.fontHeight;
+        int padding = 7;
+        RenderHelper.drawSmoothRect(new Color(64,64,64, 40), context.getMatrices(), -titleWidth/2f - padding, -titleHeight/2f - padding,titleWidth/2f + padding, titleHeight/2f + padding, 5, new int[] {5,5,5,5});
+        context.drawCenteredTextWithShadow(textRenderer, Falsify.title, 0, -titleHeight/2, -1);
         context.getMatrices().pop();
     }
 }
