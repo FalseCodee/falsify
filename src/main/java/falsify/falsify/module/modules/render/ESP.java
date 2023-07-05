@@ -22,7 +22,7 @@ public class ESP extends Module {
     private final ModeSetting type = new ModeSetting("Type", "All", "All", "Players", "Mobs", "Animals");
 
     public ESP() {
-        super("ESP", Category.PLAYER, -1);
+        super("ESP", "Draws a box around entities.", Category.RENDER, -1);
         settings.add(type);
         mc.options.getGamma().getValue();
     }

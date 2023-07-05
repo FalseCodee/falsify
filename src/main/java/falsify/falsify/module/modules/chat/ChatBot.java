@@ -10,7 +10,7 @@ import org.lwjgl.glfw.GLFW;
 
 public class ChatBot extends Module {
     public ChatBot() {
-        super("ChatBot", Category.MISC, -1);
+        super("ChatBot", "Become a chat bot!", Category.MISC, -1);
     }
 
     @Override

@@ -5,7 +5,10 @@ import falsify.falsify.gui.clickgui.Clickable;
 import falsify.falsify.gui.clickgui.Draggable;
 import falsify.falsify.gui.clickgui.settings.SettingsGUI;
 import falsify.falsify.module.Module;
+import falsify.falsify.utils.RenderHelper;
+import falsify.falsify.utils.RenderUtils;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.util.math.MatrixStack;
 
 import java.awt.*;
 
@@ -24,7 +27,10 @@ public class ModuleItem extends Clickable implements Draggable {
         Color active = module.category.getColor().brighter().brighter();
         if(module.isEnabled()) fade.rise(); else fade.lower();
         Color color = fade.color(inactive, active);
-        if(isHovering(mouseX, mouseY)) fade2.rise(); else fade2.lower();
+        if(isHovering(mouseX, mouseY)){
+            fade2.rise();
+            renderDescription(context, mouseX, mouseY, delta);
+        } else fade2.lower();
         color = fade2.color(color, color.brighter());
         if(last) {
             drawSmoothRect(color.darker() , context.getMatrices(), (int) this.x, (int) this.y, (int) this.x + (int) this.width, (int) this.y + (int) this.height, 2, new int[] {5, 0, 0, 5});
@@ -37,6 +43,18 @@ public class ModuleItem extends Clickable implements Draggable {
         context.drawCenteredTextWithShadow(Falsify.mc.textRenderer, module.name, (int) x + (int) width/2, (int) y + (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, 0xffffff);
         fade.tick();
         fade2.tick();
+    }
+
+    private void renderDescription(DrawContext context, int mouseX, int mouseY, float delta) {
+        MatrixStack matrices = context.getMatrices();
+        matrices.push();
+        int padding = 4;
+        matrices.translate(mouseX, mouseY-Falsify.mc.textRenderer.fontHeight - 2 * padding, 0.35);
+        String description = module.description;
+        RenderHelper.drawSmoothRect(module.category.getColor().darker(),matrices,-1,-1, Falsify.mc.textRenderer.getWidth(description) + 2 * padding + 1, Falsify.mc.textRenderer.fontHeight + 2 * padding + 1, padding/2f, new int[] {5,5,5,5});
+        RenderHelper.drawSmoothRect(module.category.getColor(),matrices,0,0, Falsify.mc.textRenderer.getWidth(description) + 2 * padding, Falsify.mc.textRenderer.fontHeight + 2 * padding, padding/2f, new int[] {5,5,5,5});
+        context.drawTextWithShadow(Falsify.mc.textRenderer, description, padding, padding, Color.WHITE.getRGB());
+        matrices.pop();
     }
 
     @Override
@@ -59,5 +77,9 @@ public class ModuleItem extends Clickable implements Draggable {
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         render(context, mouseX, mouseY, delta, false);
+    }
+
+    public Module getModule() {
+        return this.module;
     }
 }

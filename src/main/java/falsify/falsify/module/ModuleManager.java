@@ -18,16 +18,13 @@ public class ModuleManager {
     public static final CopyOnWriteArrayList<Module> enabledModules = new CopyOnWriteArrayList<>();
 
     public static void init(){
-        modules.add(new DiamondGrabber());
         modules.add(new GuiArrayList());
         modules.add(new Sentry());
-        modules.add(new RunFromSpawn());
         modules.add(new AutoRespawn());
         modules.add(new AutoFish());
         modules.add(new BungeeHack());
         modules.add(new TPAnnoy());
         modules.add(new AntiAdvertisement());
-        modules.add(new TextBrush());
         modules.add(new VClip());
         modules.add(new ClientBrand());
         modules.add(new Aimbot());
@@ -35,7 +32,6 @@ public class ModuleManager {
         modules.add(new AutoJump());
         modules.add(new Sprint());
         modules.add(new FastPlace());
-        modules.add(new Spectate());
         modules.add(new AutoClick());
         modules.add(new AutoMath());
         modules.add(new Trajectories());

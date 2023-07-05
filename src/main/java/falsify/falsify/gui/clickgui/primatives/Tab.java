@@ -10,6 +10,7 @@ import net.minecraft.client.gui.DrawContext;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.stream.Collectors;
 
 public class Tab extends Clickable implements Draggable {
@@ -60,10 +61,11 @@ public class Tab extends Clickable implements Draggable {
 
     public void init() {
         int i = 1;
-        for (Module module : ModuleManager.modules.stream().filter(m -> m.category == this.category).collect(Collectors.toList())){
+        for (Module module : ModuleManager.modules.stream().filter(m -> m.category == this.category).toList()){
             modules.add(new ModuleItem(module, x, y + 20*i, 100, 20));
             i++;
         }
+        modules.sort(Comparator.comparingInt(module -> -Falsify.mc.textRenderer.getWidth(module.getModule().name)));
     }
 
     @Override
@@ -83,14 +85,14 @@ public class Tab extends Clickable implements Draggable {
             drawSmoothRect(scroll.color(category.getColor().darker(), category.getColor()), context.getMatrices(), (int) this.x, (int) this.y, (int) this.x + (int) this.width, (int) this.y + (int) this.height, 2, new int[] {0, 5, 5, 0});
             context.drawCenteredTextWithShadow(Falsify.mc.textRenderer, category.getName(), (int) x + (int) width/2, (int) y + (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, 0xffffff);
             int i = 1;
-            enableScissor((int) x, (int) (y+height), (int) (x+width), (int) (y+height + (20*modules.size()*scroll.run()) + 1));
+            if(scroll.getProgress() != 1.0) enableScissor((int) x, (int) (y+height), (int) (x+width), (int) (y+height + (20*modules.size()*scroll.run()) + 1));
             for(ModuleItem moduleItem : modules) {
                 moduleItem.setX(x);
                 moduleItem.setY(y + 20*i - (20*modules.size()*(1-scroll.run())));
                 moduleItem.render(context, mouseX, mouseY, delta, (i == modules.size()));
                 i++;
             }
-            disableScissor();
+            if(scroll.getProgress() != 1.0) disableScissor();
         } else {
             scroll.lower();
             drawSmoothRect(category.getColor().darker(), context.getMatrices(), (int) this.x, (int) this.y, (int) this.x + (int) this.width, (int) this.y + (int) this.height, 2, new int[] {5, 5, 5, 5});

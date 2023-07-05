@@ -14,7 +14,7 @@ public class CPSModule extends DisplayModule<CPSRenderModule> {
     private int lmb = 0;
 
     public CPSModule() {
-        super("CPS", new CPSRenderModule(2*105.0, 25.0, 100, 20), Category.RENDER, -1);
+        super("CPS", "Shows your Clicks-Per-Second.", new CPSRenderModule(2*105.0, 25.0, 100, 20), Category.RENDER, -1);
         renderModule.setModule(this);
     }
 

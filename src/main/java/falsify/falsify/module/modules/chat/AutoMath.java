@@ -18,7 +18,7 @@ import java.util.HashMap;
 public class AutoMath extends ChatModule {
 
     public AutoMath() {
-        super("Auto Math", Category.MISC, -1);
+        super("Auto Math", "Automatically solve math.", Category.MISC, -1);
         settings.add(chatBot);
         settings.add(autoSolve);
         settings.add(showEquation);

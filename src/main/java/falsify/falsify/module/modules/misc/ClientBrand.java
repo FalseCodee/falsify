@@ -13,7 +13,7 @@ public class ClientBrand extends Module {
     public String brand = "Legacy Client";
 
     public ClientBrand() {
-        super("Brand", Category.MISC, -1);
+        super("Brand","Change the client brand from fabric to anything!", Category.MISC, -1);
     }
 
     @Override

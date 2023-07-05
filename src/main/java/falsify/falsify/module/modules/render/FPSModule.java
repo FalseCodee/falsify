@@ -9,7 +9,7 @@ import net.minecraft.client.gui.DrawContext;
 
 public class FPSModule extends DisplayModule<FPSRenderModule> {
     public FPSModule() {
-        super("FPS", new FPSRenderModule(0.0, 0.0, 100, 20), Category.RENDER, -1);
+        super("FPS", "Shows your current fps.", new FPSRenderModule(0.0, 0.0, 100, 20), Category.RENDER, -1);
         renderModule.setModule(this);
     }
 }

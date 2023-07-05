@@ -13,7 +13,7 @@ public class WASDModule extends DisplayModule<WASDRenderModule> {
     RangeSetting size = new RangeSetting("Size", 20, 10, 100, 1);
     RangeSetting padding = new RangeSetting("Padding", 3, 0, 20, 1);
     public WASDModule() {
-        super("WASD", new WASDRenderModule(2*105.0, 25.0, 160, 105), Category.RENDER, -1);
+        super("WASD", "Shows WASD keystrokes.", new WASDRenderModule(2*105.0, 25.0, 160, 105), Category.RENDER, -1);
         renderModule.setModule(this);
         settings.add(size);
         settings.add(padding);

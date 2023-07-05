@@ -10,7 +10,7 @@ import java.util.Calendar;
 
 public class TimeModule extends DisplayModule<TimeRenderModule> {
     public TimeModule() {
-        super("Current Time", new TimeRenderModule(4*105.0, 0.0, 100, 20), Category.RENDER, -1);
+        super("Current Time", "Shows the current time", new TimeRenderModule(4*105.0, 0.0, 100, 20), Category.RENDER, -1);
         renderModule.setModule(this);
         renderModule.setScale(2);
     }

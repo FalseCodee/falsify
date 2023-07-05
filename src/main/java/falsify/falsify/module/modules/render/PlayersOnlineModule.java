@@ -8,7 +8,7 @@ import net.minecraft.client.gui.DrawContext;
 
 public class PlayersOnlineModule extends DisplayModule<PlayersOnlineRenderModule> {
     public PlayersOnlineModule() {
-        super("Player Count", new PlayersOnlineRenderModule(1*105.0, 0.0, 100, 20), Category.RENDER, -1);
+        super("Player Count", "Shows the current player count.", new PlayersOnlineRenderModule(1*105.0, 0.0, 100, 20), Category.RENDER, -1);
         renderModule.setModule(this);
     }
 }

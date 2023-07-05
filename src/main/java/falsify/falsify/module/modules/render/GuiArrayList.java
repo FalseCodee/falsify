@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 public class GuiArrayList extends Module {
 
     public GuiArrayList() {
-        super("Arraylist", Category.RENDER, -1, true);
+        super("Arraylist", "Shows Active Mods", Category.RENDER, -1, true);
     }
 
     @Override

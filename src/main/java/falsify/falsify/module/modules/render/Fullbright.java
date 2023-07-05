@@ -19,10 +19,10 @@ import java.util.stream.Collectors;
 
 public class Fullbright extends Module {
 
-    private final RangeSetting gamma = new RangeSetting("Gamma", 30, 1, 100, 0.5);
+    private final RangeSetting gamma = new RangeSetting("Gamma", 30, -100, 100, 1);
 
     public Fullbright() {
-        super("Fullbright", Category.PLAYER, -1);
+        super("Fullbright", "Increase default brightness.", Category.RENDER, -1);
         settings.add(gamma);
     }
 

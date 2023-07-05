@@ -39,7 +39,7 @@ public class FaceCover extends Module {
     private LegacyIdentifier identifier;
 
     public FaceCover() {
-        super("Face Cover", Category.RENDER, -1);
+        super("Face Cover", "Covers the face of targets with an image.", Category.RENDER, -1);
         settings.add(type);
         settings.add(distance);
         settings.add(faceScale);

@@ -8,7 +8,7 @@ import net.minecraft.client.gui.DrawContext;
 
 public class ServerAddressModule extends DisplayModule<ServerAddressRenderModule> {
     public ServerAddressModule() {
-        super("Server Address", new ServerAddressRenderModule(2*105.0, 0.0, 100, 20), Category.RENDER, -1);
+        super("Server Address", "Shows the current server address.", new ServerAddressRenderModule(2*105.0, 0.0, 100, 20), Category.RENDER, -1);
         renderModule.setModule(this);
     }
 }

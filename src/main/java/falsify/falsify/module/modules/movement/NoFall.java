@@ -13,7 +13,7 @@ import org.lwjgl.glfw.GLFW;
 
 public class NoFall extends Module {
     public NoFall() {
-        super("No Fall", Category.MOVEMENT, -1);
+        super("No Fall", "Prevents fall damage", Category.MOVEMENT, -1);
     }
 
     @Override

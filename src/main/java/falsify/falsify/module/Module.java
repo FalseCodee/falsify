@@ -10,20 +10,22 @@ import java.util.List;
 
 public class Module {
     public final String name;
+    public final String description;
     public boolean toggled;
     public final KeybindSetting keybind;
     public final Category category;
     public static final MinecraftClient mc = MinecraftClient.getInstance();
     public final List<Setting<?>> settings = new ArrayList<>();
 
-    public Module(String name, Category category, int keyCode){
+    public Module(String name, String description, Category category, int keyCode){
         this.name = name;
+        this.description = description;
         this.category = category;
         keybind = new KeybindSetting("Keybind", keyCode);
         settings.add(keybind);
     }
-    public Module(String name, Category category, int keyCode, boolean enabled){
-       this(name, category, keyCode);
+    public Module(String name, String description, Category category, int keyCode, boolean enabled){
+       this(name, description, category, keyCode);
         if(enabled){
             this.toggle();
         }

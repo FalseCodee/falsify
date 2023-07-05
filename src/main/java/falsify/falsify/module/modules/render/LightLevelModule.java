@@ -9,7 +9,7 @@ import net.minecraft.world.LightType;
 
 public class LightLevelModule extends DisplayModule<LightLevelRenderModule> {
     public LightLevelModule() {
-        super("Light Level", new LightLevelRenderModule(105.0, 25.0, 100, 20), Category.RENDER, -1);
+        super("Light Level", "Shows the current light level.", new LightLevelRenderModule(105.0, 25.0, 100, 20), Category.RENDER, -1);
         renderModule.setModule(this);
     }
 }

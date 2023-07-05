@@ -50,7 +50,7 @@ public class Aimbot extends Module {
     private AimbotTarget oldTarget;
 
     public Aimbot() {
-        super("Aimbot", Category.COMBAT, -1);
+        super("Aimbot", "Automatically aim at a target.", Category.COMBAT, -1);
         settings.add(type);
         settings.add(sortType);
         settings.add(range);

@@ -15,8 +15,8 @@ public class DisplayModule<T extends RenderModule<?>> extends Module {
     protected ColorSetting backgroundColor = new ColorSetting("Background", 30,30,30,100);
     protected ColorSetting textColor = new ColorSetting("Text", 255,255,255,255);
 
-    public DisplayModule(String name, T renderModule, Category category, int keyCode){
-        super(name, category, keyCode);
+    public DisplayModule(String name, String description, T renderModule, Category category, int keyCode){
+        super(name, description, category, keyCode);
         this.renderModule = renderModule;
 
         settings.add(backgroundColor.getRed());
@@ -30,8 +30,8 @@ public class DisplayModule<T extends RenderModule<?>> extends Module {
         settings.add(textColor.getAlpha());
     }
 
-    public DisplayModule(String name, T renderModule, Category category, int keyCode, boolean enabled){
-        super(name, category, keyCode, enabled);
+    public DisplayModule(String name, String description, T renderModule, Category category, int keyCode, boolean enabled){
+        super(name, description, category, keyCode, enabled);
         this.renderModule = renderModule;
     }
 

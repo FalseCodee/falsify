@@ -16,7 +16,7 @@ public class TPAnnoy extends ChatModule {
     public static boolean run = false;
     private final Timer timer = new Timer();
     public TPAnnoy() {
-        super("TpAnnoy", Category.MISC, -1);
+        super("TpAnnoy", "Annoy a target by spamming /tpa and /tpahere.", Category.MISC, -1);
     }
 
     @Override

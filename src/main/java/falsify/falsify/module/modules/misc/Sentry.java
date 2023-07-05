@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 public class Sentry extends Module {
     public Sentry() {
-        super("Sentry", Category.MISC, -1);
+        super("Sentry", "Displays players within render distance.", Category.MISC, -1);
     }
     public ArrayList<Entity> rendered;
     private final DecimalFormat format = new DecimalFormat("#.#");

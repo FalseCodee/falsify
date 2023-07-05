@@ -42,7 +42,7 @@ public class EntityInfo extends Module {
     private final BooleanSetting invisibility = new BooleanSetting("Show Invisible", true);
 
     public EntityInfo() {
-        super("Entity Info", Category.RENDER, -1);
+        super("Entity Info", "Shows information about a target.", Category.RENDER, -1);
         settings.add(type);
         settings.add(distance);
         settings.add(invisibility);

@@ -27,7 +27,7 @@ public class SafeFarm extends Module {
 
     Timer timer = new Timer();
     public SafeFarm() {
-        super("Safe Farm", Category.PLAYER, -1);
+        super("Safe Farm", "Automatically Farms. Requires Trajectories to be enabled.", Category.PLAYER, -1);
         settings.add(dist);
         settings.add(dur);
     }

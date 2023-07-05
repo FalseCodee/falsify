@@ -29,7 +29,7 @@ public class BodyGuard extends Module {
 
     String targetName = "FalseCode";
     public BodyGuard() {
-        super("BodyGuard", Category.MOVEMENT, -1);
+        super("BodyGuard", "Follows a target. Requires Trajectories to be enabled.", Category.MOVEMENT, -1);
         settings.add(range);
         settings.add(location);
     }

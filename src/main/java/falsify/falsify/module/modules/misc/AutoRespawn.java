@@ -9,7 +9,7 @@ import org.lwjgl.glfw.GLFW;
 
 public class AutoRespawn extends Module {
     public AutoRespawn() {
-        super("Auto Respawn", Category.MISC, -1);
+        super("Auto Respawn", "Automatically respawn.", Category.MISC, -1);
     }
     public final Timer timer = new Timer();
     @Override

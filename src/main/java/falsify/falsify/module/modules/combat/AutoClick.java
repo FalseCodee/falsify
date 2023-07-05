@@ -21,7 +21,7 @@ public class AutoClick extends Module {
     final Timer timer = new Timer();
     final Timer windupTimer = new Timer();
     public AutoClick() {
-        super("Auto Click", Category.COMBAT, -1);
+        super("Auto Click", "Automatically click.", Category.COMBAT, -1);
         settings.add(aps);
         settings.add(randomness);
         settings.add(windupTime);

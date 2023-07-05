@@ -8,7 +8,7 @@ import net.minecraft.client.gui.DrawContext;
 
 public class ServerPingModule extends DisplayModule<ServerPingRenderModule> {
     public ServerPingModule() {
-        super("Server Ping", new ServerPingRenderModule(3*105.00, 0.0, 100, 20), Category.RENDER, -1);
+        super("Server Ping", "Shows the current server ping.", new ServerPingRenderModule(3*105.00, 0.0, 100, 20), Category.RENDER, -1);
         renderModule.setModule(this);
     }
 }

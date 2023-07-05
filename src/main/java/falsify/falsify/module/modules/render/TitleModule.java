@@ -8,7 +8,7 @@ import net.minecraft.client.gui.DrawContext;
 
 public class TitleModule extends DisplayModule<TitleRenderModule> {
     public TitleModule() {
-        super("Title", new TitleRenderModule(0.0, 25.0, 100, 20), Category.RENDER, -1);
+        super("Title", "Shows the client title", new TitleRenderModule(0.0, 25.0, 100, 20), Category.RENDER, -1);
         renderModule.setModule(this);
     }
 }

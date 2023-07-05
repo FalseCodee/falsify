@@ -11,7 +11,7 @@ public class AntiAdvertisement extends ChatModule {
 
     final BooleanSetting actionBar = new BooleanSetting("Action Bar", true);
     public AntiAdvertisement() {
-        super("AntiAd", Category.MISC, -1);
+        super("AntiAd","Removes Minehut advertisements.", Category.MISC, -1);
         settings.add(actionBar);
     }
 

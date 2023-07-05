@@ -9,7 +9,7 @@ import net.minecraft.client.gui.DrawContext;
 
 public class BiomeModule extends DisplayModule<BiomeRenderModule> {
     public BiomeModule() {
-        super("Biome", new BiomeRenderModule(0.0, 25.0, 100, 20), Category.RENDER, -1);
+        super("Biome", "Shows your current biome.", new BiomeRenderModule(0.0, 25.0, 100, 20), Category.RENDER, -1);
         renderModule.setModule(this);
     }
 }

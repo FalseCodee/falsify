@@ -11,7 +11,7 @@ import net.minecraft.text.Text;
 public class ArmorModule extends DisplayModule<ArmorRenderModule> {
 
     public ArmorModule() {
-        super("Armor", new ArmorRenderModule(3*105.0, 25.0, 3 + 20 + mc.textRenderer.getWidth("888") + 6, 20), Category.PLAYER, -1);
+        super("Armor", "Shows the status of your equipped armor.", new ArmorRenderModule(3*105.0, 25.0, 3 + 20 + mc.textRenderer.getWidth("888") + 6, 20), Category.RENDER, -1);
         renderModule.setModule(this);
     }
 }

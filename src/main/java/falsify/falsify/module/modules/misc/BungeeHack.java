@@ -17,7 +17,7 @@ public class BungeeHack extends Module {
     public String uuid = mc.getSession().getUuid().replace("-","");
 
     public BungeeHack() {
-        super("BungeeHack", Category.MISC, -1);
+        super("BungeeHack", "Exploit weak Bungee servers.", Category.MISC, -1);
     }
 
     @Override
