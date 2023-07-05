@@ -21,10 +21,10 @@ public class ModuleTranslator {
         JsonObject json = new JsonObject();
         for(int i = 0; i < settings.size(); i++) {
             Setting<?> setting = settings.get(i);
-            if(setting instanceof BooleanSetting s) json.addProperty(i+"",s.getValue());
-            else if(setting instanceof RangeSetting s) json.addProperty(i+"",s.getValue());
-            else if(setting instanceof ModeSetting s) json.addProperty(i+"",s.getIndex());
-            else if(setting instanceof KeybindSetting s) json.addProperty(i+"",s.getValue());
+            if(setting instanceof BooleanSetting s) json.addProperty(s.getName(),s.getValue());
+            else if(setting instanceof RangeSetting s) json.addProperty(s.getName(),s.getValue());
+            else if(setting instanceof ModeSetting s) json.addProperty(s.getName(),s.getIndex());
+            else if(setting instanceof KeybindSetting s) json.addProperty(s.getName(),s.getValue());
         }
         return json;
     }
@@ -37,12 +37,16 @@ public class ModuleTranslator {
 
 
     private static void loadSettings(List<Setting<?>> settings, JsonObject settingsJson){
-        for(int i = 0; i < settings.size(); i++) {
-            Setting<?> setting = settings.get(i);
-            if(setting instanceof BooleanSetting s) s.setValue(settingsJson.getAsJsonPrimitive(i+"").getAsBoolean());
-            else if(setting instanceof RangeSetting s) s.setValue(settingsJson.getAsJsonPrimitive(i+"").getAsDouble());
-            else if(setting instanceof ModeSetting s) s.setIndex(settingsJson.getAsJsonPrimitive(i+"").getAsInt());
-            else if(setting instanceof KeybindSetting s) s.setValue(settingsJson.getAsJsonPrimitive(i+"").getAsInt());
+        for (Setting<?> setting : settings) {
+            if(!settingsJson.has(setting.getName())) continue;
+            if (setting instanceof BooleanSetting s)
+                s.setValue(settingsJson.getAsJsonPrimitive(s.getName()).getAsBoolean());
+            else if (setting instanceof RangeSetting s)
+                s.setValue(settingsJson.getAsJsonPrimitive(s.getName()).getAsDouble());
+            else if (setting instanceof ModeSetting s)
+                s.setIndex(settingsJson.getAsJsonPrimitive(s.getName()).getAsInt());
+            else if (setting instanceof KeybindSetting s)
+                s.setValue(settingsJson.getAsJsonPrimitive(s.getName()).getAsInt());
         }
     }
 }

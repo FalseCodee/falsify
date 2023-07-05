@@ -37,7 +37,7 @@ public class ConfigManager {
         if(config.has("modules")) {
             JsonObject modules = config.getAsJsonObject("modules");
             for(Category category : Category.values()) {
-                CategoryTranslator.loadCategory(category, modules.getAsJsonArray(category.getName()));
+                CategoryTranslator.loadCategory(category, modules.getAsJsonObject(category.getName()));
             }
         }
     }

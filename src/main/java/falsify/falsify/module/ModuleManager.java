@@ -50,6 +50,7 @@ public class ModuleManager {
         modules.add(new NoFall());
         modules.add(new EntityInfo());
         modules.add(new FaceCover());
+        modules.add(new Fullbright());
 
         modules.add(new FPSModule());
         modules.add(new TimeModule());

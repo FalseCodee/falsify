@@ -9,19 +9,20 @@ import falsify.falsify.module.ModuleManager;
 import java.util.List;
 
 public class CategoryTranslator {
-    public static JsonArray translateCategory(Category category) {
-        JsonArray json = new JsonArray();
+    public static JsonObject translateCategory(Category category) {
+        JsonObject json = new JsonObject();
         List<Module> modules = ModuleManager.modules.stream().filter(m -> m.category == category).toList();
         for(Module module : modules) {
-            json.add(ModuleTranslator.translateModule(module));
+            json.add(module.name, ModuleTranslator.translateModule(module));
         }
         return json;
     }
 
-    public static void loadCategory(Category category, JsonArray categoryJson) {
+    public static void loadCategory(Category category, JsonObject categoryJson) {
         List<Module> modules = ModuleManager.modules.stream().filter(m -> m.category == category).toList();
-        for(int i = 0; i < categoryJson.size(); i++) {
-            ModuleTranslator.loadModule(modules.get(i), categoryJson.get(i).getAsJsonObject());
+        for(Module module : modules) {
+            if(categoryJson.has(module.name))
+                ModuleTranslator.loadModule(module, categoryJson.getAsJsonObject(module.name));
         }
     }
 }

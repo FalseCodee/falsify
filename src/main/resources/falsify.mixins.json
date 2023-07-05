@@ -20,6 +20,7 @@
     "special.MixinPlayerMoveC2SPacket"
   ],
   "client": [
+    "MixinLightmapTextureManager",
     "MixinMouse",
     "special.MixinAbstractClientPlayerEntity"
   ],

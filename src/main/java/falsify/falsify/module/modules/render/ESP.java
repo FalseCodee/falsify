@@ -24,6 +24,7 @@ public class ESP extends Module {
     public ESP() {
         super("ESP", Category.PLAYER, -1);
         settings.add(type);
+        mc.options.getGamma().getValue();
     }
 
 
