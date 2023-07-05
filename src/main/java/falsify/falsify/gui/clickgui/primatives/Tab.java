@@ -54,6 +54,10 @@ public class Tab extends Clickable implements Draggable {
         this.extended = !this.extended;
     }
 
+    public void setExtended(boolean extended) {
+        this.extended = extended;
+    }
+
     public void init() {
         int i = 1;
         for (Module module : ModuleManager.modules.stream().filter(m -> m.category == this.category).collect(Collectors.toList())){
@@ -64,7 +68,7 @@ public class Tab extends Clickable implements Draggable {
 
     @Override
     public boolean onDrag(double x, double y, int button, double dx, double dy) {
-        if(dragging && button == 0) {
+        if (dragging && button == 0) {
             this.x += dx;
             this.y += dy;
             return true;
@@ -76,7 +80,7 @@ public class Tab extends Clickable implements Draggable {
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         if(isExtended()) {
             scroll.rise();
-            drawSmoothRect(new Color(54, 54, 54), context.getMatrices(), (int) this.x, (int) this.y, (int) this.x + (int) this.width, (int) this.y + (int) this.height, 2, new int[] {0, 5, 5, 0});
+            drawSmoothRect(scroll.color(category.getColor().darker(), category.getColor()), context.getMatrices(), (int) this.x, (int) this.y, (int) this.x + (int) this.width, (int) this.y + (int) this.height, 2, new int[] {0, 5, 5, 0});
             context.drawCenteredTextWithShadow(Falsify.mc.textRenderer, category.getName(), (int) x + (int) width/2, (int) y + (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, 0xffffff);
             int i = 1;
             enableScissor((int) x, (int) (y+height), (int) (x+width), (int) (y+height + (20*modules.size()*scroll.run()) + 1));
@@ -89,7 +93,7 @@ public class Tab extends Clickable implements Draggable {
             disableScissor();
         } else {
             scroll.lower();
-            drawSmoothRect(new Color(54, 54, 54), context.getMatrices(), (int) this.x, (int) this.y, (int) this.x + (int) this.width, (int) this.y + (int) this.height, 2, new int[] {5, 5, 5, 5});
+            drawSmoothRect(category.getColor().darker(), context.getMatrices(), (int) this.x, (int) this.y, (int) this.x + (int) this.width, (int) this.y + (int) this.height, 2, new int[] {5, 5, 5, 5});
             context.drawCenteredTextWithShadow(Falsify.mc.textRenderer, category.getName(), (int) x + (int) width/2, (int) y + (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, 0xffffff);
             if(scroll.run() != 0) {
                 int i = 1;
@@ -112,5 +116,9 @@ public class Tab extends Clickable implements Draggable {
 
     public void setDragging(boolean dragging) {
         this.dragging = dragging;
+    }
+
+    public Category getCategory() {
+        return this.category;
     }
 }

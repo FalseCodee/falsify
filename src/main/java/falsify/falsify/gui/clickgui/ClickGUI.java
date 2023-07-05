@@ -10,6 +10,7 @@ import net.minecraft.text.Text;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ClickGUI extends Screen {
 
@@ -42,6 +43,7 @@ public class ClickGUI extends Screen {
             tabs.add(new Tab(category, 10 + 120 * i, 10));
             i++;
         }
+        Falsify.configManager.loadClickGui(tabs);
     }
 
     @Override
@@ -91,5 +93,9 @@ public class ClickGUI extends Screen {
             tabs.get(i).render(context, mouseX, mouseY, delta);
             context.getMatrices().pop();
         }
+    }
+
+    public List<Tab> getTabs() {
+        return this.tabs;
     }
 }

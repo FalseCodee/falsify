@@ -6,31 +6,30 @@ import falsify.falsify.listeners.events.EventPacketRecieve;
 import falsify.falsify.listeners.events.EventPacketSend;
 import falsify.falsify.module.Module;
 import falsify.falsify.module.ModuleManager;
-import falsify.falsify.utils.LegacyIdentifier;
-import falsify.falsify.utils.RenderUtils;
 import falsify.falsify.utils.TextureCacheManager;
+import falsify.falsify.utils.config.ConfigManager;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.texture.NativeImage;
-import net.minecraft.client.texture.NativeImageBackedTexture;
-import net.minecraft.client.texture.TextureManager;
 import net.minecraft.client.util.Session;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
 
-import java.io.InputStream;
-import java.net.URL;
+import java.io.File;
+
 
 public class Falsify{
     public static final MinecraftClient mc = MinecraftClient.getInstance();
     public static Session session;
     public static TextureCacheManager textureCacheManager;
+    public static ConfigManager configManager;
+    public static File clientDir;
     public static final String title = "Legacy Client";
     public static void init(Session session) {
-        ModuleManager.init();
         Falsify.session = session;
+        String clientDirPath = mc.runDirectory.getAbsolutePath()+"\\legacy_client";
+        clientDir = new File(clientDirPath);
+        clientDir.mkdirs();
         Falsify.textureCacheManager = new TextureCacheManager();
+        Falsify.configManager = new ConfigManager();
+        ModuleManager.init();
     }
 
     public static void onEvent(Event e){
@@ -41,16 +40,18 @@ public class Falsify{
         } else {
             if(mc.player == null)
                 return;
-            if(e instanceof EventKey){
-                for(Module module : ModuleManager.modules){
-                    if(((EventKey) e).getKey() == module.getKeyCode() && ((EventKey) e).getAction() == GLFW.GLFW_PRESS){
-                        module.toggle();
+            if(e instanceof EventKey ek){
+                if(ek.getKey() != -1) {
+                    for (Module module : ModuleManager.modules) {
+                        if (ek.getKey() == module.getKeyCode() && ek.getAction() == GLFW.GLFW_PRESS) {
+                            module.toggle();
+                        }
                     }
                 }
             }
-                for(Module module : ModuleManager.enabledModules){
-                    module.onEvent(e);
-                }
+            for(Module module : ModuleManager.enabledModules){
+                module.onEvent(e);
+            }
 
         }
     }

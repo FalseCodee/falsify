@@ -13,7 +13,7 @@ import org.lwjgl.glfw.GLFW;
 
 public class AutoFish extends Module {
     public AutoFish() {
-        super("Auto Fish", Category.PLAYER, GLFW.GLFW_KEY_M);
+        super("Auto Fish", Category.PLAYER, -1);
     }
 
     final Timer timer = new Timer();

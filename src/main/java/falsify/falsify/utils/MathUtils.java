@@ -2,11 +2,21 @@ package falsify.falsify.utils;
 
 import falsify.falsify.Falsify;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.AbstractClientPlayerEntity;
+import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.scoreboard.Scoreboard;
+import net.minecraft.scoreboard.ScoreboardObjective;
+import net.minecraft.scoreboard.ScoreboardPlayerScore;
+import net.minecraft.screen.ScreenTexts;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import org.joml.Vector2d;
+
+import java.util.Objects;
 
 public class MathUtils {
     public static float clamp(float val, float min, float max) {
@@ -20,16 +30,16 @@ public class MathUtils {
         return getRotationsNeeded(pos.getX(), pos.getY(), pos.getZ());
     }
     public static float[] getRotationsNeeded(double x, double y, double z) {
-        double diffX = x - Falsify.mc.player.getCameraPosVec(Falsify.mc.getTickDelta()).getX();
+        double diffX = x - Falsify.mc.gameRenderer.getCamera().getPos().getX();
         double diffY;
 
-       diffY = y - Falsify.mc.player.getCameraPosVec(Falsify.mc.getTickDelta()).getY() + Falsify.mc.player.getEyeHeight(Falsify.mc.player.getPose());
-        double diffZ = z - Falsify.mc.player.getCameraPosVec(Falsify.mc.getTickDelta()).getZ();
+       diffY = y - Falsify.mc.gameRenderer.getCamera().getPos().getY();
+        double diffZ = z - Falsify.mc.gameRenderer.getCamera().getPos().getZ();
         double dist = Math.sqrt(diffX * diffX + diffZ * diffZ);
         float yaw = (float) (Math.atan2(diffZ, diffX) * 180.0D / Math.PI) - 90.0F;
         float pitch = (float) -(Math.atan2(diffY, dist) * 180.0D / Math.PI);
-        return new float[] {Falsify.mc.player.getYaw() + MathHelper.wrapDegrees(yaw - Falsify.mc.player.getYaw()),
-                Falsify.mc.player.getPitch() + MathHelper.wrapDegrees(pitch - Falsify.mc.player.getPitch())};
+        return new float[] {Falsify.mc.gameRenderer.getCamera().getYaw() + MathHelper.wrapDegrees(yaw - Falsify.mc.gameRenderer.getCamera().getYaw()),
+                Falsify.mc.gameRenderer.getCamera().getPitch() + MathHelper.wrapDegrees(pitch - Falsify.mc.gameRenderer.getCamera().getPitch())};
 
     }
 

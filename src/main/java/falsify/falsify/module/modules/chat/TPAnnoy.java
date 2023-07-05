@@ -16,7 +16,7 @@ public class TPAnnoy extends ChatModule {
     public static boolean run = false;
     private final Timer timer = new Timer();
     public TPAnnoy() {
-        super("TpAnnoy", Category.MISC, GLFW.GLFW_KEY_K);
+        super("TpAnnoy", Category.MISC, -1);
     }
 
     @Override

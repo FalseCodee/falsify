@@ -18,7 +18,7 @@ public class TextBrush extends Module {
     public static boolean run = false;
     final ArrayList<FalseRunnable> runnables = new ArrayList<>();
     public TextBrush() {
-        super("Text Brush", Category.MOVEMENT, GLFW.GLFW_KEY_EQUAL);
+        super("Text Brush", Category.MOVEMENT, -1);
     }
 
     @Override

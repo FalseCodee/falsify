@@ -15,7 +15,7 @@ public class VClip extends Module {
     private final BooleanSetting velocity = new BooleanSetting("Velocity", true);
 
     public VClip() {
-        super("V-Clip", Category.MOVEMENT, GLFW.GLFW_KEY_0);
+        super("V-Clip", Category.MOVEMENT, -1);
         settings.add(velocity);
     }
 

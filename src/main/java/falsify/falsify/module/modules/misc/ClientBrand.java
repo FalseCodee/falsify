@@ -13,7 +13,7 @@ public class ClientBrand extends Module {
     public String brand = "Legacy Client";
 
     public ClientBrand() {
-        super("Brand", Category.MISC, GLFW.GLFW_KEY_BACKSLASH, true);
+        super("Brand", Category.MISC, -1);
     }
 
     @Override

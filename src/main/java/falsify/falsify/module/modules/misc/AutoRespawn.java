@@ -1,4 +1,4 @@
-package falsify.falsify.module.modules.player;
+package falsify.falsify.module.modules.misc;
 
 import falsify.falsify.listeners.Event;
 import falsify.falsify.listeners.events.EventUpdate;
@@ -9,7 +9,7 @@ import org.lwjgl.glfw.GLFW;
 
 public class AutoRespawn extends Module {
     public AutoRespawn() {
-        super("Auto Respawn", Category.MISC, GLFW.GLFW_KEY_U, true);
+        super("Auto Respawn", Category.MISC, -1);
     }
     public final Timer timer = new Timer();
     @Override

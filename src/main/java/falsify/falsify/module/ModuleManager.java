@@ -1,12 +1,13 @@
 package falsify.falsify.module;
 
+import falsify.falsify.Falsify;
 import falsify.falsify.module.modules.chat.*;
 import falsify.falsify.module.modules.combat.Aimbot;
 import falsify.falsify.module.modules.combat.AutoClick;
 import falsify.falsify.module.modules.misc.*;
 import falsify.falsify.module.modules.movement.*;
 import falsify.falsify.module.modules.player.AutoFish;
-import falsify.falsify.module.modules.player.AutoRespawn;
+import falsify.falsify.module.modules.misc.AutoRespawn;
 import falsify.falsify.module.modules.player.FastPlace;
 import falsify.falsify.module.modules.render.*;
 
@@ -48,6 +49,7 @@ public class ModuleManager {
         modules.add(new ElytraFly());
         modules.add(new NoFall());
         modules.add(new EntityInfo());
+        modules.add(new FaceCover());
 
         modules.add(new FPSModule());
         modules.add(new TimeModule());
@@ -61,6 +63,7 @@ public class ModuleManager {
         modules.add(new TitleModule());
         modules.add(new WASDModule());
 
+        Falsify.configManager.loadModules();
     }
 
     public static <T extends Module> T getModule(Class<T> module){

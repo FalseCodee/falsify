@@ -22,7 +22,7 @@ public class ESP extends Module {
     private final ModeSetting type = new ModeSetting("Type", "All", "All", "Players", "Mobs", "Animals");
 
     public ESP() {
-        super("ESP", Category.PLAYER, GLFW.GLFW_KEY_DOWN);
+        super("ESP", Category.PLAYER, -1);
         settings.add(type);
     }
 

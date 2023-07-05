@@ -16,7 +16,7 @@ public class DiamondGrabber extends Module {
     final Timer timer = new Timer();
     final Timer fallback = new Timer();
     public DiamondGrabber() {
-        super("Diamonds!", Category.MISC, GLFW.GLFW_KEY_N);
+        super("Diamonds!", Category.MISC, -1);
     }
     final double[] coords = {-42, 67 ,42};
 

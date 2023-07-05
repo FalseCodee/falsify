@@ -19,7 +19,7 @@ public class DupeDrop extends Module {
     boolean refilling = false;
     int index = 0;
     public DupeDrop() {
-        super("DupeDrop", Category.MOVEMENT, GLFW.GLFW_KEY_M);
+        super("DupeDrop", Category.MOVEMENT, -1);
         settings.add(delay);
         settings.add(amount);
     }

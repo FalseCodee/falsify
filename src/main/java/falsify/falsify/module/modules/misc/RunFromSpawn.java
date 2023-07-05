@@ -10,7 +10,7 @@ import org.lwjgl.glfw.GLFW;
 
 public class RunFromSpawn  extends Module {
     public RunFromSpawn() {
-        super("RUN!!!!", Category.MOVEMENT, GLFW.GLFW_KEY_G);
+        super("RUN!!!!", Category.MOVEMENT, -1);
     }
     final Timer timer = new Timer();
 

@@ -11,7 +11,7 @@ public class AntiAdvertisement extends ChatModule {
 
     final BooleanSetting actionBar = new BooleanSetting("Action Bar", true);
     public AntiAdvertisement() {
-        super("AntiAd", Category.MISC, GLFW.GLFW_KEY_APOSTROPHE, true);
+        super("AntiAd", Category.MISC, -1);
         settings.add(actionBar);
     }
 

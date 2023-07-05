@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 public class Sentry extends Module {
     public Sentry() {
-        super("Sentry", Category.MISC, GLFW.GLFW_KEY_B);
+        super("Sentry", Category.MISC, -1);
     }
     public ArrayList<Entity> rendered;
     private final DecimalFormat format = new DecimalFormat("#.#");

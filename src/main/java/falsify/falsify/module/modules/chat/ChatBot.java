@@ -10,7 +10,7 @@ import org.lwjgl.glfw.GLFW;
 
 public class ChatBot extends Module {
     public ChatBot() {
-        super("ChatBot", Category.MISC, GLFW.GLFW_KEY_APOSTROPHE);
+        super("ChatBot", Category.MISC, -1);
     }
 
     @Override

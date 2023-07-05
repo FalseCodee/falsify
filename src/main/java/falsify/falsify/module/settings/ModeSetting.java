@@ -17,6 +17,14 @@ public class ModeSetting extends Setting<List<String>> {
         this.index = (this.index + 1) % this.value.size();
     }
 
+    public int getIndex() {
+        return this.index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
     public String getMode() {
         return getValue().get(index);
     }

@@ -12,7 +12,7 @@ import org.lwjgl.glfw.GLFW;
 public class ElytraFly extends Module {
     RangeSetting speed = new RangeSetting("Speed", 1.1, 0.1, 20, 0.01);
     public ElytraFly() {
-        super("ElytraFly", Category.MOVEMENT, GLFW.GLFW_KEY_V);
+        super("ElytraFly", Category.MOVEMENT, -1);
         settings.add(speed);
     }
 

@@ -50,7 +50,7 @@ public class Aimbot extends Module {
     private AimbotTarget oldTarget;
 
     public Aimbot() {
-        super("Aimbot", Category.COMBAT, GLFW.GLFW_KEY_DOWN);
+        super("Aimbot", Category.COMBAT, -1);
         settings.add(type);
         settings.add(sortType);
         settings.add(range);

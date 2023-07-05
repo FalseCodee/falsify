@@ -2,6 +2,7 @@ package falsify.falsify.mixin;
 
 import falsify.falsify.Falsify;
 import falsify.falsify.gui.ClientMenuScreen;
+import falsify.falsify.gui.clickgui.ClickGUI;
 import falsify.falsify.listeners.events.EventAttack;
 import falsify.falsify.listeners.events.EventUpdate;
 import net.minecraft.client.MinecraftClient;
@@ -28,6 +29,11 @@ public class MixinMinecraft {
 
     @ModifyVariable(method = "setScreen", at = @At("HEAD"), ordinal = 0, argsOnly = true)
     public Screen setScreen(Screen screen) {
+        if(Falsify.mc.currentScreen instanceof ClickGUI clickGUI) {
+            Falsify.configManager.saveModules();
+            Falsify.configManager.saveClickGui(clickGUI.getTabs());
+            Falsify.configManager.saveConfigFile();
+        }
         if(screen == null && Falsify.mc.world == null) return new ClientMenuScreen();
         else if(screen instanceof TitleScreen) return new ClientMenuScreen();
         else return screen;
@@ -36,6 +42,16 @@ public class MixinMinecraft {
     public void tick(CallbackInfo ci){
         EventUpdate e = new EventUpdate();
         Falsify.onEvent(e);
+    }
+
+    private boolean hasRan = false;
+
+    @Inject(method = "scheduleStop", at = @At("HEAD"))
+    public void scheduleStop(CallbackInfo ci) {
+        if(hasRan) return;
+        Falsify.configManager.saveModules();
+        Falsify.configManager.saveConfigFile();
+        hasRan = true;
     }
     @Inject(method = "doAttack", at =@At("HEAD"), cancellable = true)
     public void doAttack(CallbackInfoReturnable<Boolean> cir){

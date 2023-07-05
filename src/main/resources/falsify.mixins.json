@@ -20,7 +20,8 @@
     "special.MixinPlayerMoveC2SPacket"
   ],
   "client": [
-    "MixinMouse"
+    "MixinMouse",
+    "special.MixinAbstractClientPlayerEntity"
   ],
   "injectors": {
     "defaultRequire": 1

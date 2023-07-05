@@ -67,10 +67,10 @@ public class FollowerGuy extends Clickable {
 //                }
             } else reverseGravity(centerOtherGuy, guy.mass, delta);
         }
-        reverseGravity(new Vec3d(0, y+height/2, 0), 6000, delta);
-        reverseGravity(new Vec3d(Falsify.mc.currentScreen.width, y+height/2, 0), 6000, delta);
-        reverseGravity(new Vec3d(x+width/2, 0, 0), 6000, delta);
-        reverseGravity(new Vec3d(x+width/2, Falsify.mc.currentScreen.height, 0), 6000, delta);
+        reverseGravity(new Vec3d(0, y+height/2, 0), 1000, delta);
+        reverseGravity(new Vec3d(Falsify.mc.currentScreen.width, y+height/2, 0), 1000, delta);
+        reverseGravity(new Vec3d(x+width/2, 0, 0), 1000, delta);
+        reverseGravity(new Vec3d(x+width/2, Falsify.mc.currentScreen.height, 0), 1000, delta);
 //        reverseGravity(new Vec3d(0, 0, 0), 20000, delta);
 //        reverseGravity(new Vec3d(Falsify.mc.currentScreen.width, 0, 0), 20000, delta);
 //        reverseGravity(new Vec3d(0, Falsify.mc.currentScreen.height, 0), 20000, delta);

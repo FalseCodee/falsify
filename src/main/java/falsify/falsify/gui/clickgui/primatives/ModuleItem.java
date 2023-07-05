@@ -20,8 +20,8 @@ public class ModuleItem extends Clickable implements Draggable {
     }
 
     public void render(DrawContext context, int mouseX, int mouseY, float delta, boolean last) {
-        Color inactive = new Color(59, 59, 59);
-        Color active = new Color(238, 238, 238);
+        Color inactive = module.category.getColor().darker();
+        Color active = module.category.getColor().brighter().brighter();
         if(module.isEnabled()) fade.rise(); else fade.lower();
         Color color = fade.color(inactive, active);
         if(isHovering(mouseX, mouseY)) fade2.rise(); else fade2.lower();
