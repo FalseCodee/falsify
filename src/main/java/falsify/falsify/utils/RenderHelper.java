@@ -162,7 +162,6 @@ public class RenderHelper {
     }
     public static void enableScissor(int x1, int y1, int x2, int y2) {
         RenderSystem.enableScissor((int) (x1 * Falsify.mc.getWindow().getScaleFactor()), (int) ((Falsify.mc.getWindow().getScaledHeight() - y2) * Falsify.mc.getWindow().getScaleFactor()), (int) ((x2-x1) * Falsify.mc.getWindow().getScaleFactor()), (int) ((y2-y1) * Falsify.mc.getWindow().getScaleFactor()));
-
     }
 
     public static void disableScissor() {

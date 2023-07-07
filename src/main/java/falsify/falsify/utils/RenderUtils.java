@@ -1,29 +1,38 @@
 package falsify.falsify.utils;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import falsify.falsify.Falsify;
 import falsify.falsify.listeners.events.EventRender3d;
+import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.text.Style;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.*;
 import org.joml.Matrix4f;
-import org.lwjgl.opengl.GL11;
+
 
 import java.awt.*;
 import java.util.List;
+import java.util.SortedMap;
 
 import static falsify.falsify.Falsify.mc;
 
 public class RenderUtils {
     public static float windowRatio = 16f/9f;
+    public static VertexConsumerProvider.Immediate vertexConsumerProvider;
+
+    public static void init() {
+        SortedMap<RenderLayer, BufferBuilder> buffers = Util.make(new Object2ObjectLinkedOpenHashMap<>(), (map) -> {
+            map.put(RenderLayer.getText(Style.DEFAULT_FONT_ID), new BufferBuilder(RenderLayer.getGui().getExpectedBufferSize()));
+        });
+        vertexConsumerProvider = VertexConsumerProvider.immediate(buffers, new BufferBuilder(256));
+    }
 
     public static void AlignFill(DrawContext context, int x1, int y1, int x2, int y2, int color, Alignment alignment) {
         switch (alignment) {
@@ -96,11 +105,23 @@ public class RenderUtils {
         Vec3d pos = MathUtils.getInterpolatedPos(entity, eventRender3d.getTickDelta());
         Box box = new Box(pos.subtract(entity.getWidth()/2, 0, entity.getWidth()/2), pos.add(entity.getWidth()/2, entity.getHeight(), entity.getWidth()/2));
         drawBoundingBox(box, eventRender3d, Color.RED);
-        //RenderSystem.enableTexture();
     }
 
     public static void drawCenteredText(DrawContext context, TextRenderer textRenderer, String text, int centerX, int y, int color) {
         context.drawTextWithShadow(textRenderer, text, centerX - textRenderer.getWidth(text) / 2, y, color);
+    }
+
+    public static void drawCenteredText(EventRender3d e, TextRenderer textRenderer, String text, int centerX, int y, int color) {
+        e.getMatrices().push();
+        MatrixStack matrices = e.getMatrices();
+        Camera camera = mc.gameRenderer.getCamera();
+        Vec3d vec3d = MathUtils.pitchYawToVector3d(camera.getPitch(), camera.getYaw());
+        double dist = camera.getPos().distanceTo(new Vec3d(0,0,0));
+        vec3d = vec3d.multiply(dist/2f);
+        matrices.translate(vec3d.x/-0.025, vec3d.y/-0.025, vec3d.z/-0.025);
+        textRenderer.draw(text, centerX - textRenderer.getWidth(text) / 2f, y, color, false, matrices.peek().getPositionMatrix(), e.getBufferBuilderStorage().getOutlineVertexConsumers(), TextRenderer.TextLayerType.NORMAL, 0, 250);
+
+        e.getMatrices().pop();
     }
 
     public static void drawBoundingBox(Box bb, EventRender3d eventRender3d, Color color) {
@@ -128,46 +149,6 @@ public class RenderUtils {
                 new Vec3d(bb.minX, bb.maxY, bb.maxZ),
                 new Vec3d(bb.minX, bb.maxY, bb.maxZ),
                 new Vec3d(bb.minX, bb.maxY, bb.minZ)}, color);
-    }
-
-    public RenderUtils outline(Entity entity, float partialTicks) {
-        double x = entity.prevX + (entity.getX() - entity.prevX) * partialTicks;
-        double y = entity.prevY + (entity.getY() - entity.prevY) * partialTicks;
-        double z = entity.prevZ + (entity.getZ() - entity.prevZ) * partialTicks;
-        double halfwidth = entity.getWidth() * 0.5D;
-        return outline(x - halfwidth, y, z - halfwidth, x + halfwidth, y + entity.getHeight(), z + halfwidth);
-    }
-
-    public RenderUtils outline(double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
-        return internal_outline(minX - mc.player.getX(), minY - mc.player.getY(), minZ - mc.player.getZ(), maxX - mc.player.getX(), maxY - mc.player.getY(), maxZ - mc.player.getZ());
-    }
-
-    protected RenderUtils internal_outline(double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
-        GL11.glVertex3d(minX, minY, minZ);
-        GL11.glVertex3d(maxX, minY, minZ);
-        GL11.glVertex3d(maxX, minY, minZ);
-        GL11.glVertex3d(maxX, minY, maxZ);
-        GL11.glVertex3d(maxX, minY, maxZ);
-        GL11.glVertex3d(minX, minY, maxZ);
-        GL11.glVertex3d(minX, minY, maxZ);
-        GL11.glVertex3d(minX, minY, minZ);
-        GL11.glVertex3d(minX, minY, minZ);
-        GL11.glVertex3d(minX, maxY, minZ);
-        GL11.glVertex3d(maxX, minY, minZ);
-        GL11.glVertex3d(maxX, maxY, minZ);
-        GL11.glVertex3d(maxX, minY, maxZ);
-        GL11.glVertex3d(maxX, maxY, maxZ);
-        GL11.glVertex3d(minX, minY, maxZ);
-        GL11.glVertex3d(minX, maxY, maxZ);
-        GL11.glVertex3d(minX, maxY, minZ);
-        GL11.glVertex3d(maxX, maxY, minZ);
-        GL11.glVertex3d(maxX, maxY, minZ);
-        GL11.glVertex3d(maxX, maxY, maxZ);
-        GL11.glVertex3d(maxX, maxY, maxZ);
-        GL11.glVertex3d(minX, maxY, maxZ);
-        GL11.glVertex3d(minX, maxY, maxZ);
-        GL11.glVertex3d(minX, maxY, minZ);
-        return this;
     }
 
     public static void line(EventRender3d eventRender3d, Vec3d from, Vec3d to, Color color) {
@@ -205,6 +186,95 @@ public class RenderUtils {
         //RenderSystem.enableTexture();
     }
 
+    public static void push3DPos(MatrixStack matrices, Vec3d pos) {
+        Camera camera = mc.gameRenderer.getCamera();
+        matrices.push();
+        RenderSystem.applyModelViewMatrix();
+        RenderSystem.disableDepthTest();
+        RenderSystem.disableCull();
+        RenderSystem.defaultBlendFunc();
+        matrices.translate(-camera.getPos().x, -camera.getPos().y, -camera.getPos().z);
+        matrices.translate(pos.x, pos.y, pos.z);
+        matrices.multiply(camera.getRotation());
+        matrices.scale(-0.025f,-0.025f,-0.025f);
+    }
+
+    public static void pop3DPos(MatrixStack matrices) {
+        RenderSystem.enableCull();
+        RenderSystem.enableDepthTest();
+        matrices.pop();
+    }
+
+    public static void drawTexture(Identifier texture, MatrixStack matrices, int x, int y, int u, int v, int width, int height) {
+        drawTexture(texture, matrices, x, y, 0, (float)u, (float)v, width, height, 256, 256);
+    }
+
+    public static void drawTexture(Identifier texture, MatrixStack matrices, int x, int y, int z, float u, float v, int width, int height, int textureWidth, int textureHeight) {
+        drawTexture(texture, matrices, x, x + width, y, y + height, z, width, height, u, v, textureWidth, textureHeight);
+    }
+
+    public static void drawTexture(Identifier texture, MatrixStack matrices, int x, int y, int width, int height, float u, float v, int regionWidth, int regionHeight, int textureWidth, int textureHeight) {
+        drawTexture(texture, matrices, x, x + width, y, y + height, 0, regionWidth, regionHeight, u, v, textureWidth, textureHeight);
+    }
+
+    public static void drawTexture(Identifier texture, MatrixStack matrices, int x, int y, float u, float v, int width, int height, int textureWidth, int textureHeight) {
+        drawTexture(texture, matrices, x, y, width, height, u, v, width, height, textureWidth, textureHeight);
+    }
+
+    public static void drawTexture(Identifier texture, MatrixStack matrices, int x1, int x2, int y1, int y2, int z, int regionWidth, int regionHeight, float u, float v, int textureWidth, int textureHeight) {
+        drawTexturedQuad(texture, matrices, x1, x2, y1, y2, z, (u + 0.0F) / (float)textureWidth, (u + (float)regionWidth) / (float)textureWidth, (v + 0.0F) / (float)textureHeight, (v + (float)regionHeight) / (float)textureHeight);
+    }
+
+    public static void drawTexturedQuad(Identifier texture, MatrixStack matrices, int x1, int x2, int y1, int y2, int z, float u1, float u2, float v1, float v2) {
+        RenderSystem.setShaderTexture(0, texture);
+        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
+        Matrix4f matrix4f = matrices.peek().getPositionMatrix();
+        BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
+        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+        bufferBuilder.vertex(matrix4f, (float)x1, (float)y1, (float)z).texture(u1, v1).next();
+        bufferBuilder.vertex(matrix4f, (float)x1, (float)y2, (float)z).texture(u1, v2).next();
+        bufferBuilder.vertex(matrix4f, (float)x2, (float)y2, (float)z).texture(u2, v2).next();
+        bufferBuilder.vertex(matrix4f, (float)x2, (float)y1, (float)z).texture(u2, v1).next();
+        BufferRenderer.drawWithGlobalProgram(bufferBuilder.end());
+    }
+
+    public static void fill(MatrixStack matrices, int x1, int y1, int x2, int y2, int color) {
+        fill(matrices, x1, y1, x2, y2, 0, color);
+    }
+
+    public static void fill(MatrixStack matrices, int x1, int x2, int y1, int y2, int z, int color) {
+        RenderSystem.setShaderColor(1,1,1,1);
+        Matrix4f matrix4f = matrices.peek().getPositionMatrix();
+        int i;
+        if (x1 < y1) {
+            i = x1;
+            x1 = y1;
+            y1 = i;
+        }
+
+        if (x2 < y2) {
+            i = x2;
+            x2 = y2;
+            y2 = i;
+        }
+
+        float f = (float) ColorHelper.Argb.getAlpha(color) / 255.0F;
+        float g = (float) ColorHelper.Argb.getRed(color) / 255.0F;
+        float h = (float) ColorHelper.Argb.getGreen(color) / 255.0F;
+        float j = (float) ColorHelper.Argb.getBlue(color) / 255.0F;
+        BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
+        RenderSystem.enableBlend();
+
+        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
+        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
+        bufferBuilder.vertex(matrix4f, (float)x1, (float)x2, (float)z).color(g, h, j, f).next();
+        bufferBuilder.vertex(matrix4f, (float)x1, (float)y2, (float)z).color(g, h, j, f).next();
+        bufferBuilder.vertex(matrix4f, (float)y1, (float)y2, (float)z).color(g, h, j, f).next();
+        bufferBuilder.vertex(matrix4f, (float)y1, (float)x2, (float)z).color(g, h, j, f).next();
+        BufferRenderer.drawWithGlobalProgram(bufferBuilder.end());
+        RenderSystem.disableBlend();
+    }
+
     public static void line(EventRender3d eventRender3d, Vec3d[] vec3d, Color color) {
         MatrixStack matrices = eventRender3d.getMatrices();
         Camera camera = eventRender3d.getCamera();
@@ -222,10 +292,10 @@ public class RenderUtils {
         RenderSystem.disableDepthTest();
         RenderSystem.disableCull();
         RenderSystem.setShader(GameRenderer::getPositionColorProgram);
-        RenderSystem.lineWidth(5.0f);
+        RenderSystem.lineWidth(50.0f);
 
         buffer.begin(VertexFormat.DrawMode.DEBUG_LINES, VertexFormats.POSITION_COLOR);
-        RenderSystem.lineWidth(5.0F);
+        RenderSystem.lineWidth(50.0F);
         buffer.vertex(matrices.peek().getPositionMatrix(), (float) vec3d[0].x, (float) vec3d[0].y, (float) vec3d[0].z).color(color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F, 1F).next();//.normal(matrices.peek().getNormalMatrix(), (float) vec3d[0].x, (float) vec3d[0].y, (float) vec3d[0].z).next();
         for(int i = 1; i < vec3d.length; i++) {
             Vec3d from = vec3d[i-1];
@@ -286,50 +356,13 @@ public class RenderUtils {
         context.draw();
     }
 
-    public static void renderLabel(String text, Vec3d pos, EventRender3d eventRender3d) {
-        MatrixStack matrices = eventRender3d.getMatrices();
-        Camera camera = eventRender3d.getCamera();
-        double d = camera.getPos().squaredDistanceTo(pos);
-        if (!(d > 4096.0)) {
-
-            matrices.push();
-            RenderSystem.enableBlend();
-            RenderSystem.defaultBlendFunc();
-
-            Tessellator tessellator = Tessellator.getInstance();
-            BufferBuilder buffer = tessellator.getBuffer();
-
-            RenderSystem.disableDepthTest();
-            RenderSystem.disableCull();
-            RenderSystem.setShader(GameRenderer::getPositionColorProgram);
-
-            matrices.translate(-camera.getPos().x, -camera.getPos().y, -camera.getPos().z);
-            matrices.translate(pos.x, pos.y, pos.z);
-
-            Matrix4f matrix4f = matrices.peek().getPositionMatrix();
-            float g = MinecraftClient.getInstance().options.getTextBackgroundOpacity(0.25F);
-            int j = (int)(g * 255.0F) << 24;
-            TextRenderer textRenderer = mc.textRenderer;
-            float h = (float)(-textRenderer.getWidth(text) / 2);
-            textRenderer.draw(text, h, (float)0, 553648127, false, matrix4f, (VertexConsumerProvider) buffer, TextRenderer.TextLayerType.SEE_THROUGH, j, 15);
-
-            RenderSystem.enableCull();
-            RenderSystem.enableDepthTest();
-            RenderSystem.disableBlend();
-
-            matrices.pop();
-        }
-    }
-    public static void invertBob(MatrixStack matrices, float tickDelta) {
-        if (mc.getCameraEntity() instanceof PlayerEntity) {
-            PlayerEntity playerEntity = (PlayerEntity) mc.getCameraEntity();
-            float f = playerEntity.horizontalSpeed - playerEntity.prevHorizontalSpeed;
-            float g = -(playerEntity.horizontalSpeed + f * tickDelta);
-            float h = MathHelper.lerp(tickDelta, playerEntity.prevStrideDistance, playerEntity.strideDistance);
-            matrices.translate(-MathHelper.sin(g * 3.1415927F) * h * 0.5F, Math.abs(MathHelper.cos(g * 3.1415927F) * h), 0.0F);
-            matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(MathHelper.sin(g * 3.1415927F) * h * 3.0F).invert());
-            matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(Math.abs(MathHelper.cos(g * 3.1415927F - 0.2F) * h) * 5.0F).invert());
-        }
+    public static MatrixStack get3dMatrixStackAtCamera() {
+        Camera camera = mc.gameRenderer.getCamera();
+        MatrixStack matrices = new MatrixStack();
+        matrices.push();
+        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(camera.getPitch()));
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(camera.getYaw() + 180.0F));
+        return matrices;
     }
 
 }

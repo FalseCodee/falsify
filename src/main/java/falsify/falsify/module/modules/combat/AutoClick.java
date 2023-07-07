@@ -45,21 +45,21 @@ public class AutoClick extends Module {
             if(waitForCharge.getValue()){
                 if(mc.player.getAttackCooldownProgress(0.0f) >= 0.99) {
                     if(!trigger.getValue()) {
-                        if (!whileClicking.getValue()) ((MixinMinecraft)mc).doAttack();
+                        if (!whileClicking.getValue()) ((MixinMinecraft)mc).leftClick();
 
-                        else if (mc.options.attackKey.isPressed()) ((MixinMinecraft)mc).doAttack();
+                        else if (mc.options.attackKey.isPressed()) ((MixinMinecraft)mc).leftClick();
                     } else if(mc.crosshairTarget.getType() == HitResult.Type.ENTITY) {
-                        if (!whileClicking.getValue()) ((MixinMinecraft)mc).doAttack();
-                        else if (mc.options.attackKey.isPressed()) ((MixinMinecraft)mc).doAttack();
+                        if (!whileClicking.getValue()) ((MixinMinecraft)mc).leftClick();
+                        else if (mc.options.attackKey.isPressed()) ((MixinMinecraft)mc).leftClick();
                     }
                 }
             } else if(timer.hasTimeElapsed(1000 / ((randomTime == 0) ? 1 : randomTime), true)) {
                 if(!trigger.getValue()) {
-                    if (!whileClicking.getValue()) ((MixinMinecraft)mc).doAttack();
-                    else if (mc.options.attackKey.isPressed()) ((MixinMinecraft)mc).doAttack();
+                    if (!whileClicking.getValue()) ((MixinMinecraft)mc).leftClick();
+                    else if (mc.options.attackKey.isPressed()) ((MixinMinecraft)mc).leftClick();
                 } else if(mc.crosshairTarget.getType() == HitResult.Type.ENTITY) {
-                    if (!whileClicking.getValue()) ((MixinMinecraft)mc).doAttack();
-                    else if (mc.options.attackKey.isPressed()) ((MixinMinecraft)mc).doAttack();
+                    if (!whileClicking.getValue()) ((MixinMinecraft)mc).leftClick();
+                    else if (mc.options.attackKey.isPressed()) ((MixinMinecraft)mc).leftClick();
                 }
             }
         }

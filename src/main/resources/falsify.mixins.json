@@ -20,6 +20,10 @@
     "special.MixinPlayerMoveC2SPacket"
   ],
   "client": [
+    "MixinClientWorld",
+    "MixinEntityRenderDispatcher",
+    "MixinGameRenderer",
+    "MixinGameRenderer$Accessor",
     "MixinLightmapTextureManager",
     "MixinMouse",
     "special.MixinAbstractClientPlayerEntity"

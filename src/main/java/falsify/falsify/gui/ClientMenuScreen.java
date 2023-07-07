@@ -30,10 +30,8 @@ public class ClientMenuScreen extends Screen {
     private final LegacyIdentifier title;
     private ArrayList<FollowerGuy> guys;
 
-    private boolean isLoading = false;
     public ClientMenuScreen() {
         super(Text.of("Menu Screen"));
-        if(Falsify.textureCacheManager.loadingThread.isAlive()) isLoading = true;
         addButton("Singleplayer", new SelectWorldScreen(this));
         addButton("Multiplayer", new MultiplayerScreen(this));
         addButton("Settings", new OptionsScreen(this, Falsify.mc.options));
@@ -99,7 +97,6 @@ public class ClientMenuScreen extends Screen {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if(isLoading) return false;
         for(Clickable clickable : buttons) {
             if(clickable.handleClick(mouseX, mouseY, button)) return true;
         }
@@ -120,10 +117,7 @@ public class ClientMenuScreen extends Screen {
         color3 = RenderHelper.colorLerp(color3, new Color(Color.HSBtoRGB((mouseY/(float)height*0.8f + 0.45f), 1.00f, 0.25f)), MathUtils.clamp(0.1f*Falsify.mc.getLastFrameDuration(), 0.0f, 1.0f));
         color4 = RenderHelper.colorLerp(color4, new Color(Color.HSBtoRGB((mouseX/(float)width*0.9f  + 0.33f), 1.00f, 0.25f)), MathUtils.clamp(0.1f*Falsify.mc.getLastFrameDuration(), 0.0f, 1.0f));
         RenderUtils.fillCornerGradient(context,0, 0, width, height, color1.getRGB(), color2.getRGB(),color3.getRGB(), color4.getRGB());
-        if(isLoading) {
-            if(!Falsify.textureCacheManager.loadingThread.isAlive()) isLoading = false;
-            return;
-        }
+
         int size = guys.size();
         for(int i = guys.size()-1; i >=0 ;i--) {
             if(i >= guys.size()) i -= 1 + i-guys.size();

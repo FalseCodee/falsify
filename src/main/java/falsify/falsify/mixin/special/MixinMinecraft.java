@@ -19,7 +19,7 @@ public interface MixinMinecraft {
     void setCoolDown(int coolDown);
 
     @Invoker("doAttack")
-    boolean doAttack();
+    boolean leftClick();
 //
 //    @Invoker("doItemUse")
 //    void doItemUse();

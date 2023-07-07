@@ -25,9 +25,11 @@ public class KeybindSettingItem extends SettingItem<KeybindSetting> implements T
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         if(!highlighted) {
+            drawSmoothRect(backgroundColor.brighter(), context.getMatrices(), (float) x-1, (float) y-1, (float) (x + width)+1, (float) (y + height)+1,2, new int[] {5,5,5,5});
             drawSmoothRect(backgroundColor, context.getMatrices(), (float) x, (float) y, (float) (x + width), (float) (y + height),2, new int[] {5,5,5,5});
             context.drawCenteredTextWithShadow(Falsify.mc.textRenderer, setting.getName() + ": " + ChatModuleUtils.keyCodeToString(setting.getValue()), (int) (x + width / 2), (int) (y + height / 2 - Falsify.mc.textRenderer.fontHeight / 2), textColor.getRGB());
         } else {
+            drawSmoothRect(backgroundColor.brighter().brighter(), context.getMatrices(), (float) x-1, (float) y-1, (float) (x + width)+1, (float) (y + height)+1,3, new int[] {5,5,5,5});
             drawSmoothRect(backgroundColor.brighter(), context.getMatrices(), (float) x, (float) y, (float) (x + width), (float) (y + height),2, new int[] {5,5,5,5});
             context.drawCenteredTextWithShadow(Falsify.mc.textRenderer, "SELECT KEY", (int) (x + width / 2), (int) (y + height / 2 - Falsify.mc.textRenderer.fontHeight / 2), textColor.getRGB());
         }

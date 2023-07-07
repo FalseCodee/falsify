@@ -39,7 +39,7 @@ public class SettingsGUI extends Screen {
             columns--;
         }
         double width = ((3*xStart)-xStart - ((columns+1) * xPadding)) / columns;
-        double height = 60;
+        double height = 20;
         for (int i = 0; i < module.settings.size(); i++) {
             Setting<?> setting = module.settings.get(i);
             addSettingItem(setting, xStart + xPadding + (width + xPadding) * (i % columns), yStart + yPadding + (height + yPadding) * (int) (i / columns), width, height);
@@ -125,8 +125,8 @@ public class SettingsGUI extends Screen {
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         int padding = 1;
-        RenderHelper.drawSmoothRect(new Color(255, 255, 255, 200), context.getMatrices(), width/4-padding, height/4-padding, 3*width/4+padding, 3*height/4+padding, 5+padding, new int[] {15,15,15,15});
-        RenderHelper.drawSmoothRect(new Color(136, 136, 136), context.getMatrices(), width/4, height/4, 3*width/4, 3*height/4, 5, new int[] {15,15,15,15});
+        RenderHelper.drawSmoothRect(new Color(80, 80, 80, 128), context.getMatrices(), width/4-padding, height/4-padding, 3*width/4+padding, 3*height/4+padding, 5+padding, new int[] {15,15,15,15});
+        RenderHelper.drawSmoothRect(new Color(52, 52, 52, 128), context.getMatrices(), width/4, height/4, 3*width/4, 3*height/4, 5, new int[] {15,15,15,15});
         RenderHelper.drawRect(new Color(50,50,50, 100), context.getMatrices(), 0, 0, width, height);
         context.drawCenteredTextWithShadow(Falsify.mc.textRenderer, module.name, width/2, height/4 + 5, new Color(255, 255, 255).getRGB());
         RenderHelper.enableScissor(width/4, height/4 + Falsify.mc.textRenderer.fontHeight + 10, 3*width/4, 3*height/4);

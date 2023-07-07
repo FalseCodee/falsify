@@ -8,7 +8,7 @@ import java.awt.*;
 public abstract class SettingItem<T extends Setting<?>> extends Clickable {
 
     protected final T setting;
-    protected final Color backgroundColor = new Color(54, 54, 54);
+    protected final Color backgroundColor = new Color(119, 119, 119);
     protected final Color textColor = new Color(255, 255, 255);
 
     private boolean isActive = false;

@@ -24,9 +24,10 @@ public class RangeSettingItem extends SettingItem<RangeSetting> implements Dragg
     }
 
 
-    private final Color barColor = new Color(75, 75, 75);
+    private final Color barColor = new Color(183, 183, 183);
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        drawSmoothRect(backgroundColor.brighter(), context.getMatrices(), (float) x-1, (float) y-1, (float) (x + width)+1, (float) (y + height)+1,3, new int[] {5,5,5,5});
         drawSmoothRect(backgroundColor, context.getMatrices(), (float) x, (float) y, (float) (x + width), (float) (y + height),2, new int[] {5,5,5,5});
         double ratio = (setting.getValue()-setting.getMin()) / (setting.getMax()-setting.getMin());
         drawRect(barColor,context.getMatrices(), (float)x, (float)y, (float)(x + ratio*width), (float)(y + height));

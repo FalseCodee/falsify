@@ -21,7 +21,7 @@ public class BoatFly extends Module {
 
     @Override
     public void onEvent(Event event) {
-        if(event instanceof EventUpdate && mc.player.isRiding()){
+        if(event instanceof EventUpdate && mc.player.hasVehicle()){
             double[] xzVel = MathUtils.directionSpeed(speed.getValue()/10.0);
             double yVel = MathUtils.getVerticalMov() * (speed.getValue()/10.0/vd.getValue());
             mc.player.getVehicle().setVelocity(xzVel[0], MathUtils.lerp(mc.player.getVelocity().y, yVel, lerp.getValue()), xzVel[1]);

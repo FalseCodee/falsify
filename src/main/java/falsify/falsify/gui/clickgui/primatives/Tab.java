@@ -15,14 +15,18 @@ import java.util.stream.Collectors;
 
 public class Tab extends Clickable implements Draggable {
 
-    private final Animation scroll = new Animation(100, Animation.Type.EASE_IN_OUT);
+    private final Animation scroll = new Animation(1000, Animation.Type.EASE_IN_OUT);
     private final Category category;
     private boolean extended = false;
     private boolean dragging = false;
     private final ArrayList<ModuleItem> modules = new ArrayList<>();
+    private final double moduleWidth;
+    private final double moduleHeight;
 
     public Tab(Category category, int x, int y) {
         super(x, y, 100, 20);
+        this.moduleWidth = this.width;
+        this.moduleHeight = this.height;
         this.category = category;
         init();
     }
@@ -62,7 +66,7 @@ public class Tab extends Clickable implements Draggable {
     public void init() {
         int i = 1;
         for (Module module : ModuleManager.modules.stream().filter(m -> m.category == this.category).toList()){
-            modules.add(new ModuleItem(module, x, y + 20*i, 100, 20));
+            modules.add(new ModuleItem(module, x, y + moduleHeight*i, moduleWidth, moduleHeight));
             i++;
         }
         modules.sort(Comparator.comparingInt(module -> -Falsify.mc.textRenderer.getWidth(module.getModule().name)));
@@ -85,27 +89,32 @@ public class Tab extends Clickable implements Draggable {
             drawSmoothRect(scroll.color(category.getColor().darker(), category.getColor()), context.getMatrices(), (int) this.x, (int) this.y, (int) this.x + (int) this.width, (int) this.y + (int) this.height, 2, new int[] {0, 5, 5, 0});
             context.drawCenteredTextWithShadow(Falsify.mc.textRenderer, category.getName(), (int) x + (int) width/2, (int) y + (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, 0xffffff);
             int i = 1;
-            if(scroll.getProgress() != 1.0) enableScissor((int) x, (int) (y+height), (int) (x+width), (int) (y+height + (20*modules.size()*scroll.run()) + 1));
+            if(scroll.getProgress() != 1.0) enableScissor((int) x, (int) (y+height), (int) (x+width), (int) (y+height + (moduleHeight*modules.size()*scroll.run()) + 1));
             for(ModuleItem moduleItem : modules) {
                 moduleItem.setX(x);
-                moduleItem.setY(y + 20*i - (20*modules.size()*(1-scroll.run())));
+                moduleItem.setY(y + moduleHeight*i - (moduleHeight*modules.size()*(1-scroll.run())));
                 moduleItem.render(context, mouseX, mouseY, delta, (i == modules.size()));
                 i++;
             }
-            if(scroll.getProgress() != 1.0) disableScissor();
+
+            if(scroll.getProgress() != 1.0) {
+                context.fill(0,0,Falsify.mc.getWindow().getScaledWidth(),Falsify.mc.getWindow().getScaledHeight(), Color.WHITE.getRGB());
+                disableScissor();
+            }
         } else {
             scroll.lower();
             drawSmoothRect(category.getColor().darker(), context.getMatrices(), (int) this.x, (int) this.y, (int) this.x + (int) this.width, (int) this.y + (int) this.height, 2, new int[] {5, 5, 5, 5});
             context.drawCenteredTextWithShadow(Falsify.mc.textRenderer, category.getName(), (int) x + (int) width/2, (int) y + (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, 0xffffff);
             if(scroll.run() != 0) {
                 int i = 1;
-                enableScissor((int) x, (int) (y+height), (int) (x+width), (int) (y+height + (20*modules.size()*scroll.run()) + 1));
+                enableScissor((int) x, (int) (y+height), (int) (x+width), (int) (y+height + (moduleHeight*modules.size()*scroll.run()) + 1));
                 for(ModuleItem moduleItem : modules) {
                     moduleItem.setX(x);
-                    moduleItem.setY(y + 20*i - (20*modules.size()*(1-scroll.run())));
+                    moduleItem.setY(y + moduleHeight*i - (moduleHeight*modules.size()*(1-scroll.run())));
                     moduleItem.render(context, mouseX, mouseY, delta, (i == modules.size()));
                     i++;
                 }
+                context.fill(0,0,Falsify.mc.getWindow().getScaledWidth(),Falsify.mc.getWindow().getScaledHeight(), Color.WHITE.getRGB());
                 disableScissor();
             }
         }

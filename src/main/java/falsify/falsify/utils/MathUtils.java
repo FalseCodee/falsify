@@ -131,7 +131,7 @@ public class MathUtils {
     public static Vec3d pitchYawToVector3d(double pitch, double yaw) {
         pitch = Math.toRadians(pitch);
         yaw = Math.toRadians(yaw);
-        return new Vec3d(Math.cos(yaw)*Math.cos(pitch), Math.sin(pitch), Math.sin(yaw)*Math.cos(pitch));
+        return new Vec3d(Math.cos(yaw+180)*Math.cos(pitch+45), Math.sin(pitch+45), Math.sin(yaw+180)*Math.cos(pitch+45));
     }
 
     public static float[] toScreenXY(Vec3d pos) {

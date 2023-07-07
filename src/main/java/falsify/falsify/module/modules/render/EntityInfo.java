@@ -13,10 +13,7 @@ import falsify.falsify.module.modules.combat.Aimbot;
 import falsify.falsify.module.settings.BooleanSetting;
 import falsify.falsify.module.settings.ModeSetting;
 import falsify.falsify.module.settings.RangeSetting;
-import falsify.falsify.utils.ChatModuleUtils;
-import falsify.falsify.utils.LegacyIdentifier;
-import falsify.falsify.utils.MathUtils;
-import falsify.falsify.utils.RenderUtils;
+import falsify.falsify.utils.*;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.entity.PlayerModelPart;
 import net.minecraft.client.util.math.MatrixStack;
@@ -25,6 +22,9 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.text.Text;
+import net.minecraft.util.math.Vec2f;
+import net.minecraft.util.math.Vec3d;
 import org.lwjgl.glfw.GLFW;
 
 import java.awt.*;
@@ -90,25 +90,23 @@ public class EntityInfo extends Module {
         }
 
     public void drawInfoBox(DrawContext context, float tickDelta, LivingEntity entity) {
-        float scale = MathUtils.clamp((float) ( (1/mc.gameRenderer.getCamera().getPos().squaredDistanceTo(MathUtils.interpolateEntity(entity, tickDelta)))*distance.getValue()*distance.getValue()/2f), 0.25f, 1f);
-        if(scale <= 0.25f) return;
-        float[] pos = MathUtils.toScreenXY(MathUtils.getInterpolatedPos(entity, tickDelta).subtract(0, mc.player.getEyeHeight(mc.player.getPose())+1, 0));
-        float lowerCorrection = MathUtils.clamp(mc.getWindow().getScaledHeight()/4f+pos[1]-mc.getWindow().getScaledHeight(), 0, 100);
-
         MatrixStack matrices = context.getMatrices();
         matrices.push();
-        matrices.scale(scale, scale, 1);
-        matrices.translate(pos[0]/scale, (pos[1]-lowerCorrection)/scale, 0);
+        Vec3d entityPos = MathUtils.getInterpolatedPos(entity, tickDelta);
+        Vec2f pos = ProjectionUtils.toScreenXY(entityPos.subtract(0, 1,0));
+        double dist = entityPos.distanceTo(mc.gameRenderer.getCamera().getPos());
+        matrices.translate(pos.x, pos.y, 0);
+        matrices.scale((float) (5/dist), (float) (5/dist), 1);
+        //RenderUtils.push3DPos(matrices, MathUtils.getInterpolatedPos(entity, tickDelta));
 
-        context.fill( -75,  -25,  75, 25, new Color(56, 56, 56, 194).getRGB());
-        RenderUtils.drawCenteredText(context, mc.textRenderer, entity.getDisplayName().getString(), 0, -23, Color.WHITE.getRGB());
-        RenderUtils.drawCenteredText(context, mc.textRenderer, "Can Take Damage: " + (entity.canTakeDamage() ? "Yes" : "No"), 0, -13, Color.WHITE.getRGB());
+        RenderUtils.fill(matrices, -75,  -25,  75, 25, new Color(56, 56, 56, 194).getRGB());
+        //RenderUtils.drawText(eventRender3d, pos.add(0, entity.getNameLabelHeight(), 0), entity.getDisplayName().getString(), Color.WHITE);
+        context.drawCenteredTextWithShadow(mc.textRenderer, entity.getDisplayName().getString(), 0, -23, Color.WHITE.getRGB());
+        context.drawCenteredTextWithShadow(mc.textRenderer, "Can Take Damage: " + (entity.canTakeDamage() ? "Yes" : "No"), 0, -13, Color.WHITE.getRGB());
 
-        RenderUtils.drawCenteredText(context, mc.textRenderer, entity.getHealth() + " / " + entity.getMaxHealth(), 0, 11, Color.WHITE.getRGB());
-        float percentage = entity.getHealth()/ entity.getMaxHealth();
-        context.fill( -75,  20, (int) (150*percentage-75), 22, new Color((1-percentage), percentage, 56/255f, 219/255f).getRGB());
-//        RenderUtils.pizzaHut = new LegacyIdentifier("textures/red-apple.png");
-
-        matrices.pop();
+        context.drawCenteredTextWithShadow(mc.textRenderer, entity.getHealth() + " / " + entity.getMaxHealth(), 0, 11, Color.WHITE.getRGB());
+        float percentage = MathUtils.clamp(entity.getHealth()/ entity.getMaxHealth(), 0.0f, 1.0f);
+        RenderUtils.fill(matrices, -75,  20, (int) (150*percentage-75), 22, new Color((1-percentage), percentage, 56/255f, 219/255f).getRGB());
+        RenderUtils.pop3DPos(matrices);
     }
 }

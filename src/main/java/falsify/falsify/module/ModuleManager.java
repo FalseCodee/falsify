@@ -47,6 +47,7 @@ public class ModuleManager {
         modules.add(new EntityInfo());
         modules.add(new FaceCover());
         modules.add(new Fullbright());
+        modules.add(new Chams());
 
         modules.add(new FPSModule());
         modules.add(new TimeModule());
@@ -59,8 +60,6 @@ public class ModuleManager {
         modules.add(new ArmorModule());
         modules.add(new TitleModule());
         modules.add(new WASDModule());
-
-        Falsify.configManager.loadModules();
     }
 
     public static <T extends Module> T getModule(Class<T> module){

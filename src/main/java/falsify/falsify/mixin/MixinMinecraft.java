@@ -5,6 +5,7 @@ import falsify.falsify.gui.ClientMenuScreen;
 import falsify.falsify.gui.clickgui.ClickGUI;
 import falsify.falsify.listeners.events.EventAttack;
 import falsify.falsify.listeners.events.EventUpdate;
+import falsify.falsify.utils.RenderUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
 import net.minecraft.client.gui.screen.Screen;
@@ -25,6 +26,12 @@ public class MixinMinecraft {
     @Inject(method = "<init>(Lnet/minecraft/client/RunArgs;)V", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;inGameHud:Lnet/minecraft/client/gui/hud/InGameHud;", ordinal = 0, shift = At.Shift.AFTER))
     public void init(RunArgs args, CallbackInfo ci){
         Falsify.init(session);
+    }
+
+    @Inject(method = "<init>(Lnet/minecraft/client/RunArgs;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/SplashOverlay;init(Lnet/minecraft/client/MinecraftClient;)V", shift = At.Shift.AFTER))
+    public void registerTextures(RunArgs args, CallbackInfo ci){
+        Falsify.textureCacheManager.registerTextures();
+        RenderUtils.init();
     }
 
     @ModifyVariable(method = "setScreen", at = @At("HEAD"), ordinal = 0, argsOnly = true)

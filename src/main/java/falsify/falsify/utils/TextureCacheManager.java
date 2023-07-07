@@ -13,27 +13,25 @@ import java.awt.image.DataBufferByte;
 import java.io.*;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class TextureCacheManager {
-    private final HashMap<String, LegacyIdentifier> textures;
-    public final Thread loadingThread;
-
+    private final ConcurrentHashMap<String, LegacyIdentifier> textures;
     public final File textureDir;
 
     public TextureCacheManager() {
-        this.textures = new HashMap<>();
+        this.textures = new ConcurrentHashMap<>();
         this.textureDir = new File(Falsify.clientDir + "\\textures");
         textureDir.mkdirs();
-
-        loadingThread = new FalseRunnable() {
-            @Override
-            public void run() {
-                cacheTextureFromUrlAsync("title", "https://raw.githubusercontent.com/FalseCodee/legacy-client-assets/main/legacy_client.png", true);
-                cacheTextureFromUrlAsync("pizza-hut", "https://i.imgur.com/yx8Gopg.png", false);
-                cacheTextureFromUrlAsync("dev_cape", "https://raw.githubusercontent.com/FalseCodee/legacy-client-assets/main/legacy_dev_cape.png",true);
-            }
-        }.runTaskAsync();
     }
+
+    public void registerTextures() {
+        cacheTextureFromUrlAsync("title", "https://raw.githubusercontent.com/FalseCodee/legacy-client-assets/main/legacy_client.png", true);
+        cacheTextureFromUrlAsync("pizza-hut", "https://i.imgur.com/yx8Gopg.png", false);
+        cacheTextureFromUrlAsync("dev_cape", "https://raw.githubusercontent.com/FalseCodee/legacy-client-assets/main/legacy_dev_cape.png",true);
+    }
+
+
 
     public void cacheTextureFromUrl(String textureName, String url, boolean saveTexture) {
         if(saveTexture && loadFileTexture(textureName)) {
@@ -49,7 +47,7 @@ public class TextureCacheManager {
 
                 image = NativeImage.read(imageStream);
                 if(saveTexture) saveTexture(textureName, image);
-            } catch (IOException ignored) {}
+            } catch (IOException e) {e.printStackTrace();}
             i++;
         }
 
@@ -61,7 +59,6 @@ public class TextureCacheManager {
         NativeImageBackedTexture texture = new NativeImageBackedTexture(image);
         LegacyIdentifier identifier = new LegacyIdentifier(textureName, image.getWidth(), image.getHeight());
         textureManager.registerTexture(identifier, texture);
-
         textures.put(textureName, identifier);
     }
     public Thread cacheTextureFromUrlAsync(String textureName, String url, boolean saveTexture) {
