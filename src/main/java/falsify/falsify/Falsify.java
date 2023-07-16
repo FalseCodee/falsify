@@ -6,8 +6,11 @@ import falsify.falsify.listeners.events.EventPacketRecieve;
 import falsify.falsify.listeners.events.EventPacketSend;
 import falsify.falsify.module.Module;
 import falsify.falsify.module.ModuleManager;
+import falsify.falsify.utils.PlayerDataManager;
 import falsify.falsify.utils.TextureCacheManager;
 import falsify.falsify.utils.config.ConfigManager;
+import falsify.falsify.utils.fonts.FontRenderer;
+import falsify.falsify.utils.fonts.Fonts;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.Session;
 import org.lwjgl.glfw.GLFW;
@@ -20,6 +23,10 @@ public class Falsify{
     public static Session session;
     public static TextureCacheManager textureCacheManager;
     public static ConfigManager configManager;
+    public static PlayerDataManager playerDataManager;
+    public static Fonts fonts;
+
+    public static FontRenderer fontRenderer;
     public static File clientDir;
     public static final String title = "Legacy Client";
     public static void init(Session session) {
@@ -29,7 +36,10 @@ public class Falsify{
         clientDir.mkdirs();
         Falsify.textureCacheManager = new TextureCacheManager();
         Falsify.configManager = new ConfigManager();
+        Falsify.playerDataManager = new PlayerDataManager();
         ModuleManager.init();
+        fonts = new Fonts();
+        fontRenderer = new FontRenderer(fonts.getFonts(), 9);
     }
 
     public static void onEvent(Event e){

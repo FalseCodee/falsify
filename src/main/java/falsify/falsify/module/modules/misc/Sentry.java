@@ -14,7 +14,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 import net.minecraft.text.Text;
-import org.lwjgl.glfw.GLFW;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -25,18 +24,10 @@ import java.util.stream.Collectors;
 
 public class Sentry extends Module {
     public Sentry() {
-        super("Sentry", "Displays players within render distance.", Category.MISC, -1);
+        super("Sentry", "Displays players within render distance.", true, Category.MISC, -1);
     }
     public ArrayList<Entity> rendered;
     private final DecimalFormat format = new DecimalFormat("#.#");
-
-    @Override
-    public void onEnable() {
-        rendered = Lists.newArrayList(Lists.newArrayList(mc.world.getEntities()).stream().filter(entity -> entity instanceof PlayerEntity && !entity.equals(mc.player) && mc.getNetworkHandler().getPlayerList().contains(mc.getNetworkHandler().getPlayerListEntry(((PlayerEntity) entity).getGameProfile().getId())))
-                    .sorted(Comparator.comparingInt(entity -> mc.textRenderer.getWidth(entity.getName())))
-                .collect(Collectors.toList()));
-    }
-
     @Override
     public void onDisable() {
         rendered.forEach(entity -> entity.setGlowing(false));
@@ -46,6 +37,7 @@ public class Sentry extends Module {
 
     @Override
     public void onEvent(Event event) {
+        if(mc.world == null || mc.getNetworkHandler() == null || mc.player == null) return;
         if(event instanceof EventTrack e){
             rendered.forEach(entity -> entity.setGlowing(false));
             rendered = Lists.newArrayList(Lists.newArrayList(mc.world.getEntities()).stream().filter(entity -> entity instanceof PlayerEntity && !entity.equals(mc.player) && mc.getNetworkHandler().getPlayerList().contains(mc.getNetworkHandler().getPlayerListEntry(((PlayerEntity) entity).getGameProfile().getId())))

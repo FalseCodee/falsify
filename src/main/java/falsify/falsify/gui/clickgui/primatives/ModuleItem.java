@@ -40,7 +40,7 @@ public class ModuleItem extends Clickable implements Draggable {
             drawRect(color , context.getMatrices(), (int) this.x+1, (int) this.y, (int) this.x + (int) this.width-1, (int) this.y + (int) this.height-1);
 
         }
-        context.drawCenteredTextWithShadow(Falsify.mc.textRenderer, module.name, (int) x + (int) width/2, (int) y + (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, 0xffffff);
+        Falsify.fontRenderer.drawCenteredString(context.getMatrices(), module.name, (float) (x + width/2), (float) (y + height/2 - Falsify.fontRenderer.getStringHeight(module.name)/2), Color.WHITE);
         fade.tick();
         fade2.tick();
     }
@@ -51,9 +51,10 @@ public class ModuleItem extends Clickable implements Draggable {
         int padding = 4;
         matrices.translate(mouseX, mouseY-Falsify.mc.textRenderer.fontHeight - 2 * padding, 0.35);
         String description = module.description;
-        RenderHelper.drawSmoothRect(module.category.getColor().darker(),matrices,-1,-1, Falsify.mc.textRenderer.getWidth(description) + 2 * padding + 1, Falsify.mc.textRenderer.fontHeight + 2 * padding + 1, padding/2f, new int[] {5,5,5,5});
-        RenderHelper.drawSmoothRect(module.category.getColor(),matrices,0,0, Falsify.mc.textRenderer.getWidth(description) + 2 * padding, Falsify.mc.textRenderer.fontHeight + 2 * padding, padding/2f, new int[] {5,5,5,5});
-        context.drawTextWithShadow(Falsify.mc.textRenderer, description, padding, padding, Color.WHITE.getRGB());
+        float descriptionWidth = Falsify.fontRenderer.getStringWidth(description);
+        RenderHelper.drawSmoothRect(module.category.getColor().darker(),matrices,-1,-1, descriptionWidth + 2 * padding + 1, Falsify.mc.textRenderer.fontHeight + 2 * padding + 1, padding/2f, new int[] {5,5,5,5});
+        RenderHelper.drawSmoothRect(module.category.getColor(),matrices,0,0, descriptionWidth + 2 * padding, Falsify.mc.textRenderer.fontHeight + 2 * padding, padding/2f, new int[] {5,5,5,5});
+        Falsify.fontRenderer.drawString(matrices, description, padding, padding, Color.WHITE);
         matrices.pop();
     }
 

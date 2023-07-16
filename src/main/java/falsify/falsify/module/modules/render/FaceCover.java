@@ -5,7 +5,6 @@ import falsify.falsify.Falsify;
 import falsify.falsify.listeners.Event;
 import falsify.falsify.listeners.events.EventPacketSend;
 import falsify.falsify.listeners.events.EventRender;
-import falsify.falsify.listeners.events.EventRender3d;
 import falsify.falsify.listeners.events.EventUpdate;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
@@ -16,27 +15,19 @@ import falsify.falsify.module.settings.RangeSetting;
 import falsify.falsify.utils.LegacyIdentifier;
 import falsify.falsify.utils.MathUtils;
 import falsify.falsify.utils.ProjectionUtils;
-import falsify.falsify.utils.RenderUtils;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.boss.BossBar;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec2f;
-import net.minecraft.util.math.Vec3d;
-import org.joml.Quaternionf;
 
-import java.awt.*;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 public class FaceCover extends Module {
@@ -46,25 +37,26 @@ public class FaceCover extends Module {
     private final RangeSetting faceScale = new RangeSetting("Scale", 2, 0.1, 10, 0.1);
     private final BooleanSetting invisibility = new BooleanSetting("Show Invisible", true);
 
-    private Thread loadingThread = null;
     private LegacyIdentifier identifier;
 
     public FaceCover() {
-        super("Face Cover", "Covers the face of targets with an image.", Category.RENDER, -1);
+        super("Face Cover", "Covers the face of targets with an image.", true, Category.RENDER, -1);
         settings.add(type);
         settings.add(distance);
         settings.add(faceScale);
         settings.add(invisibility);
     }
 
-    @Override
-    public void onEnable() {
-        identifier = Falsify.textureCacheManager.getIdentifier("pizza-hut");
+    private void setIdentifier() {
+        CompletableFuture<LegacyIdentifier> futureIdentifier = Falsify.textureCacheManager.getIdentifier("pizza-hut");
+        if(futureIdentifier.isDone()) {
+            this.identifier = futureIdentifier.getNow(null);
+        }
     }
 
     @Override
     public void onEvent(Event<?> event) {
-        if(event instanceof EventRender e && loadingThread == null) {
+        if(event instanceof EventRender e && identifier != null) {
             if(mc.world == null) return;
             if(type.getMode().equals("Aimbot")) {
                 if(Aimbot.target == null || Aimbot.target.getEntity() == null) return;
@@ -101,13 +93,12 @@ public class FaceCover extends Module {
         } else if(event instanceof EventPacketSend ep && ep.getPacket() instanceof ChatMessageC2SPacket packet && packet.chatMessage().toLowerCase().startsWith(".upload ")) {
             String urlString = packet.chatMessage().substring(".upload ".length());
             if(urlString.length() == 0) return;
-
+            identifier = null;
             Falsify.textureCacheManager.destroyTexture("pizza-hut");
-            loadingThread = Falsify.textureCacheManager.cacheTextureFromUrlAsync("pizza-hut", urlString, false);
+            Falsify.textureCacheManager.cacheTextureFromUrlAsync("pizza-hut", urlString, false);
             ep.setCancelled(true);
-        } else if(event instanceof EventUpdate && loadingThread != null && !loadingThread.isAlive()) {
-            loadingThread = null;
-            identifier = Falsify.textureCacheManager.getIdentifier("pizza-hut");
+        } else if(event instanceof EventUpdate && identifier == null) {
+            setIdentifier();
         }
     }
 

@@ -8,7 +8,7 @@ import net.minecraft.client.gui.DrawContext;
 
 public class ServerPingModule extends DisplayModule<ServerPingRenderModule> {
     public ServerPingModule() {
-        super("Server Ping", "Shows the current server ping.", new ServerPingRenderModule(3*105.00, 0.0, 100, 20), Category.RENDER, -1);
+        super("Server Ping", "Shows the current server ping.", new ServerPingRenderModule(3*105.00, 0.0, 100, 20), Category.RENDER, -1, false);
         renderModule.setModule(this);
     }
 }
@@ -21,7 +21,7 @@ class ServerPingRenderModule extends RenderModule<ServerPingModule> {
 
     @Override
     public void renderModule(DrawContext context, int mouseX, int mouseY, float delta) {
-        drawRect(module.getBackgroundColor(), context.getMatrices(), (float) getX(), (float) getY(), (float) (getX() + width), (float) (getY() + height));
-        context.drawCenteredTextWithShadow(Falsify.mc.textRenderer, (Falsify.mc.getNetworkHandler() == null) ? "Unknown" : "Ping: " + Falsify.mc.getNetworkHandler().getPlayerListEntry(Falsify.mc.player.getUuid()).getLatency() + " ms", (int) getX() + (int) width/2, (int) getY() + (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, module.getTextColor().getRGB());
+        drawRect(module.getBackgroundColor(), context.getMatrices(), (float) 0, (float) 0, (float) (width), (float) (height));
+        context.drawCenteredTextWithShadow(Falsify.mc.textRenderer, (Falsify.mc.getNetworkHandler() == null) ? "Unknown" : "Ping: " + Falsify.mc.getNetworkHandler().getPlayerListEntry(Falsify.mc.player.getUuid()).getLatency() + " ms", (int) width/2, (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, module.getTextColor().getRGB());
     }
 }

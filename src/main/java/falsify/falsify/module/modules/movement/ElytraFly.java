@@ -2,17 +2,14 @@ package falsify.falsify.module.modules.movement;
 
 import falsify.falsify.listeners.Event;
 import falsify.falsify.listeners.events.EventMouse;
-import falsify.falsify.listeners.events.EventUpdate;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
 import falsify.falsify.module.settings.RangeSetting;
-import falsify.falsify.utils.MathUtils;
-import org.lwjgl.glfw.GLFW;
 
 public class ElytraFly extends Module {
     RangeSetting speed = new RangeSetting("Speed", 1.1, 0.1, 20, 0.01);
     public ElytraFly() {
-        super("ElytraFly", "Infinite elytra boost.", Category.MOVEMENT, -1);
+        super("ElytraFly", "Infinite elytra boost.", true, Category.MOVEMENT, -1);
         settings.add(speed);
     }
 

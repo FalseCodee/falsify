@@ -1,34 +1,20 @@
 package falsify.falsify.module.modules.render;
 
-import com.google.common.collect.Lists;
 import falsify.falsify.listeners.Event;
 import falsify.falsify.listeners.events.EventRender;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
 import falsify.falsify.module.ModuleManager;
-import falsify.falsify.module.settings.BooleanSetting;
 import falsify.falsify.utils.Alignment;
-import falsify.falsify.utils.MathUtils;
 import falsify.falsify.utils.RenderUtils;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.Vec3d;
-import org.joml.AxisAngle4f;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
-import org.lwjgl.glfw.GLFW;
 
-import java.awt.*;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class GuiArrayList extends Module {
 
     public GuiArrayList() {
-        super("Arraylist", "Shows Active Mods", Category.RENDER, -1);
+        super("Arraylist", "Shows Active Mods", false, Category.RENDER, -1);
     }
 
     @Override

@@ -7,10 +7,10 @@ import net.minecraft.network.packet.s2c.play.GameMessageS2CPacket;
 
 public class ChatModule extends Module {
     public ChatModule(String name, String description, Category category, int keyCode){
-        super(name, description, category, keyCode);
+        super(name, description, false, category, keyCode);
     }
     public ChatModule(String name, String description, Category category, int keyCode, boolean enabled){
-        super(name, description, category, keyCode, enabled);
+        super(name, description, category, keyCode, enabled, false);
     }
 
 

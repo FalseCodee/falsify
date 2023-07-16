@@ -7,7 +7,7 @@ import falsify.falsify.module.Module;
 
 public class Sprint extends Module {
     public Sprint() {
-        super("Sprint", "Automatically sprint", Category.MOVEMENT, -1);
+        super("Sprint", "Automatically sprint", true, Category.MOVEMENT, -1);
     }
 
     @Override

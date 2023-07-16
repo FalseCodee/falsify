@@ -151,4 +151,11 @@ public class MathUtils {
     public static double random(double min, double max) {
         return (Math.random() * (max-min)) + min;
     }
+
+    public static int[] RGBIntToRGB(int in) {
+        int red = in >> 8 * 2 & 0xFF;
+        int green = in >> 8 & 0xFF;
+        int blue = in & 0xFF;
+        return new int[]{red, green, blue};
+    }
 }

@@ -1,39 +1,29 @@
 package falsify.falsify.module.modules.render;
 
 import com.google.common.collect.Lists;
-import com.mojang.blaze3d.systems.RenderSystem;
-import falsify.falsify.Falsify;
 import falsify.falsify.listeners.Event;
 import falsify.falsify.listeners.events.EventRender;
-import falsify.falsify.listeners.events.EventRender3d;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
-import falsify.falsify.module.ModuleManager;
 import falsify.falsify.module.modules.combat.Aimbot;
 import falsify.falsify.module.settings.BooleanSetting;
 import falsify.falsify.module.settings.ModeSetting;
 import falsify.falsify.module.settings.RangeSetting;
 import falsify.falsify.utils.*;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.entity.PlayerModelPart;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
-import org.lwjgl.glfw.GLFW;
 
 import java.awt.*;
-import java.io.FileNotFoundException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static falsify.falsify.Falsify.mc;
 
 public class EntityInfo extends Module {
 
@@ -42,7 +32,7 @@ public class EntityInfo extends Module {
     private final BooleanSetting invisibility = new BooleanSetting("Show Invisible", true);
 
     public EntityInfo() {
-        super("Entity Info", "Shows information about a target.", Category.RENDER, -1);
+        super("Entity Info", "Shows information about a target.", true, Category.RENDER, -1);
         settings.add(type);
         settings.add(distance);
         settings.add(invisibility);
@@ -102,8 +92,11 @@ public class EntityInfo extends Module {
         RenderUtils.fill(matrices, -75,  -25,  75, 25, new Color(56, 56, 56, 194).getRGB());
         //RenderUtils.drawText(eventRender3d, pos.add(0, entity.getNameLabelHeight(), 0), entity.getDisplayName().getString(), Color.WHITE);
         context.drawCenteredTextWithShadow(mc.textRenderer, entity.getDisplayName().getString(), 0, -23, Color.WHITE.getRGB());
-        context.drawCenteredTextWithShadow(mc.textRenderer, "Can Take Damage: " + (entity.canTakeDamage() ? "Yes" : "No"), 0, -13, Color.WHITE.getRGB());
-
+        if(entity instanceof PlayerEntity playerEntity) {
+            context.drawCenteredTextWithShadow(mc.textRenderer, "UUID: " + playerEntity.getGameProfile().getId().toString(), 0, -13, Color.WHITE.getRGB());
+        } else {
+            context.drawCenteredTextWithShadow(mc.textRenderer, "Id: " + entity.getId(), 0, -13, Color.WHITE.getRGB());
+        }
         context.drawCenteredTextWithShadow(mc.textRenderer, entity.getHealth() + " / " + entity.getMaxHealth(), 0, 11, Color.WHITE.getRGB());
         float percentage = MathUtils.clamp(entity.getHealth()/ entity.getMaxHealth(), 0.0f, 1.0f);
         RenderUtils.fill(matrices, -75,  20, (int) (150*percentage-75), 22, new Color((1-percentage), percentage, 56/255f, 219/255f).getRGB());

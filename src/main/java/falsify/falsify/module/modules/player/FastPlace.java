@@ -8,7 +8,7 @@ import falsify.falsify.module.Module;
 
 public class FastPlace extends Module {
     public FastPlace() {
-        super("Fast Place", "Removes block placement cooldown.", Category.MOVEMENT, -1);
+        super("Fast Place", "Removes block placement cooldown.", true, Category.MOVEMENT, -1);
     }
 
     @Override

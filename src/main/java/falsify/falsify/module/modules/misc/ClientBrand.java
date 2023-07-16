@@ -6,14 +6,13 @@ import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 import net.minecraft.text.Text;
-import org.lwjgl.glfw.GLFW;
 
 public class ClientBrand extends Module {
 
     public String brand = "Legacy Client";
 
     public ClientBrand() {
-        super("Brand","Change the client brand from fabric to anything!", Category.MISC, -1);
+        super("Brand","Change the client brand from fabric to anything!", false, Category.MISC, -1);
     }
 
     @Override

@@ -15,6 +15,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.*;
 import org.joml.Matrix4f;
+import static org.lwjgl.opengl.GL32C.*;
 
 
 import java.awt.*;
@@ -94,17 +95,12 @@ public class RenderUtils {
         return new float[]{red, green, blue, alpha};
     }
 
-    public static void drawESPTracers(PlayerEntity player, List<Entity> entityList, EventRender3d eventRender3d) {
-        for (Entity entity : entityList) {
-            drawESPTracer(player, entity, eventRender3d);
-        }
-    }
-
-    public static void drawESPTracer(PlayerEntity player, Entity entity, EventRender3d eventRender3d) {
-        float intensity = mc.player.distanceTo(entity) / 20.0F;
+    public static void drawESPTracer(PlayerEntity player, Entity entity, EventRender3d eventRender3d, Color color, boolean fill) {
         Vec3d pos = MathUtils.getInterpolatedPos(entity, eventRender3d.getTickDelta());
         Box box = new Box(pos.subtract(entity.getWidth()/2, 0, entity.getWidth()/2), pos.add(entity.getWidth()/2, entity.getHeight(), entity.getWidth()/2));
-        drawBoundingBox(box, eventRender3d, Color.RED);
+
+        if(fill) drawBoundingBox(box, eventRender3d, color);
+        else drawBoundingBoxOutline(box, eventRender3d, color);
     }
 
     public static void drawCenteredText(DrawContext context, TextRenderer textRenderer, String text, int centerX, int y, int color) {
@@ -125,6 +121,33 @@ public class RenderUtils {
     }
 
     public static void drawBoundingBox(Box bb, EventRender3d eventRender3d, Color color) {
+        box(eventRender3d, new Vec3d[] {new Vec3d(bb.minX, bb.minY, bb.minZ),
+                new Vec3d(bb.maxX, bb.minY, bb.minZ),
+                new Vec3d(bb.maxX, bb.minY, bb.minZ),
+                new Vec3d(bb.maxX, bb.minY, bb.maxZ),
+                new Vec3d(bb.maxX, bb.minY, bb.maxZ),
+                new Vec3d(bb.minX, bb.minY, bb.maxZ),
+                new Vec3d(bb.minX, bb.minY, bb.maxZ),
+                new Vec3d(bb.minX, bb.minY, bb.minZ),
+                new Vec3d(bb.minX, bb.minY, bb.minZ),
+                new Vec3d(bb.minX, bb.maxY, bb.minZ),
+                new Vec3d(bb.maxX, bb.minY, bb.minZ),
+                new Vec3d(bb.maxX, bb.maxY, bb.minZ),
+                new Vec3d(bb.maxX, bb.minY, bb.maxZ),
+                new Vec3d(bb.maxX, bb.maxY, bb.maxZ),
+                new Vec3d(bb.minX, bb.minY, bb.maxZ),
+                new Vec3d(bb.minX, bb.maxY, bb.maxZ),
+                new Vec3d(bb.minX, bb.maxY, bb.minZ),
+                new Vec3d(bb.maxX, bb.maxY, bb.minZ),
+                new Vec3d(bb.maxX, bb.maxY, bb.minZ),
+                new Vec3d(bb.maxX, bb.maxY, bb.maxZ),
+                new Vec3d(bb.maxX, bb.maxY, bb.maxZ),
+                new Vec3d(bb.minX, bb.maxY, bb.maxZ),
+                new Vec3d(bb.minX, bb.maxY, bb.maxZ),
+                new Vec3d(bb.minX, bb.maxY, bb.minZ)}, color);
+    }
+
+    public static void drawBoundingBoxOutline(Box bb, EventRender3d eventRender3d, Color color) {
         line(eventRender3d, new Vec3d[] {new Vec3d(bb.minX, bb.minY, bb.minZ),
                 new Vec3d(bb.maxX, bb.minY, bb.minZ),
                 new Vec3d(bb.maxX, bb.minY, bb.minZ),
@@ -174,8 +197,8 @@ public class RenderUtils {
 
         buffer.begin(VertexFormat.DrawMode.DEBUG_LINES, VertexFormats.LINES);
         RenderSystem.lineWidth(2.0F);
-        buffer.vertex(matrices.peek().getPositionMatrix(), (float) from.x, (float) from.y, (float) from.z).color(color.getRed()/255F, color.getGreen()/255F, color.getBlue()/255F, 1F).normal(matrices.peek().getNormalMatrix(), (float) 0, (float) 0, (float) 0).next();
-        buffer.vertex(matrices.peek().getPositionMatrix(), (float) to.x, (float) to.y, (float) to.z).color(color.getRed()/255F, color.getGreen()/255F, color.getBlue()/255F, 1F).normal(matrices.peek().getNormalMatrix(), (float) vector.x, (float) vector.y, (float) vector.z).next();
+        buffer.vertex(matrices.peek().getPositionMatrix(), (float) from.x, (float) from.y, (float) from.z).color(color.getRed()/255F, color.getGreen()/255F, color.getBlue()/255F, color.getAlpha() / 255F).normal(matrices.peek().getNormalMatrix(), (float) 0, (float) 0, (float) 0).next();
+        buffer.vertex(matrices.peek().getPositionMatrix(), (float) to.x, (float) to.y, (float) to.z).color(color.getRed()/255F, color.getGreen()/255F, color.getBlue()/255F, color.getAlpha() / 255F).normal(matrices.peek().getNormalMatrix(), (float) vector.x, (float) vector.y, (float) vector.z).next();
         tessellator.draw();
 
         matrices.pop();
@@ -275,6 +298,29 @@ public class RenderUtils {
         RenderSystem.disableBlend();
     }
 
+    public static void renderShader(MatrixStack matrices) {
+        Matrix4f matrix4f = matrices.peek().getPositionMatrix();
+        BufferBuilder bufferBuilder = RenderSystem.renderThreadTesselator().getBuffer();
+        bufferBuilder.begin(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION);
+        bufferBuilder.vertex(matrix4f, -1, -1, 0f).next();
+        bufferBuilder.vertex(matrix4f, -1, 1, 0f).next();
+        bufferBuilder.vertex(matrix4f, 1, 1, 0f).next();
+        bufferBuilder.vertex(matrix4f, 1, -1, 0f).next();
+        BufferRenderer.draw(bufferBuilder.end());
+    }
+
+    public static void renderShaderBegin() {
+        RenderSystem.disableCull();
+        glEnable(GL_LINE_SMOOTH);
+        glLineWidth(1);
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+    }
+    public static void renderShaderEnd() {
+        RenderSystem.disableBlend();
+        glDisable(GL_LINE_SMOOTH);
+        RenderSystem.enableCull();
+    }
     public static void line(EventRender3d eventRender3d, Vec3d[] vec3d, Color color) {
         MatrixStack matrices = eventRender3d.getMatrices();
         Camera camera = eventRender3d.getCamera();
@@ -296,12 +342,49 @@ public class RenderUtils {
 
         buffer.begin(VertexFormat.DrawMode.DEBUG_LINES, VertexFormats.POSITION_COLOR);
         RenderSystem.lineWidth(50.0F);
-        buffer.vertex(matrices.peek().getPositionMatrix(), (float) vec3d[0].x, (float) vec3d[0].y, (float) vec3d[0].z).color(color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F, 1F).next();//.normal(matrices.peek().getNormalMatrix(), (float) vec3d[0].x, (float) vec3d[0].y, (float) vec3d[0].z).next();
+        buffer.vertex(matrices.peek().getPositionMatrix(), (float) vec3d[0].x, (float) vec3d[0].y, (float) vec3d[0].z).color(color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F, color.getAlpha() / 255F).next();//.normal(matrices.peek().getNormalMatrix(), (float) vec3d[0].x, (float) vec3d[0].y, (float) vec3d[0].z).next();
         for(int i = 1; i < vec3d.length; i++) {
             Vec3d from = vec3d[i-1];
             Vec3d to = vec3d[i];
             Vec3d vector = to.subtract(from);
-            buffer.vertex(matrices.peek().getPositionMatrix(), (float) to.x, (float) to.y, (float) to.z).color(color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F, 1F).next();//.normal(matrices.peek().getNormalMatrix(), (float) vector.x, (float) vector.y, (float) vector.z).next();
+            buffer.vertex(matrices.peek().getPositionMatrix(), (float) to.x, (float) to.y, (float) to.z).color(color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F, color.getAlpha() / 255F).next();//.normal(matrices.peek().getNormalMatrix(), (float) vector.x, (float) vector.y, (float) vector.z).next();
+        }
+        tessellator.draw();
+
+        matrices.pop();
+
+        RenderSystem.enableCull();
+        RenderSystem.enableDepthTest();
+        RenderSystem.disableBlend();
+        //RenderSystem.enableTexture();
+    }
+    public static void box(EventRender3d eventRender3d, Vec3d[] vec3d, Color color) {
+        MatrixStack matrices = eventRender3d.getMatrices();
+        Camera camera = eventRender3d.getCamera();
+
+        matrices.push();
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder buffer = tessellator.getBuffer();
+
+        matrices.translate(-camera.getPos().x, -camera.getPos().y, -camera.getPos().z);
+
+
+        RenderSystem.disableDepthTest();
+        RenderSystem.disableCull();
+        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
+        RenderSystem.lineWidth(50.0f);
+
+        buffer.begin(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION_COLOR);
+        RenderSystem.lineWidth(50.0F);
+        buffer.vertex(matrices.peek().getPositionMatrix(), (float) vec3d[0].x, (float) vec3d[0].y, (float) vec3d[0].z).color(color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F, color.getAlpha() / 255F).next();//.normal(matrices.peek().getNormalMatrix(), (float) vec3d[0].x, (float) vec3d[0].y, (float) vec3d[0].z).next();
+        for(int i = 1; i < vec3d.length; i++) {
+            Vec3d from = vec3d[i-1];
+            Vec3d to = vec3d[i];
+            Vec3d vector = to.subtract(from);
+            buffer.vertex(matrices.peek().getPositionMatrix(), (float) to.x, (float) to.y, (float) to.z).color(color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F, color.getAlpha() / 255F).next();//.normal(matrices.peek().getNormalMatrix(), (float) vector.x, (float) vector.y, (float) vector.z).next();
         }
         tessellator.draw();
 

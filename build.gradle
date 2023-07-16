@@ -13,6 +13,8 @@ project.ext.lwjglVersion = "3.0.0a"
 
 
 dependencies {
+    implementation 'org.projectlombok:lombok:1.18.22'
+
     //to change the versions see the gradle.properties file
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"

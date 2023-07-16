@@ -8,14 +8,13 @@ import falsify.falsify.module.settings.BooleanSetting;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
-import org.lwjgl.glfw.GLFW;
 
 public class VClip extends Module {
 
     private final BooleanSetting velocity = new BooleanSetting("Velocity", true);
 
     public VClip() {
-        super("V-Clip", ".clip x y z", Category.MOVEMENT, -1);
+        super("V-Clip", ".clip x y z", true, Category.MOVEMENT, -1);
         settings.add(velocity);
     }
 

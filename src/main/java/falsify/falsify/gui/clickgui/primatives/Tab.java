@@ -34,6 +34,9 @@ public class Tab extends Clickable implements Draggable {
 
     @Override
     public boolean handleClick(double x, double y, int button) {
+        double sf = getScaleFactor();
+        x /= sf;
+        y /= sf;
         if (isHovering(x, y) && button == 1){
             this.toggleExtended();
             return true;
@@ -74,6 +77,9 @@ public class Tab extends Clickable implements Draggable {
 
     @Override
     public boolean onDrag(double x, double y, int button, double dx, double dy) {
+        double sf = getScaleFactor();
+        dx /= sf;
+        dy /= sf;
         if (dragging && button == 0) {
             this.x += dx;
             this.y += dy;
@@ -84,12 +90,17 @@ public class Tab extends Clickable implements Draggable {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        context.getMatrices().push();
+        double sf = getScaleFactor();
+        mouseX /= sf;
+        mouseY /= sf;
+        context.getMatrices().scale((float) sf, (float) sf, (float) 1);
         if(isExtended()) {
             scroll.rise();
             drawSmoothRect(scroll.color(category.getColor().darker(), category.getColor()), context.getMatrices(), (int) this.x, (int) this.y, (int) this.x + (int) this.width, (int) this.y + (int) this.height, 2, new int[] {0, 5, 5, 0});
-            context.drawCenteredTextWithShadow(Falsify.mc.textRenderer, category.getName(), (int) x + (int) width/2, (int) y + (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, 0xffffff);
+            Falsify.fontRenderer.drawCenteredString(context.getMatrices(), category.getName(), (float) (x + width/2), (float) (y + height/2 - Falsify.fontRenderer.getStringHeight(category.getName())/2), Color.WHITE);
             int i = 1;
-            if(scroll.getProgress() != 1.0) enableScissor((int) x, (int) (y+height), (int) (x+width), (int) (y+height + (moduleHeight*modules.size()*scroll.run()) + 1));
+            if(scroll.getProgress() != 1.0) enableScissor((int) (x*sf), (int) ((y+height)*sf), (int) ((x+width)*sf), (int) ((y+height + (moduleHeight*modules.size()*scroll.run()) + 1)*sf));
             for(ModuleItem moduleItem : modules) {
                 moduleItem.setX(x);
                 moduleItem.setY(y + moduleHeight*i - (moduleHeight*modules.size()*(1-scroll.run())));
@@ -97,28 +108,27 @@ public class Tab extends Clickable implements Draggable {
                 i++;
             }
 
-            if(scroll.getProgress() != 1.0) {
-                context.fill(0,0,Falsify.mc.getWindow().getScaledWidth(),Falsify.mc.getWindow().getScaledHeight(), Color.WHITE.getRGB());
-                disableScissor();
-            }
+
+            if(scroll.getProgress() != 1.0) disableScissor();
+
         } else {
             scroll.lower();
             drawSmoothRect(category.getColor().darker(), context.getMatrices(), (int) this.x, (int) this.y, (int) this.x + (int) this.width, (int) this.y + (int) this.height, 2, new int[] {5, 5, 5, 5});
-            context.drawCenteredTextWithShadow(Falsify.mc.textRenderer, category.getName(), (int) x + (int) width/2, (int) y + (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, 0xffffff);
+            Falsify.fontRenderer.drawCenteredString(context.getMatrices(), category.getName(), (float) (x + width/2), (float) (y + height/2 - Falsify.fontRenderer.getStringHeight(category.getName())/2), Color.WHITE);
             if(scroll.run() != 0) {
                 int i = 1;
-                enableScissor((int) x, (int) (y+height), (int) (x+width), (int) (y+height + (moduleHeight*modules.size()*scroll.run()) + 1));
+                enableScissor((int) (x*sf), (int) ((y+height)*sf), (int) ((x+width)*sf), (int) ((y+height + (moduleHeight*modules.size()*scroll.run()) + 1)*sf));
                 for(ModuleItem moduleItem : modules) {
                     moduleItem.setX(x);
                     moduleItem.setY(y + moduleHeight*i - (moduleHeight*modules.size()*(1-scroll.run())));
                     moduleItem.render(context, mouseX, mouseY, delta, (i == modules.size()));
                     i++;
                 }
-                context.fill(0,0,Falsify.mc.getWindow().getScaledWidth(),Falsify.mc.getWindow().getScaledHeight(), Color.WHITE.getRGB());
                 disableScissor();
             }
         }
         scroll.tick();
+        context.getMatrices().pop();
     }
 
     public boolean isDragging() {

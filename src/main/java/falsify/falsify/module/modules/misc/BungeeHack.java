@@ -9,7 +9,6 @@ import falsify.falsify.module.Module;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.NetworkState;
 import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket;
-import org.lwjgl.glfw.GLFW;
 
 public class BungeeHack extends Module {
     final MinecraftClient mc = MinecraftClient.getInstance();
@@ -17,7 +16,7 @@ public class BungeeHack extends Module {
     public String uuid = mc.getSession().getUuid().replace("-","");
 
     public BungeeHack() {
-        super("BungeeHack", "Exploit weak Bungee servers.", Category.MISC, -1);
+        super("BungeeHack", "Exploit weak Bungee servers.", true, Category.MISC, -1);
     }
 
     @Override

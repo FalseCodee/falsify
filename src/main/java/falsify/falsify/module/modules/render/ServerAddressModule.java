@@ -8,7 +8,7 @@ import net.minecraft.client.gui.DrawContext;
 
 public class ServerAddressModule extends DisplayModule<ServerAddressRenderModule> {
     public ServerAddressModule() {
-        super("Server Address", "Shows the current server address.", new ServerAddressRenderModule(2*105.0, 0.0, 100, 20), Category.RENDER, -1);
+        super("Server Address", "Shows the current server address.", new ServerAddressRenderModule(2*105.0, 0.0, 100, 20), Category.RENDER, -1, false);
         renderModule.setModule(this);
     }
 }
@@ -21,7 +21,7 @@ class ServerAddressRenderModule extends RenderModule<ServerAddressModule> {
 
     @Override
     public void renderModule(DrawContext context, int mouseX, int mouseY, float delta) {
-        drawRect(module.getBackgroundColor(), context.getMatrices(), (float) getX(), (float) getY(), (float) (getX() + width), (float) (getY() + height));
-        context.drawCenteredTextWithShadow(Falsify.mc.textRenderer, (Falsify.mc.getCurrentServerEntry() == null || Falsify.mc.getCurrentServerEntry().isLocal()) ? "Local" : Falsify.mc.getCurrentServerEntry().address, (int) getX() + (int) width/2, (int) getY() + (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, module.getTextColor().getRGB());
+        drawRect(module.getBackgroundColor(), context.getMatrices(), (float) 0, (float) 0, (float) (width), (float) (height));
+        context.drawCenteredTextWithShadow(Falsify.mc.textRenderer, (Falsify.mc.getCurrentServerEntry() == null || Falsify.mc.getCurrentServerEntry().isLocal()) ? "Local" : Falsify.mc.getCurrentServerEntry().address, (int) width/2, (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, module.getTextColor().getRGB());
     }
 }

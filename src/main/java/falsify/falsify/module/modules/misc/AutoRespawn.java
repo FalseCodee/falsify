@@ -5,11 +5,10 @@ import falsify.falsify.listeners.events.EventUpdate;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
 import falsify.falsify.utils.Timer;
-import org.lwjgl.glfw.GLFW;
 
 public class AutoRespawn extends Module {
     public AutoRespawn() {
-        super("Auto Respawn", "Automatically respawn.", Category.MISC, -1);
+        super("Auto Respawn", "Automatically respawn.", true, Category.MISC, -1);
     }
     public final Timer timer = new Timer();
     @Override

@@ -9,7 +9,7 @@ import net.minecraft.client.gui.DrawContext;
 
 public class FPSModule extends DisplayModule<FPSRenderModule> {
     public FPSModule() {
-        super("FPS", "Shows your current fps.", new FPSRenderModule(0.0, 0.0, 100, 20), Category.RENDER, -1);
+        super("FPS", "Shows your current fps.", new FPSRenderModule(0.0, 0.0, 100, 20), Category.RENDER, -1, false);
         renderModule.setModule(this);
     }
 }
@@ -22,7 +22,7 @@ class FPSRenderModule extends RenderModule<FPSModule> {
 
     @Override
     public void renderModule(DrawContext context, int mouseX, int mouseY, float delta) {
-        drawRect(module.getBackgroundColor(), context.getMatrices(), (float) getX(), (float) getY(), (float) (getX() + width), (float) (getY() + height));
-        context.drawCenteredTextWithShadow(Falsify.mc.textRenderer, "FPS: " + ((MixinMinecraft)Falsify.mc).getCurrentFps(), (int) getX() + (int) width/2, (int) getY() + (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, module.getTextColor().getRGB());
+        drawRect(module.getBackgroundColor(), context.getMatrices(), (float) 0, (float) 0, (float) (width), (float) (height));
+        context.drawCenteredTextWithShadow(Falsify.mc.textRenderer, "FPS: " + ((MixinMinecraft)Falsify.mc).getCurrentFps(), (int) width/2, (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, module.getTextColor().getRGB());
     }
 }

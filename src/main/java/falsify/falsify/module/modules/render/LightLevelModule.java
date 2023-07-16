@@ -9,7 +9,7 @@ import net.minecraft.world.LightType;
 
 public class LightLevelModule extends DisplayModule<LightLevelRenderModule> {
     public LightLevelModule() {
-        super("Light Level", "Shows the current light level.", new LightLevelRenderModule(105.0, 25.0, 100, 20), Category.RENDER, -1);
+        super("Light Level", "Shows the current light level.", new LightLevelRenderModule(105.0, 25.0, 100, 20), Category.RENDER, -1, false);
         renderModule.setModule(this);
     }
 }
@@ -22,7 +22,7 @@ class LightLevelRenderModule extends RenderModule<LightLevelModule> {
 
     @Override
     public void renderModule(DrawContext context, int mouseX, int mouseY, float delta) {
-        drawRect(module.getBackgroundColor(), context.getMatrices(), (float) getX(), (float) getY(), (float) (getX() + width), (float) (getY() + height));
-        context.drawCenteredTextWithShadow(Falsify.mc.textRenderer, "Light Level: " + Falsify.mc.world.getLightLevel(LightType.BLOCK, Falsify.mc.player.getBlockPos()), (int) getX() + (int) width/2, (int) getY() + (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, module.getTextColor().getRGB());
+        drawRect(module.getBackgroundColor(), context.getMatrices(), (float) 0, (float) 0, (float) (width), (float) (height));
+        context.drawCenteredTextWithShadow(Falsify.mc.textRenderer, "Light Level: " + Falsify.mc.world.getLightLevel(LightType.BLOCK, Falsify.mc.player.getBlockPos()), (int) width/2, (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, module.getTextColor().getRGB());
     }
 }

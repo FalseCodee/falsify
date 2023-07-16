@@ -9,7 +9,7 @@ import falsify.falsify.module.settings.BooleanSetting;
 public class AutoJump extends Module {
     private final BooleanSetting whileRunning = new BooleanSetting("Running", false);
     public AutoJump() {
-        super("Auto Jump", "Automatically Jump.", Category.MOVEMENT, -1);
+        super("Auto Jump", "Automatically Jump.", true, Category.MOVEMENT, -1);
         settings.add(whileRunning);
     }
 

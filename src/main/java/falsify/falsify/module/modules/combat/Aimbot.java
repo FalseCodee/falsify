@@ -22,7 +22,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Vec3d;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.Comparator;
 import java.util.List;
@@ -50,7 +49,7 @@ public class Aimbot extends Module {
     private AimbotTarget oldTarget;
 
     public Aimbot() {
-        super("Aimbot", "Automatically aim at a target.", Category.COMBAT, -1);
+        super("Aimbot", "Automatically aim at a target.", true, Category.COMBAT, -1);
         settings.add(type);
         settings.add(sortType);
         settings.add(range);

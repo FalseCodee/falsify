@@ -4,6 +4,7 @@ import falsify.falsify.gui.editor.EditGUI;
 import falsify.falsify.gui.editor.module.RenderModule;
 import falsify.falsify.listeners.Event;
 import falsify.falsify.listeners.events.EventRender;
+import falsify.falsify.listeners.events.EventWindowResize;
 import falsify.falsify.module.settings.ColorSetting;
 import net.minecraft.client.util.math.MatrixStack;
 
@@ -15,8 +16,8 @@ public class DisplayModule<T extends RenderModule<?>> extends Module {
     protected ColorSetting backgroundColor = new ColorSetting("Background", 30,30,30,100);
     protected ColorSetting textColor = new ColorSetting("Text", 255,255,255,255);
 
-    public DisplayModule(String name, String description, T renderModule, Category category, int keyCode){
-        super(name, description, category, keyCode);
+    public DisplayModule(String name, String description, T renderModule, Category category, int keyCode, boolean isCheat){
+        super(name, description, isCheat, category, keyCode);
         this.renderModule = renderModule;
 
         settings.add(backgroundColor.getRed());
@@ -30,8 +31,8 @@ public class DisplayModule<T extends RenderModule<?>> extends Module {
         settings.add(textColor.getAlpha());
     }
 
-    public DisplayModule(String name, String description, T renderModule, Category category, int keyCode, boolean enabled){
-        super(name, description, category, keyCode, enabled);
+    public DisplayModule(String name, String description, T renderModule, Category category, int keyCode, boolean enabled, boolean isCheat){
+        super(name, description, category, keyCode, enabled, isCheat);
         this.renderModule = renderModule;
     }
 
@@ -44,6 +45,9 @@ public class DisplayModule<T extends RenderModule<?>> extends Module {
                  renderModule.render(eventRender.getDrawContext(), 0, 0, eventRender.getTickDelta());
                  matrices.pop();
              }
+         } else if (event instanceof EventWindowResize e) {
+             renderModule.setX(renderModule.getX() / e.getPrevScaledWidth() * e.getNewScaledWidth());
+             renderModule.setY(renderModule.getY() / e.getPrevScaledHeight() * e.getNewScaledHeight());
          }
     }
 

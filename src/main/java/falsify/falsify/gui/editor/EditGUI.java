@@ -32,18 +32,15 @@ public class EditGUI extends Screen {
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         RenderHelper.drawRect(new Color(50,50,50, 100), context.getMatrices(), 0, 0, width, height);
-        context.getMatrices().push();
-        RenderHelper.convertToScale(context.getMatrices());
         for(int i = renderModules.size()-1; i >= 0; i--) {
             renderModules.get(i).render(context, mouseX, mouseY, delta);
         }
-        context.getMatrices().pop();
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         for(RenderModule<?> renderModule : renderModules) {
-            if(renderModule.handleClick(RenderHelper.convertToScale(mouseX), RenderHelper.convertToScale(mouseY), button)) {
+            if(renderModule.handleClick(mouseX, mouseY, button)) {
                 renderModules.remove(renderModule);
                 renderModules.add(0, renderModule);
                 return true;
@@ -56,7 +53,7 @@ public class EditGUI extends Screen {
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
         for(RenderModule<?> renderModule : renderModules) {
-            if(renderModule.onDrag(RenderHelper.convertToScale(mouseX), RenderHelper.convertToScale(mouseY), button, RenderHelper.convertToScale(deltaX), RenderHelper.convertToScale(deltaY))) {
+            if(renderModule.onDrag(mouseX, mouseY, button, deltaX, deltaY)) {
 
                 return true;
             }

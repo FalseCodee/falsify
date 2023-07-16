@@ -8,7 +8,6 @@ import falsify.falsify.module.settings.RangeSetting;
 import falsify.falsify.utils.ChatModuleUtils;
 import falsify.falsify.utils.Timer;
 import net.minecraft.item.Items;
-import org.lwjgl.glfw.GLFW;
 
 public class DupeDrop extends Module {
 
@@ -19,7 +18,7 @@ public class DupeDrop extends Module {
     boolean refilling = false;
     int index = 0;
     public DupeDrop() {
-        super("DupeDrop", "/dupe items then drops them.", Category.MISC, -1);
+        super("DupeDrop", "/dupe items then drops them.", false, Category.MISC, -1);
         settings.add(delay);
         settings.add(amount);
     }

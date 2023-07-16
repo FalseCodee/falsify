@@ -6,11 +6,10 @@ import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
 import falsify.falsify.utils.ChatModuleUtils;
 import net.minecraft.network.packet.s2c.play.ChatMessageS2CPacket;
-import org.lwjgl.glfw.GLFW;
 
 public class ChatBot extends Module {
     public ChatBot() {
-        super("ChatBot", "Become a chat bot!", Category.MISC, -1);
+        super("ChatBot", "Become a chat bot!", false, Category.MISC, -1);
     }
 
     @Override

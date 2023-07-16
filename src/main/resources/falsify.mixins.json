@@ -9,7 +9,9 @@
     "MixinMinecraft",
     "MixinMultiplayerGUI",
     "MixinPacket",
+    "MixinPlayerEntity",
     "MixinRender",
+    "MixinSharedConstants",
     "MixinWorldRenderer",
     "special.MixinClientBrandRetriever",
     "special.MixinEntityTracker",
@@ -26,7 +28,10 @@
     "MixinGameRenderer$Accessor",
     "MixinLightmapTextureManager",
     "MixinMouse",
-    "special.MixinAbstractClientPlayerEntity"
+    "MixinTextRenderer",
+    "special.FrameBufferAccessor",
+    "special.MixinAbstractClientPlayerEntity",
+    "special.MixinGlStateManager"
   ],
   "injectors": {
     "defaultRequire": 1

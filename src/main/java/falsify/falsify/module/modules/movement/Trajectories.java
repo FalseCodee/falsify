@@ -25,7 +25,7 @@ public class Trajectories extends Module {
     BooleanSetting doVert = new BooleanSetting("Do Vertical", true);
 
     public Trajectories() {
-        super("Trajectories", "Navigates to coordinates, used by other mods.", Category.PLAYER, -1);
+        super("Trajectories", "Navigates to coordinates, used by other mods.", true, Category.PLAYER, -1);
         settings.add(kp);
         settings.add(ki);
         settings.add(kd);

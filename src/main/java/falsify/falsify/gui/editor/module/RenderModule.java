@@ -31,6 +31,9 @@ public abstract class RenderModule<T extends DisplayModule<?>> extends Clickable
 
     @Override
     public boolean handleClick(double x, double y, int button) {
+        double sf = getScaleFactor();
+        x /= sf;
+        y /= sf;
         if(scaleModule.handleClick(x, y, button)) return true;
         if(isHovering(x, y)){
             if(!dragging) {
@@ -47,10 +50,16 @@ public abstract class RenderModule<T extends DisplayModule<?>> extends Clickable
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         context.getMatrices().push();
         RenderHelper.convertToScale(context.getMatrices(), scale);
+        context.getMatrices().translate(x,y,0);
+        double sf = getScaleFactor();
         renderModule(context, mouseX, mouseY, delta);
         scaleModule.setX(this.x + this.width-5+2.5*scale);
         scaleModule.setY(this.y + this.height-5+2.5*scale);
-        if(Falsify.mc.currentScreen != null && Falsify.mc.currentScreen.getClass() == EditGUI.class) scaleModule.render(context, mouseX, mouseY, delta);
+
+        if(Falsify.mc.currentScreen != null && Falsify.mc.currentScreen.getClass() == EditGUI.class){
+            context.getMatrices().translate(this.width-5+2.5*scale, this.height-5+2.5*scale, 0);
+            scaleModule.render(context, mouseX, mouseY, delta);
+        }
         context.getMatrices().pop();
 
     }
@@ -86,6 +95,11 @@ public abstract class RenderModule<T extends DisplayModule<?>> extends Clickable
 
     @Override
     public boolean onDrag(double x, double y, int button, double dx, double dy) {
+        double sf = getScaleFactor();
+        x /= sf;
+        y /= sf;
+        dx /= sf;
+        dy /= sf;
         x /= scale;
         y /= scale;
         dx /= scale;

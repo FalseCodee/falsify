@@ -15,7 +15,7 @@ public class RenderHelper {
     public static double SCALE = 2.0;
 
     public static double getScaleFactor() {
-        return 1/WINDOW.getScaleFactor() * SCALE;
+        return SCALE/WINDOW.getScaleFactor();
     }
 
     public static void convertToScale(MatrixStack matrices) {
@@ -26,7 +26,7 @@ public class RenderHelper {
     }
 
     public static double convertToScale(double input, double scale) {
-        return input * 1 / (getScaleFactor() * getScaleFactor()) * scale;
+        return input / getScaleFactor() * scale;
     }
 
     public static double convertToScale(double input) {

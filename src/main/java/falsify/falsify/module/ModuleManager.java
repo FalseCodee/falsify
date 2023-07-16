@@ -48,6 +48,9 @@ public class ModuleManager {
         modules.add(new FaceCover());
         modules.add(new Fullbright());
         modules.add(new Chams());
+        modules.add(new BlurModule());
+        modules.add(new ProtocolChanger());
+        modules.add(new Zoom());
 
         modules.add(new FPSModule());
         modules.add(new TimeModule());

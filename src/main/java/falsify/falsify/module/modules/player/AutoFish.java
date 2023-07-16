@@ -9,11 +9,10 @@ import falsify.falsify.utils.Timer;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket;
 import net.minecraft.sound.SoundEvents;
-import org.lwjgl.glfw.GLFW;
 
 public class AutoFish extends Module {
     public AutoFish() {
-        super("Auto Fish", "Automatically Fish", Category.PLAYER, -1);
+        super("Auto Fish", "Automatically Fish", true, Category.PLAYER, -1);
     }
 
     final Timer timer = new Timer();

@@ -43,6 +43,6 @@ public class ScaleModule extends Clickable implements Draggable {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        drawSmoothRect(new Color(200,200,200), context.getMatrices(), (float) x, (float) y, (float) (x + width ), (float) (y + height ), (float) (width  / 2), new int[] {10, 10, 10, 10});
+        drawSmoothRect(new Color(200,200,200), context.getMatrices(), (float) 0, (float) 0, (float) (width), (float) (height), (float) (width  / 2), new int[] {10, 10, 10, 10});
     }
 }

@@ -7,7 +7,7 @@ import falsify.falsify.module.Module;
 
 public class AutoWalk extends Module {
     public AutoWalk() {
-        super("Auto Walk", "Automatically Walk", Category.MOVEMENT, -1);
+        super("Auto Walk", "Automatically Walk", true, Category.MOVEMENT, -1);
     }
 
     @Override

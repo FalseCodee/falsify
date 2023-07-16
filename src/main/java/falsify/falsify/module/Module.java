@@ -11,21 +11,23 @@ import java.util.List;
 public class Module {
     public final String name;
     public final String description;
+    public final boolean isCheat;
     public boolean toggled;
     public final KeybindSetting keybind;
     public final Category category;
     public static final MinecraftClient mc = MinecraftClient.getInstance();
     public final List<Setting<?>> settings = new ArrayList<>();
 
-    public Module(String name, String description, Category category, int keyCode){
+    public Module(String name, String description, boolean isCheat, Category category, int keyCode){
         this.name = name;
         this.description = description;
+        this.isCheat = isCheat;
         this.category = category;
         keybind = new KeybindSetting("Keybind", keyCode);
         settings.add(keybind);
     }
-    public Module(String name, String description, Category category, int keyCode, boolean enabled){
-       this(name, description, category, keyCode);
+    public Module(String name, String description, Category category, int keyCode, boolean enabled, boolean isCheat){
+       this(name, description, isCheat, category, keyCode);
         if(enabled){
             this.toggle();
         }

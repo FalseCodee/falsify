@@ -10,7 +10,7 @@ import java.util.Calendar;
 
 public class TimeModule extends DisplayModule<TimeRenderModule> {
     public TimeModule() {
-        super("Current Time", "Shows the current time", new TimeRenderModule(4*105.0, 0.0, 100, 20), Category.RENDER, -1);
+        super("Current Time", "Shows the current time", new TimeRenderModule(4*105.0, 0.0, 100, 20), Category.RENDER, -1, false);
         renderModule.setModule(this);
         renderModule.setScale(2);
     }
@@ -24,8 +24,8 @@ class TimeRenderModule extends RenderModule<TimeModule> {
 
     @Override
     public void renderModule(DrawContext context, int mouseX, int mouseY, float delta) {
-        drawRect(module.getBackgroundColor(), context.getMatrices(), (float) getX(), (float) getY(), (float) (getX() + width), (float) (getY() + height));
-        context.drawCenteredTextWithShadow(Falsify.mc.textRenderer, getTime(), (int) getX() + (int) width/2, (int) getY() + (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, module.getTextColor().getRGB());
+        drawRect(module.getBackgroundColor(), context.getMatrices(), (float) 0, (float) 0, (float) (width), (float) (height));
+        context.drawCenteredTextWithShadow(Falsify.mc.textRenderer, getTime(), (int) width/2, (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, module.getTextColor().getRGB());
     }
 
     private String getTime() {

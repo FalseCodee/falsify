@@ -11,7 +11,7 @@ import net.minecraft.text.Text;
 public class ArmorModule extends DisplayModule<ArmorRenderModule> {
 
     public ArmorModule() {
-        super("Armor", "Shows the status of your equipped armor.", new ArmorRenderModule(3*105.0, 25.0, 3 + 20 + mc.textRenderer.getWidth("888") + 6, 20), Category.RENDER, -1);
+        super("Armor", "Shows the status of your equipped armor.", new ArmorRenderModule(3*105.0, 25.0, 3 + 20 + mc.textRenderer.getWidth("888") + 6, 20), Category.RENDER, -1, false);
         renderModule.setModule(this);
     }
 }
@@ -24,14 +24,14 @@ class ArmorRenderModule extends RenderModule<ArmorModule> {
 
     @Override
     public void renderModule(DrawContext context, int mouseX, int mouseY, float delta) {
-        drawRect(module.getBackgroundColor(), context.getMatrices(), (float) getX(), (float) getY(), (float) (getX() + width), (float) (getY() + height));
+        drawRect(module.getBackgroundColor(), context.getMatrices(), (float) 0, (float) 0, (float) (width), (float) (height));
         renderArmor(context);
     }
 
     private void renderArmor(DrawContext context) {
         int padding = 3;
-        double x = getX() + padding;
-        double y = getY() + padding;
+        double x = padding;
+        double y = padding;
 
         for(int i = Falsify.mc.player.getInventory().armor.size()-1; i >= 0; i--) {
             ItemStack itemStack = Falsify.mc.player.getInventory().armor.get(i);
