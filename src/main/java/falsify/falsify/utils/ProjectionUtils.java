@@ -39,8 +39,8 @@ public class ProjectionUtils {
         Vec3d relativePos = camera.getPos().subtract(pos);
         Vector4f vector4f = new Vector4f((float) relativePos.x, (float) relativePos.y, (float) relativePos.z, 1f);
 
-        transform(vector4f, modelMatrix);
-        transform(vector4f, projectionMatrix);
+        vector4f = vector4f.mul(modelMatrix);
+        vector4f = vector4f.mul(projectionMatrix);
 
         if (vector4f.w > 0.0f) {
             vector4f.x *= -100000;
@@ -52,15 +52,5 @@ public class ProjectionUtils {
         }
 
         return vector4f;
-    }
-
-    private static void transform(Vector4f vec, Matrix4f matrix) {
-        float x = vec.x;
-        float y = vec.y;
-        float z = vec.z;
-        vec.x = x * matrix.m00() + y * matrix.m10() + z * matrix.m20() + matrix.m30();
-        vec.y = x * matrix.m01() + y * matrix.m11() + z * matrix.m21() + matrix.m31();
-        vec.z = x * matrix.m02() + y * matrix.m12() + z * matrix.m22() + matrix.m32();
-        vec.w = x * matrix.m03() + y * matrix.m13() + z * matrix.m23() + matrix.m33();
     }
 }

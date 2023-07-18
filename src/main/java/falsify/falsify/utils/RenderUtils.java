@@ -1,9 +1,10 @@
 package falsify.falsify.utils;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import falsify.falsify.Falsify;
 import falsify.falsify.listeners.events.EventRender3d;
+import falsify.falsify.utils.fonts.FontRenderer;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.*;
@@ -19,7 +20,6 @@ import static org.lwjgl.opengl.GL32C.*;
 
 
 import java.awt.*;
-import java.util.List;
 import java.util.SortedMap;
 
 import static falsify.falsify.Falsify.mc;
@@ -29,9 +29,7 @@ public class RenderUtils {
     public static VertexConsumerProvider.Immediate vertexConsumerProvider;
 
     public static void init() {
-        SortedMap<RenderLayer, BufferBuilder> buffers = Util.make(new Object2ObjectLinkedOpenHashMap<>(), (map) -> {
-            map.put(RenderLayer.getText(Style.DEFAULT_FONT_ID), new BufferBuilder(RenderLayer.getGui().getExpectedBufferSize()));
-        });
+        SortedMap<RenderLayer, BufferBuilder> buffers = Util.make(new Object2ObjectLinkedOpenHashMap<>(), (map) -> map.put(RenderLayer.getText(Style.DEFAULT_FONT_ID), new BufferBuilder(RenderLayer.getGui().getExpectedBufferSize())));
         vertexConsumerProvider = VertexConsumerProvider.immediate(buffers, new BufferBuilder(256));
     }
 
@@ -55,25 +53,27 @@ public class RenderUtils {
         }
     }
 
-    public static void AlignText(DrawContext context, String text, int x1, int y1, int color, Alignment alignment) {
-        TextRenderer tr = MinecraftClient.getInstance().textRenderer;
+    public static void AlignText(DrawContext context, String text, float x1, float y1, Color color, Alignment alignment) {
+        FontRenderer fr = Falsify.fontRenderer;
+        MatrixStack matrices = context.getMatrices();
         switch (alignment) {
-            case LEFT -> context.drawTextWithShadow(tr, text, x1, y1, color);
-            case RIGHT -> context.drawTextWithShadow(tr, text, mc.getWindow().getScaledWidth() - x1 - tr.getWidth(text), y1, color);
-            case XCENTER -> context.drawTextWithShadow(tr, text, mc.getWindow().getScaledWidth() / 2 + x1, y1, color);
-            case YCENTER -> context.drawTextWithShadow(tr, text, x1, mc.getWindow().getScaledHeight() / 2 + y1, color);
-            case CENTER -> context.drawTextWithShadow(tr, text, mc.getWindow().getScaledWidth() / 2 + x1, mc.getWindow().getScaledHeight() / 2 + y1, color);
+            case LEFT -> fr.drawString(matrices, text, x1, y1, color, true);
+            case RIGHT -> fr.drawString(matrices, text, mc.getWindow().getScaledWidth() - x1 - fr.getStringWidth(text), y1, color, true);
+            case XCENTER -> fr.drawString(matrices, text, mc.getWindow().getScaledWidth() / 2f + x1, y1, color, true);
+            case YCENTER -> fr.drawString(matrices, text, x1, mc.getWindow().getScaledHeight() / 2f + y1, color, true);
+            case CENTER -> fr.drawString(matrices, text, mc.getWindow().getScaledWidth() / 2f + x1, mc.getWindow().getScaledHeight() / 2f + y1, color, true);
         }
     }
 
-    public static void AlignCenteredText(DrawContext context, String text, int x1, int y1, int color, Alignment alignment) {
-        TextRenderer tr = mc.textRenderer;
+    public static void AlignCenteredText(DrawContext context, String text, float x1, float y1, Color color, Alignment alignment) {
+        FontRenderer fr = Falsify.fontRenderer;
+        MatrixStack matrices = context.getMatrices();
         switch (alignment) {
-            case LEFT -> context.drawCenteredTextWithShadow(tr, text, x1, y1, color);
-            case RIGHT -> context.drawCenteredTextWithShadow(tr, text, mc.getWindow().getScaledWidth() - x1, y1, color);
-            case XCENTER -> context.drawCenteredTextWithShadow(tr, text, mc.getWindow().getScaledWidth() / 2 + x1, y1, color);
-            case YCENTER -> context.drawCenteredTextWithShadow(tr, text, x1, mc.getWindow().getScaledHeight() / 2 + y1, color);
-            case CENTER -> context.drawCenteredTextWithShadow(tr, text, mc.getWindow().getScaledWidth() / 2 + x1, mc.getWindow().getScaledHeight() / 2 + y1, color);
+            case LEFT -> fr.drawCenteredString(matrices, text, x1, y1, color, true);
+            case RIGHT -> fr.drawCenteredString(matrices, text,mc.getWindow().getScaledWidth() - x1, y1, color, true);
+            case XCENTER -> fr.drawCenteredString(matrices, text, mc.getWindow().getScaledWidth() / 2f + x1, y1, color, true);
+            case YCENTER -> fr.drawCenteredString(matrices, text, x1, mc.getWindow().getScaledHeight() / 2f + y1, color, true);
+            case CENTER -> fr.drawCenteredString(matrices, text, mc.getWindow().getScaledWidth() / 2f + x1, mc.getWindow().getScaledHeight() / 2f + y1, color, true);
         }
     }
 
@@ -106,20 +106,6 @@ public class RenderUtils {
     public static void drawCenteredText(DrawContext context, TextRenderer textRenderer, String text, int centerX, int y, int color) {
         context.drawTextWithShadow(textRenderer, text, centerX - textRenderer.getWidth(text) / 2, y, color);
     }
-
-    public static void drawCenteredText(EventRender3d e, TextRenderer textRenderer, String text, int centerX, int y, int color) {
-        e.getMatrices().push();
-        MatrixStack matrices = e.getMatrices();
-        Camera camera = mc.gameRenderer.getCamera();
-        Vec3d vec3d = MathUtils.pitchYawToVector3d(camera.getPitch(), camera.getYaw());
-        double dist = camera.getPos().distanceTo(new Vec3d(0,0,0));
-        vec3d = vec3d.multiply(dist/2f);
-        matrices.translate(vec3d.x/-0.025, vec3d.y/-0.025, vec3d.z/-0.025);
-        textRenderer.draw(text, centerX - textRenderer.getWidth(text) / 2f, y, color, false, matrices.peek().getPositionMatrix(), e.getBufferBuilderStorage().getOutlineVertexConsumers(), TextRenderer.TextLayerType.NORMAL, 0, 250);
-
-        e.getMatrices().pop();
-    }
-
     public static void drawBoundingBox(Box bb, EventRender3d eventRender3d, Color color) {
         box(eventRender3d, new Vec3d[] {new Vec3d(bb.minX, bb.minY, bb.minZ),
                 new Vec3d(bb.maxX, bb.minY, bb.minZ),

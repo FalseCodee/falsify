@@ -13,9 +13,4 @@ public class EventPacketSend extends Event<EventPacketSend> {
     public Packet<?> getPacket() {
         return packet;
     }
-
-
-
-
-
 }

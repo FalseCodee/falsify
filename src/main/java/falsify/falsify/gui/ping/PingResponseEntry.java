@@ -12,18 +12,18 @@ import java.awt.*;
 public class PingResponseEntry extends Clickable {
 
     private final ServerInfo serverInfo;
-    private Clickable copyAddress;
-    private Clickable checkPlayers;
+    private final Clickable copyAddress;
+    private final Clickable checkPlayers;
 
     public boolean isActive = false;
-    Animation fade = new Animation(100, Animation.Type.EASE_IN_OUT);
+    private final Animation fade = new Animation(100, Animation.Type.EASE_IN_OUT);
 
     public PingResponseEntry(ServerInfo serverInfo, double x, double y) {
         super(x, y, 400, 46);
         this.serverInfo = serverInfo;
         this.copyAddress = new Clickable(5, 4, Falsify.mc.textRenderer.getWidth(serverInfo.address) + 10, 18) {
 
-            Animation fade = new Animation(100, Animation.Type.EASE_IN_OUT);
+            final Animation fade = new Animation(100, Animation.Type.EASE_IN_OUT);
             @Override
             public boolean handleClick(double x, double y, int button) {
                 if(isHovering(x, y)) {
@@ -48,7 +48,7 @@ public class PingResponseEntry extends Clickable {
 
         this.checkPlayers = new Clickable((width - 10 - Falsify.mc.textRenderer.getWidth("Players: " + serverInfo.playerCountLabel.getString())-5), 4, Falsify.mc.textRenderer.getWidth("Players: " + serverInfo.playerCountLabel.getString()) + 10, 18) {
 
-            Animation fade = new Animation(100, Animation.Type.EASE_IN_OUT);
+            final Animation fade = new Animation(100, Animation.Type.EASE_IN_OUT);
             @Override
             public boolean handleClick(double x, double y, int button) {
                 if(isHovering(x, y)) {

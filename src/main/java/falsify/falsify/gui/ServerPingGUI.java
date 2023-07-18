@@ -17,7 +17,7 @@ public class ServerPingGUI extends Screen {
 
     private TextFieldWidget serverAddressField;
 
-    private ArrayList<PingResponseEntry> responses;
+    private final ArrayList<PingResponseEntry> responses;
     public ServerPingGUI() {
         super(Text.of(""));
         responses = new ArrayList<>();
@@ -41,7 +41,7 @@ public class ServerPingGUI extends Screen {
         this.serverAddressField.setMaxLength(128);
         this.serverAddressField.setText("mc.hypixel.net");
         this.addSelectableChild(this.serverAddressField);
-        this.addDrawableChild(ButtonWidget.builder(Text.of("Ping Server"), button -> this.pingServer(serverAddressField.getText().toString())).dimensions( 200 + 10 + 10, 10, 70, 20).build());
+        this.addDrawableChild(ButtonWidget.builder(Text.of("Ping Server"), button -> this.pingServer(serverAddressField.getText())).dimensions( 200 + 10 + 10, 10, 70, 20).build());
         this.addDrawableChild(ButtonWidget.builder(Text.of("Port Scan"), button -> this.portScan(25400, 25600, 10)).dimensions( 200 + 10 + 10 + 75, 10, 70, 20).build());
     }
 
@@ -57,7 +57,7 @@ public class ServerPingGUI extends Screen {
     }
 
     public void portScan(int min, int max, int threads) {
-        String address = serverAddressField.getText().toString();
+        String address = serverAddressField.getText();
         if(address.contains(":")) address = address.substring(0, address.indexOf(":"));
 
         ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(threads);

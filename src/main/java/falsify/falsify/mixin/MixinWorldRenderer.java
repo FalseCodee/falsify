@@ -19,12 +19,10 @@ import java.awt.*;
 public class MixinWorldRenderer {
     @Shadow @Final private BufferBuilderStorage bufferBuilders;
 
-    @Shadow
-    private Framebuffer entityOutlinesFramebuffer;
     @Inject(method = "renderEntity", at = @At("HEAD"))
     private void EntityRenderPre(Entity entity, double cameraX, double cameraY, double cameraZ, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, CallbackInfo ci) {
         ESP esp = ModuleManager.getModule(ESP.class);
-        if(esp.isEnabled() && esp.isGlow() && esp.isValid(entity)) {
+        if(esp != null && esp.isEnabled() && esp.isGlow() && esp.isValid(entity)) {
             Color color = esp.getColor();
             bufferBuilders.getOutlineVertexConsumers().setColor(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
         }

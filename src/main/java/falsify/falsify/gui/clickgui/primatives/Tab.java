@@ -11,11 +11,10 @@ import net.minecraft.client.gui.DrawContext;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.stream.Collectors;
 
 public class Tab extends Clickable implements Draggable {
 
-    private final Animation scroll = new Animation(1000, Animation.Type.EASE_IN_OUT);
+    private final Animation scroll = new Animation(100, Animation.Type.EASE_IN_OUT);
     private final Category category;
     private boolean extended = false;
     private boolean dragging = false;
@@ -98,7 +97,7 @@ public class Tab extends Clickable implements Draggable {
         if(isExtended()) {
             scroll.rise();
             drawSmoothRect(scroll.color(category.getColor().darker(), category.getColor()), context.getMatrices(), (int) this.x, (int) this.y, (int) this.x + (int) this.width, (int) this.y + (int) this.height, 2, new int[] {0, 5, 5, 0});
-            Falsify.fontRenderer.drawCenteredString(context.getMatrices(), category.getName(), (float) (x + width/2), (float) (y + height/2 - Falsify.fontRenderer.getStringHeight(category.getName())/2), Color.WHITE);
+            Falsify.fontRenderer.drawCenteredString(context.getMatrices(), category.getName(), (float) (x + width/2), (float) (y + height/2 - Falsify.fontRenderer.getStringHeight(category.getName())/2), Color.WHITE, true);
             int i = 1;
             if(scroll.getProgress() != 1.0) enableScissor((int) (x*sf), (int) ((y+height)*sf), (int) ((x+width)*sf), (int) ((y+height + (moduleHeight*modules.size()*scroll.run()) + 1)*sf));
             for(ModuleItem moduleItem : modules) {
@@ -114,7 +113,7 @@ public class Tab extends Clickable implements Draggable {
         } else {
             scroll.lower();
             drawSmoothRect(category.getColor().darker(), context.getMatrices(), (int) this.x, (int) this.y, (int) this.x + (int) this.width, (int) this.y + (int) this.height, 2, new int[] {5, 5, 5, 5});
-            Falsify.fontRenderer.drawCenteredString(context.getMatrices(), category.getName(), (float) (x + width/2), (float) (y + height/2 - Falsify.fontRenderer.getStringHeight(category.getName())/2), Color.WHITE);
+            Falsify.fontRenderer.drawCenteredString(context.getMatrices(), category.getName(), (float) (x + width/2), (float) (y + height/2 - Falsify.fontRenderer.getStringHeight(category.getName())/2), Color.WHITE, true);
             if(scroll.run() != 0) {
                 int i = 1;
                 enableScissor((int) (x*sf), (int) ((y+height)*sf), (int) ((x+width)*sf), (int) ((y+height + (moduleHeight*modules.size()*scroll.run()) + 1)*sf));

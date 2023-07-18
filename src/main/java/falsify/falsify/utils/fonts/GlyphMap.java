@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 class GlyphMap {
-    private static final int PADDING = 5; // 5 px padding per char
+    private static final int PADDING = 6; // 6 px padding per char
     final char fromIncl, toExcl;
     final Font[] font;
     final Identifier bindToTexture;
@@ -104,7 +104,7 @@ class GlyphMap {
         g2d.fillRect(0, 0, width, height);
         g2d.setColor(Color.WHITE);
 
-        g2d.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_OFF);
+        g2d.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
         g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 

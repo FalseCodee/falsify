@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class FollowerGuy extends Clickable {
     private Vec3d inertia = new Vec3d(0.0, 0.0, 0.0);
-    public double mass = 10;
+    public double mass;
     public FollowerGuy(double x, double y) {
         super(x, y, 5, 5);
         setInertia(new Vec3d(Math.random(), Math.random(), 0));

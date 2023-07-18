@@ -16,6 +16,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.util.Session;
 import net.minecraft.entity.Entity;
+import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -53,6 +54,7 @@ public class MixinMinecraft {
         Falsify.onEvent(e);
     }
 
+    @Unique
     private boolean hasRan = false;
 
     @Inject(method = "scheduleStop", at = @At("HEAD"))
@@ -72,7 +74,7 @@ public class MixinMinecraft {
     @Inject(method = "hasOutline", at = @At("HEAD"), cancellable = true)
     private void hasOutline(Entity entity, CallbackInfoReturnable<Boolean> cir) {
         ESP esp = ModuleManager.getModule(ESP.class);
-        if(esp.isEnabled() && esp.isGlow() && esp.isValid(entity)) {
+        if(esp != null && esp.isEnabled() && esp.isGlow() && esp.isValid(entity)) {
             cir.setReturnValue(true);
         }
     }

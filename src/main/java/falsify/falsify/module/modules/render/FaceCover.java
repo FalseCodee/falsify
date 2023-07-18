@@ -6,6 +6,7 @@ import falsify.falsify.listeners.Event;
 import falsify.falsify.listeners.events.EventPacketSend;
 import falsify.falsify.listeners.events.EventRender;
 import falsify.falsify.listeners.events.EventUpdate;
+import falsify.falsify.mixin.MixinGameRenderer;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
 import falsify.falsify.module.modules.combat.Aimbot;
@@ -103,7 +104,8 @@ public class FaceCover extends Module {
     }
 
     public void drawFace(DrawContext context, float tickDelta, LivingEntity entity) {
-        float scale = (float) (faceScale.getValue().floatValue()*1/mc.gameRenderer.getCamera().getPos().distanceTo(MathUtils.interpolateEntity(entity, tickDelta)));
+        double fov = 1/((MixinGameRenderer.Accessor)mc.gameRenderer).getCurrentFov(mc.gameRenderer.getCamera(), tickDelta, true)*90;
+        float scale = (float) (fov*faceScale.getValue().floatValue()*1/mc.gameRenderer.getCamera().getPos().distanceTo(MathUtils.interpolateEntity(entity, tickDelta)));
         Vec2f pos = ProjectionUtils.toScreenXY(MathUtils.getInterpolatedPos(entity, tickDelta).add(0, entity.getEyeHeight(entity.getPose()), 0));
         MatrixStack matrices = context.getMatrices();
         matrices.push();

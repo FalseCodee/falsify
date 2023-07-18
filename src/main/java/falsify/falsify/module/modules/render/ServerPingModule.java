@@ -22,6 +22,9 @@ class ServerPingRenderModule extends RenderModule<ServerPingModule> {
     @Override
     public void renderModule(DrawContext context, int mouseX, int mouseY, float delta) {
         drawRect(module.getBackgroundColor(), context.getMatrices(), (float) 0, (float) 0, (float) (width), (float) (height));
-        context.drawCenteredTextWithShadow(Falsify.mc.textRenderer, (Falsify.mc.getNetworkHandler() == null) ? "Unknown" : "Ping: " + Falsify.mc.getNetworkHandler().getPlayerListEntry(Falsify.mc.player.getUuid()).getLatency() + " ms", (int) width/2, (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, module.getTextColor().getRGB());
+        int ping;
+        if(Falsify.mc.getNetworkHandler() == null || Falsify.mc.player == null || Falsify.mc.getNetworkHandler().getPlayerListEntry(Falsify.mc.player.getUuid()) == null) ping = 0;
+        else ping = Falsify.mc.getNetworkHandler().getPlayerListEntry(Falsify.mc.player.getUuid()).getLatency();
+        context.drawCenteredTextWithShadow(Falsify.mc.textRenderer, "Ping: " + ping + " ms", (int) width/2, (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, module.getTextColor().getRGB());
     }
 }

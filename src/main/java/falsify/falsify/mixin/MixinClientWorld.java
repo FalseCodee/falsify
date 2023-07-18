@@ -17,7 +17,7 @@ import java.util.function.Supplier;
 public class MixinClientWorld {
 
     @Inject(method = "<init>", at=@At("TAIL"))
-    public void init(ClientPlayNetworkHandler networkHandler, ClientWorld.Properties properties, RegistryKey registryRef, RegistryEntry dimensionTypeEntry, int loadDistance, int simulationDistance, Supplier profiler, WorldRenderer worldRenderer, boolean debugWorld, long seed, CallbackInfo ci) {
+    public void init(ClientPlayNetworkHandler networkHandler, ClientWorld.Properties properties, RegistryKey<?> registryRef, RegistryEntry<?> dimensionTypeEntry, int loadDistance, int simulationDistance, Supplier<?> profiler, WorldRenderer worldRenderer, boolean debugWorld, long seed, CallbackInfo ci) {
         Falsify.configManager.loadModules();
     }
 }

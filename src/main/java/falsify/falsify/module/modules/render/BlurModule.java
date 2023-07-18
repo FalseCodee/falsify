@@ -30,7 +30,7 @@ public class BlurModule extends Module {
 
     private final Timer timer = new Timer();
 
-    Animation fadeInOut = new Animation(250, Animation.Type.EASE_IN_OUT);
+    private final Animation fadeInOut = new Animation(250, Animation.Type.EASE_IN_OUT);
     public BlurModule() {
         super("Blur", "Blurs the background", false, Category.RENDER, -1);
         settings.add(radius);

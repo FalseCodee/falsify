@@ -74,9 +74,7 @@ public class ChatModuleUtils {
 
     public static boolean sendMessage(String chatText, boolean addToHistory) {
         chatText = normalize(chatText);
-        if (chatText.isEmpty()) {
-            return true;
-        } else {
+        if (!chatText.isEmpty()) {
             if (addToHistory) {
                 Falsify.mc.inGameHud.getChatHud().addToMessageHistory(chatText);
             }
@@ -87,8 +85,8 @@ public class ChatModuleUtils {
                 Falsify.mc.player.networkHandler.sendChatMessage(chatText);
             }
 
-            return true;
         }
+        return true;
     }
 
      public static String normalize(String chatText) {

@@ -1,6 +1,7 @@
 package falsify.falsify.module.modules.render;
 
 import falsify.falsify.Falsify;
+import falsify.falsify.gui.editor.module.Anchor;
 import falsify.falsify.gui.editor.module.RenderModule;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.DisplayModule;
@@ -30,16 +31,17 @@ class ArmorRenderModule extends RenderModule<ArmorModule> {
 
     private void renderArmor(DrawContext context) {
         int padding = 3;
-        double x = padding;
         double y = padding;
 
         for(int i = Falsify.mc.player.getInventory().armor.size()-1; i >= 0; i--) {
             ItemStack itemStack = Falsify.mc.player.getInventory().armor.get(i);
             if(itemStack.isEmpty()) continue;
-            context.drawItem(itemStack, (int) x, (int) y);
-            context.drawTextWithShadow(Falsify.mc.textRenderer, Text.of("" + (itemStack.getMaxDamage() - itemStack.getDamage())), (int)x + 20, (int)y + Falsify.mc.textRenderer.fontHeight/2, module.getTextColor().getRGB());
+            context.drawItem(itemStack, (int) (double) padding, (int) y);
+            context.drawTextWithShadow(Falsify.mc.textRenderer, Text.of("" + (itemStack.getMaxDamage() - itemStack.getDamage())), (int) (double) padding + 20, (int)y + Falsify.mc.textRenderer.fontHeight/2, module.getTextColor().getRGB());
             y += 16 + padding;
         }
-        this.height = Math.max(y - this.y, 16 + padding);
+        Anchor anchor = getAnchor();
+        if(anchor == Anchor.BOTTOM_LEFT || anchor == Anchor.BOTTOM_CENTER || anchor == Anchor.BOTTOM_RIGHT) this.relativeY -=
+        this.height = Math.max(y, 16 + padding);
     }
 }

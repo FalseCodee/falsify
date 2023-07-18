@@ -6,7 +6,6 @@ import falsify.falsify.module.Category;
 import falsify.falsify.module.DisplayModule;
 import falsify.falsify.utils.LegacyIdentifier;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.util.Identifier;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -40,6 +39,6 @@ class TitleRenderModule extends RenderModule<TitleModule> {
             return;
         }
         drawRect(module.getBackgroundColor(), context.getMatrices(), (float) 0, (float) 0, (float) (width), (float) (height));
-        context.drawTexture(title, (int)0,(int)0, 0,0,(int)width, (int)height, (int)width, (int)height);
+        context.drawTexture(title, 0, 0, 0,0,(int)width, (int)height, (int)width, (int)height);
     }
 }

@@ -12,7 +12,7 @@ public class AutoRespawn extends Module {
     }
     public final Timer timer = new Timer();
     @Override
-    public void onEvent(Event event) {
+    public void onEvent(Event<?> event) {
          if(event instanceof EventUpdate){
              if(timer.hasTimeElapsed(100, true) && mc.player.isDead()) {
                  mc.player.requestRespawn();

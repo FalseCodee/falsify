@@ -1,21 +1,19 @@
 package falsify.falsify.module;
 
-import falsify.falsify.Falsify;
 import falsify.falsify.module.modules.chat.*;
 import falsify.falsify.module.modules.combat.Aimbot;
 import falsify.falsify.module.modules.combat.AutoClick;
 import falsify.falsify.module.modules.misc.*;
 import falsify.falsify.module.modules.movement.*;
 import falsify.falsify.module.modules.player.AutoFish;
-import falsify.falsify.module.modules.misc.AutoRespawn;
 import falsify.falsify.module.modules.player.FastPlace;
 import falsify.falsify.module.modules.render.*;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ModuleManager {
-    public static final CopyOnWriteArrayList<Module> modules = new CopyOnWriteArrayList<>();
-    public static final CopyOnWriteArrayList<Module> enabledModules = new CopyOnWriteArrayList<>();
+    public static CopyOnWriteArrayList<Module> modules = new CopyOnWriteArrayList<>();
+    public static CopyOnWriteArrayList<Module> enabledModules = new CopyOnWriteArrayList<>();
 
     public static void init(){
         modules.add(new GuiArrayList());
@@ -51,6 +49,8 @@ public class ModuleManager {
         modules.add(new BlurModule());
         modules.add(new ProtocolChanger());
         modules.add(new Zoom());
+        modules.add(new Quote());
+        modules.add(new SafeWalk());
 
         modules.add(new FPSModule());
         modules.add(new TimeModule());
@@ -76,5 +76,10 @@ public class ModuleManager {
             }
         }
         return null;
+    }
+
+    public static void disableCheats() {
+        modules = new CopyOnWriteArrayList<>(modules.stream().filter(module -> !module.isCheat).toList());
+        enabledModules = new CopyOnWriteArrayList<>(enabledModules.stream().filter(module -> !module.isCheat).toList());
     }
 }

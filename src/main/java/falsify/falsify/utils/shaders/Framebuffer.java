@@ -4,9 +4,6 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.TextureUtil;
 import falsify.falsify.Falsify;
 
-import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
-
 import static org.lwjgl.opengl.GL32C.*;
 
 public class Framebuffer {
@@ -42,7 +39,7 @@ public class Framebuffer {
         width = Falsify.mc.getWindow().getFramebufferWidth();
         height = Falsify.mc.getWindow().getFramebufferHeight();
 
-        GlStateManager._texImage2D(GL_TEXTURE_2D, 0, GL_RGB, Falsify.mc.getWindow().getFramebufferWidth(), Falsify.mc.getWindow().getFramebufferHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, (IntBuffer) null);
+        GlStateManager._texImage2D(GL_TEXTURE_2D, 0, GL_RGB, Falsify.mc.getWindow().getFramebufferWidth(), Falsify.mc.getWindow().getFramebufferHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, null);
         bind();
         GlStateManager._glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
 

@@ -36,15 +36,14 @@ public class BodyGuard extends Module {
 
     @Override
     public void onEvent(Event<?> event) {
+        if(mc.world == null) return;
        if(event instanceof EventUpdate) {
            if(target == null) {
-               ArrayList<Entity> rendered = Lists.newArrayList(Lists.newArrayList(mc.world.getEntities()).stream().filter(entity -> entity instanceof PlayerEntity && !entity.equals(mc.player) && mc.getNetworkHandler().getPlayerList().contains(mc.getNetworkHandler().getPlayerListEntry(((PlayerEntity) entity).getGameProfile().getId())))
-                       .collect(Collectors.toList()));
+               ArrayList<Entity> rendered = Lists.newArrayList(mc.world.getEntities()).stream().filter(entity -> entity instanceof PlayerEntity && !entity.equals(mc.player) && mc.getNetworkHandler().getPlayerList().contains(mc.getNetworkHandler().getPlayerListEntry(((PlayerEntity) entity).getGameProfile().getId()))).collect(Collectors.toCollection(Lists::newArrayList));
                Entity entity = rendered.stream().filter(entity1 -> entity1 instanceof PlayerEntity && ((PlayerEntity) entity1).getGameProfile().getName().equalsIgnoreCase(targetName)).findFirst().orElse(null);
                if (entity == null) return;
                target = new AimbotTarget((LivingEntity) entity);
            }
-           if(target == null) return;
            targetPos = getTargetPos(location.getMode());
 
            Trajectories.target = new AimbotTarget(targetPos);
@@ -59,8 +58,7 @@ public class BodyGuard extends Module {
                         return;
                     }
                     String user = packet.chatMessage().substring(packet.chatMessage().indexOf(" ")).trim();
-                    ArrayList<Entity> rendered = Lists.newArrayList(Lists.newArrayList(mc.world.getEntities()).stream().filter(entity -> entity instanceof PlayerEntity && !entity.equals(mc.player) && mc.getNetworkHandler().getPlayerList().contains(mc.getNetworkHandler().getPlayerListEntry(((PlayerEntity) entity).getGameProfile().getId())))
-                            .collect(Collectors.toList()));
+                    ArrayList<Entity> rendered = Lists.newArrayList(mc.world.getEntities()).stream().filter(entity -> entity instanceof PlayerEntity && !entity.equals(mc.player) && mc.getNetworkHandler().getPlayerList().contains(mc.getNetworkHandler().getPlayerListEntry(((PlayerEntity) entity).getGameProfile().getId()))).collect(Collectors.toCollection(Lists::newArrayList));
                     Entity entity = rendered.stream().filter(entity1 -> entity1 instanceof PlayerEntity && ((PlayerEntity) entity1).getGameProfile().getName().equalsIgnoreCase(user)).findFirst().orElse(null);
                     if(entity == null) {
                         mc.player.sendMessage(Text.of("Player not found."));

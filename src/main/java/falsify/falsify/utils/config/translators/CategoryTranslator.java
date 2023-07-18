@@ -1,6 +1,5 @@
 package falsify.falsify.utils.config.translators;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;

@@ -3,17 +3,13 @@ package falsify.falsify.utils.config;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.JsonSerializer;
-import com.google.gson.stream.JsonReader;
 import falsify.falsify.Falsify;
 import falsify.falsify.gui.clickgui.primatives.Tab;
 import falsify.falsify.module.Category;
 import falsify.falsify.utils.config.translators.CategoryTranslator;
 import falsify.falsify.utils.config.translators.ClickGuiTranslator;
-import org.apache.commons.io.IOUtils;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public class ConfigManager {

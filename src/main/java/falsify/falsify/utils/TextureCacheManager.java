@@ -123,6 +123,10 @@ public class TextureCacheManager {
         return textures.get(textureName);
     }
 
+    public ConcurrentHashMap<String, CompletableFuture<LegacyIdentifier>> getTextures() {
+        return textures;
+    }
+
     private static final char RND_START = 'a';
     private static final char RND_END = 'z';
     private static final Random RND = new Random();

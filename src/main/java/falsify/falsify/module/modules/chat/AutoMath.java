@@ -9,7 +9,6 @@ import falsify.falsify.utils.ChatModuleUtils;
 import falsify.falsify.utils.FalseRunnable;
 import falsify.falsify.utils.MessageExecutor;
 import net.minecraft.text.Text;
-import org.lwjgl.glfw.GLFW;
 
 import java.text.DecimalFormat;
 import java.util.Arrays;
@@ -135,13 +134,12 @@ public class AutoMath extends ChatModule {
             from = to;
             to = x;
         }
-        int stepCountX = stepCount;
         String[] arr = new String[stepCount];
         double step = (toY - fromY) / (stepCount-1.0);
-        double stepX = (to - from) / (stepCountX-1.0);
+        double stepX = (to - from) / (stepCount -1.0);
         double avgStep = (step + stepX) / 2;
         Arrays.fill(arr, "");
-        for(int i = 0; i < stepCountX; i++) {
+        for(int i = 0; i < stepCount; i++) {
             double x = from + stepX*i;
             double y = eval(function + "(" + x + ")", vars, funcs);
             for(int j = 0; j < stepCount; j++) {
@@ -221,7 +219,7 @@ public class AutoMath extends ChatModule {
                 if (eat('+')) return +parseFactor(); // unary plus
                 if (eat('-')) return -parseFactor(); // unary minus
 
-                double x = 0;
+                double x;
                 int startPos = this.pos;
                 if (eat('(')) { // parentheses
                     x = parseExpression();

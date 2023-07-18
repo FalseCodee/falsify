@@ -11,9 +11,9 @@ import net.minecraft.item.Items;
 
 public class DupeDrop extends Module {
 
-    RangeSetting delay = new RangeSetting("Delay", 500, 0, 2000, 10);
-    RangeSetting amount = new RangeSetting("Amount", 3, 1, 10, 1);
-    Timer timer = new Timer();
+    private final RangeSetting delay = new RangeSetting("Delay", 500, 0, 2000, 10);
+    private final RangeSetting amount = new RangeSetting("Amount", 3, 1, 10, 1);
+    private final Timer timer = new Timer();
 
     boolean refilling = false;
     int index = 0;
@@ -24,7 +24,7 @@ public class DupeDrop extends Module {
     }
 
     @Override
-    public void onEvent(Event event) {
+    public void onEvent(Event<?> event) {
         if(event instanceof EventUpdate){
             if(!timer.hasTimeElapsed(delay.getValue().longValue(), true)) return;
 

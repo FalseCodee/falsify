@@ -13,8 +13,8 @@ import java.awt.*;
 public class DisplayModule<T extends RenderModule<?>> extends Module {
 
     protected final T renderModule;
-    protected ColorSetting backgroundColor = new ColorSetting("Background", 30,30,30,100);
-    protected ColorSetting textColor = new ColorSetting("Text", 255,255,255,255);
+    protected final ColorSetting backgroundColor = new ColorSetting("Background", 30,30,30,100);
+    protected final ColorSetting textColor = new ColorSetting("Text", 255,255,255,255);
 
     public DisplayModule(String name, String description, T renderModule, Category category, int keyCode, boolean isCheat){
         super(name, description, isCheat, category, keyCode);

@@ -6,7 +6,7 @@ import falsify.falsify.listeners.events.EventPacketRecieve;
 import falsify.falsify.listeners.events.EventPacketSend;
 import falsify.falsify.module.Module;
 import falsify.falsify.module.ModuleManager;
-import falsify.falsify.utils.PlayerDataManager;
+import falsify.falsify.utils.playerdata.PlayerDataManager;
 import falsify.falsify.utils.TextureCacheManager;
 import falsify.falsify.utils.config.ConfigManager;
 import falsify.falsify.utils.fonts.FontRenderer;
@@ -39,10 +39,10 @@ public class Falsify{
         Falsify.playerDataManager = new PlayerDataManager();
         ModuleManager.init();
         fonts = new Fonts();
-        fontRenderer = new FontRenderer(fonts.getFonts(), 9);
+        fontRenderer = new FontRenderer(fonts.getFonts(), 9, 2);
     }
 
-    public static void onEvent(Event e){
+    public static void onEvent(Event<?> e){
         if(e instanceof EventPacketRecieve || e instanceof EventPacketSend){
             for(Module module : ModuleManager.enabledModules){
                 module.onEvent(e);
@@ -65,8 +65,4 @@ public class Falsify{
 
         }
     }
-
-//    @Override
-//    public void onInitializeClient() {
-//    }
 }

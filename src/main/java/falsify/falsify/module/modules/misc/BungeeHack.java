@@ -24,7 +24,7 @@ public class BungeeHack extends Module {
     }
 
     @Override
-    public void onEvent(Event event) {
+    public void onEvent(Event<?> event) {
         if(event instanceof EventPacketSend){
             if(((EventPacketSend) event).getPacket() instanceof HandshakeC2SPacket){
                 HandshakeC2SPacket p = (HandshakeC2SPacket) ((EventPacketSend) event).packet;

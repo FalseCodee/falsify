@@ -48,16 +48,19 @@ public class FontRenderer implements Closeable {
     private Font[] fonts;
     private int previousGameScale = -1;
 
+    private float downScaleFactor;
+
     /**
      * Initializes a new FontRenderer with the specified fonts
      *
      * @param fonts  The fonts to use. The font renderer will go over each font in this array, search for the glyph, and render it if found. If no font has the specified glyph, it will draw the missing font symbol.
      * @param sizePx The size of the font in minecraft pixel units. One pixel unit = `guiScale` pixels
      */
-    public FontRenderer(Font[] fonts, float sizePx) {
+    public FontRenderer(Font[] fonts, float sizePx, float downScaleFactor) {
         Preconditions.checkArgument(fonts.length > 0, "fonts.length == 0");
-        this.originalSize = sizePx;
-        init(fonts, sizePx);
+        this.originalSize = sizePx * downScaleFactor;
+        this.downScaleFactor = downScaleFactor;
+        init(fonts, sizePx * downScaleFactor);
     }
 
     private static int floorNearestMulN(int x, int n) {
@@ -132,7 +135,7 @@ public class FontRenderer implements Closeable {
      * @param color     The color to draw
 
      */
-    public void drawString(MatrixStack stack, String s, float x, float y, Color color) {
+    public void drawString(MatrixStack stack, String s, float x, float y, Color color, boolean shadow) {
         float r = color.getRed() / 255f;
         float g = color.getGreen() / 255f;
         float b = color.getBlue() / 255f;
@@ -141,7 +144,7 @@ public class FontRenderer implements Closeable {
         float r2 = r, g2 = g, b2 = b;
         stack.push();
         stack.translate(x, y, 0);
-        stack.scale(1f / this.scaleMul, 1f / this.scaleMul, 1f);
+        stack.scale(1f / this.scaleMul / downScaleFactor, 1f / this.scaleMul / downScaleFactor, 1f);
 
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
@@ -212,7 +215,12 @@ public class FontRenderer implements Closeable {
                 float v1 = (float) glyph.v() / owner.height;
                 float u2 = (float) (glyph.u() + glyph.width()) / owner.width;
                 float v2 = (float) (glyph.v() + glyph.height()) / owner.height;
-
+                if(shadow) {
+                    bb.vertex(mat, xo + 0 + 2, yo + h + 2, 0).texture(u1, v2).color(0, 0, 0, a).next();
+                    bb.vertex(mat, xo + w + 2, yo + h + 2, 0).texture(u2, v2).color(0, 0, 0, a).next();
+                    bb.vertex(mat, xo + w + 2, yo + 0 + 2, 0).texture(u2, v1).color(0, 0, 0, a).next();
+                    bb.vertex(mat, xo + 0 + 2, yo + 0 + 2, 0).texture(u1, v1).color(0, 0, 0, a).next();
+                }
                 bb.vertex(mat, xo + 0, yo + h, 0).texture(u1, v2).color(cr, cg, cb, a).next();
                 bb.vertex(mat, xo + w, yo + h, 0).texture(u2, v2).color(cr, cg, cb, a).next();
                 bb.vertex(mat, xo + w, yo + 0, 0).texture(u2, v1).color(cr, cg, cb, a).next();
@@ -234,8 +242,8 @@ public class FontRenderer implements Closeable {
      * @param y     Y coordinate of the text to draw
      * @param color     The color to draw
      */
-    public void drawCenteredString(MatrixStack stack, String s, float x, float y, Color color) {
-        drawString(stack, s, x - getStringWidth(s) / 2f, y, color);
+    public void drawCenteredString(MatrixStack stack, String s, float x, float y, Color color, boolean shadow) {
+        drawString(stack, s, x - getStringWidth(s) / 2f, y, color, shadow);
     }
 
     /**
@@ -255,7 +263,7 @@ public class FontRenderer implements Closeable {
                 continue;
             }
             Glyph glyph = locateGlyph1(c1);
-            currentLine += glyph.width() / (float) this.scaleMul;
+            currentLine += glyph.width() / (float) this.scaleMul / downScaleFactor;
         }
         return Math.max(currentLine, maxPreviousLines);
     }
@@ -277,14 +285,14 @@ public class FontRenderer implements Closeable {
             if (c1 == '\n') {
                 if (currentLine == 0) {
                     // empty line, assume space
-                    currentLine = locateGlyph1(' ').height() / (float) this.scaleMul;
+                    currentLine = locateGlyph1(' ').height() / (float) this.scaleMul / downScaleFactor;
                 }
                 previous += currentLine;
                 currentLine = 0;
                 continue;
             }
             Glyph glyph = locateGlyph1(c1);
-            currentLine = Math.max(glyph.height() / (float) this.scaleMul, currentLine);
+            currentLine = Math.max(glyph.height() / (float) this.scaleMul / downScaleFactor, currentLine);
         }
         return currentLine + previous;
     }

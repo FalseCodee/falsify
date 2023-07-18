@@ -1,9 +1,7 @@
 package falsify.falsify.mixin.special;
 
-import com.mojang.authlib.GameProfile;
 import falsify.falsify.Falsify;
 import falsify.falsify.utils.Cape;
-import falsify.falsify.utils.ChatModuleUtils;
 import falsify.falsify.utils.LegacyIdentifier;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.PlayerListEntry;
@@ -11,15 +9,11 @@ import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 
 @Mixin(AbstractClientPlayerEntity.class)
 public abstract class MixinAbstractClientPlayerEntity {

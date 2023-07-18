@@ -1,22 +1,9 @@
 package falsify.falsify.utils;
 
 import falsify.falsify.Falsify;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.AbstractClientPlayerEntity;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.scoreboard.Scoreboard;
-import net.minecraft.scoreboard.ScoreboardObjective;
-import net.minecraft.scoreboard.ScoreboardPlayerScore;
-import net.minecraft.screen.ScreenTexts;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import org.joml.Vector2d;
-
-import java.util.Objects;
 
 public class MathUtils {
     public static float clamp(float val, float min, float max) {
@@ -95,14 +82,6 @@ public class MathUtils {
         double posX = forward * speed * cos + side * speed * sin;
         double posZ = forward * speed * sin - side * speed * cos;
         return new double[] { posX, posZ };
-    }
-
-    public static void asInt(String s){
-        try{
-            int number = Integer.parseInt(s);
-            //not fail
-        }catch(NumberFormatException e){
-        }
     }
 
     public static double horizontalDistance(Entity entity) {

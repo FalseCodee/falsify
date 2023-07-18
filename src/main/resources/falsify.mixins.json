@@ -18,7 +18,6 @@
     "special.MixinFishingBobberEntity",
     "special.MixinHandshakeC2SPacket",
     "special.MixinMinecraft",
-    "special.MixinPlayerEntity",
     "special.MixinPlayerMoveC2SPacket"
   ],
   "client": [

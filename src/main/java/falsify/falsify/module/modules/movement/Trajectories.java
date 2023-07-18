@@ -14,15 +14,15 @@ public class Trajectories extends Module {
 
     private final Timer timer = new Timer();
     public static AimbotTarget target;
-    PID pid = new PID(1,0.3f,10);
-    RangeSetting kp = new RangeSetting("kp", 1, 0, 10, 0.01);
-    RangeSetting ki = new RangeSetting("ki", 0.3, 0, 10, 0.01);
-    RangeSetting kd = new RangeSetting("kd", 10, 0, 10, 0.01);
-    RangeSetting deadzone = new RangeSetting("deadzone", 1, 0, 5, 0.01);
-    RangeSetting mps = new RangeSetting("Mov.PS", 50, 0, 500, 1);
+    private final PID pid = new PID(1,0.3f,10);
+    private final RangeSetting kp = new RangeSetting("kp", 1, 0, 10, 0.01);
+    private final RangeSetting ki = new RangeSetting("ki", 0.3, 0, 10, 0.01);
+    private final RangeSetting kd = new RangeSetting("kd", 10, 0, 10, 0.01);
+    private final RangeSetting deadzone = new RangeSetting("deadzone", 1, 0, 5, 0.01);
+    private final RangeSetting mps = new RangeSetting("Mov.PS", 50, 0, 500, 1);
 
-    BooleanSetting sneak = new BooleanSetting("Sneak Close", true);
-    BooleanSetting doVert = new BooleanSetting("Do Vertical", true);
+    private final BooleanSetting sneak = new BooleanSetting("Sneak Close", true);
+    private final BooleanSetting doVert = new BooleanSetting("Do Vertical", true);
 
     public Trajectories() {
         super("Trajectories", "Navigates to coordinates, used by other mods.", true, Category.PLAYER, -1);

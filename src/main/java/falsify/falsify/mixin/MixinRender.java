@@ -3,7 +3,6 @@ package falsify.falsify.mixin;
 import falsify.falsify.Falsify;
 import falsify.falsify.listeners.events.EventFrame;
 import falsify.falsify.listeners.events.EventRender;
-import falsify.falsify.utils.ProjectionUtils;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
 import org.spongepowered.asm.mixin.Mixin;

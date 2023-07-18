@@ -10,7 +10,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 
 public class NetworkUtils {
@@ -22,11 +21,7 @@ public class NetworkUtils {
         serverInfo.playerCountLabel = Text.empty();
         try {
             new MultiplayerServerListPinger().add(serverInfo, () -> runnable.run(serverInfo));
-        } catch (UnknownHostException var2) {
-            serverInfo.ping = -1L;
-            serverInfo.label = Text.of("Cannot Connect");
-            runnable.run(serverInfo);
-        } catch (Exception var3) {
+        } catch (Exception var2) {
             serverInfo.ping = -1L;
             serverInfo.label = Text.of("Cannot Connect");
             runnable.run(serverInfo);

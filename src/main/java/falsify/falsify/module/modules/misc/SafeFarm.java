@@ -22,8 +22,8 @@ import net.minecraft.util.math.Vec3i;
 
 public class SafeFarm extends Module {
 
-    RangeSetting dist = new RangeSetting("Distance", 25, 0, 50, 1);
-    RangeSetting dur = new RangeSetting("Duration", 200, 0, 1000, 5);
+    private final RangeSetting dist = new RangeSetting("Distance", 25, 0, 50, 1);
+    private final RangeSetting dur = new RangeSetting("Duration", 200, 0, 1000, 5);
 
     Timer timer = new Timer();
     public SafeFarm() {
@@ -57,10 +57,10 @@ public class SafeFarm extends Module {
                         Trajectories.target = new AimbotTarget(new Vec3d(x+0.5, mc.player.getY()+0.2, z+0.5));
                         plant = false;
                         return;
-                    } else if (block.getBlock() instanceof AirBlock && mc.player.getInventory().main.stream().anyMatch(is -> is.getItem().isFood())){
-                        if(!mc.player.getInventory().getMainHandStack().getItem().isFood()) {
+                    } else if (block.getBlock() instanceof AirBlock && mc.player.getInventory().main.stream().anyMatch(is -> PlayerUtils.isFarmable(is.getItem()))){
+                        if(!PlayerUtils.isFarmable(mc.player.getInventory().getMainHandStack().getItem())) {
                             for (int p = 0; p < 8; p++) {
-                                if (mc.player.getInventory().main.get(p).getItem().isFood()) {
+                                if (PlayerUtils.isFarmable(mc.player.getInventory().main.get(p).getItem())) {
                                     mc.player.getInventory().selectedSlot = p;
                                     break;
                                 }

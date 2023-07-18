@@ -1,6 +1,5 @@
 package falsify.falsify.mixin;
 
-import falsify.falsify.Falsify;
 import net.minecraft.client.font.FontStorage;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.util.Identifier;

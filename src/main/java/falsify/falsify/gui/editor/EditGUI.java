@@ -1,7 +1,7 @@
 package falsify.falsify.gui.editor;
 
-import falsify.falsify.Falsify;
 import falsify.falsify.gui.editor.module.RenderModule;
+import falsify.falsify.gui.editor.module.Snapper;
 import falsify.falsify.module.DisplayModule;
 import falsify.falsify.module.ModuleManager;
 import falsify.falsify.utils.RenderHelper;
@@ -11,10 +11,13 @@ import net.minecraft.text.Text;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class EditGUI extends Screen {
-    List<RenderModule<?>> renderModules = new ArrayList<>();
+    private final List<RenderModule<?>> renderModules = new ArrayList<>();
+    private final Snapper snapper = new Snapper();
 
     public EditGUI() {
         super(Text.of(""));
@@ -27,6 +30,7 @@ public class EditGUI extends Screen {
         ModuleManager.modules.stream()
                 .filter(DisplayModule.class::isInstance)
                 .forEach(module -> renderModules.add(((DisplayModule<?>) module).getRenderModule()));
+        snapper.update(RenderHelper.WINDOW.getScaledWidth()/2f, RenderHelper.WINDOW.getScaledHeight()/2f);
     }
 
     @Override
@@ -54,7 +58,18 @@ public class EditGUI extends Screen {
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
         for(RenderModule<?> renderModule : renderModules) {
             if(renderModule.onDrag(mouseX, mouseY, button, deltaX, deltaY)) {
+                if(!renderModule.isDragging()) return true;
+                boolean xSnap = renderModule.horizontalSnap(snapper);
+                boolean ySnap = renderModule.verticalSnap(snapper);
+                List<RenderModule<?>> sorted = new ArrayList<>(renderModules.stream().filter(renderModule1 -> renderModule1 != renderModule).sorted(Comparator.comparingDouble(renderModule1 -> Math.pow(renderModule.getX() - renderModule1.getX(), 2) + Math.pow(renderModule.getY() - renderModule1.getY(), 2))).toList());
 
+                for(int i = 0; i < sorted.size(); i++) {
+                    RenderModule<?> renderModule2 = sorted.get(i);
+                    renderModule2.getSnapper().update();
+                    if(!xSnap) xSnap = renderModule.horizontalSnap(renderModule2.getSnapper());
+                    if(!ySnap) ySnap = renderModule.verticalSnap(renderModule2.getSnapper());
+                    if(xSnap && ySnap) break;
+                }
                 return true;
             }
         }

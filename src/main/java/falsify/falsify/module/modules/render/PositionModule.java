@@ -2,12 +2,9 @@ package falsify.falsify.module.modules.render;
 
 import falsify.falsify.Falsify;
 import falsify.falsify.gui.editor.module.RenderModule;
-import falsify.falsify.mixin.special.MixinMinecraft;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.DisplayModule;
 import falsify.falsify.module.settings.ModeSetting;
-import falsify.falsify.utils.Alignment;
-import falsify.falsify.utils.RenderUtils;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.math.BlockPos;
 

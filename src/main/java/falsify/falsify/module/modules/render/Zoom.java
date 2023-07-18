@@ -53,6 +53,7 @@ public class Zoom extends Module {
                 inertia *= 0.5;
             }
             smooth.tick();
+            if(released) smooth.tick();
         }
         if(event instanceof EventMouse.Scroll e) {
             inertia += (zoomAmount.getValue()+1)*e.getVertical()/10;

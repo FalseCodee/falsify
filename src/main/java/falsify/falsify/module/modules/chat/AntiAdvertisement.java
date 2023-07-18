@@ -5,7 +5,6 @@ import falsify.falsify.module.Category;
 import falsify.falsify.module.ChatModule;
 import falsify.falsify.module.settings.BooleanSetting;
 import net.minecraft.text.Text;
-import org.lwjgl.glfw.GLFW;
 
 public class AntiAdvertisement extends ChatModule {
 

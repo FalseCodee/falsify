@@ -1,8 +1,10 @@
 package falsify.falsify.module.modules.render;
 
 import com.google.common.collect.Lists;
+import falsify.falsify.Falsify;
 import falsify.falsify.listeners.Event;
 import falsify.falsify.listeners.events.EventRender;
+import falsify.falsify.mixin.MixinGameRenderer;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
 import falsify.falsify.module.modules.combat.Aimbot;
@@ -10,6 +12,7 @@ import falsify.falsify.module.settings.BooleanSetting;
 import falsify.falsify.module.settings.ModeSetting;
 import falsify.falsify.module.settings.RangeSetting;
 import falsify.falsify.utils.*;
+import falsify.falsify.utils.fonts.FontRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
@@ -21,25 +24,34 @@ import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 
 import java.awt.*;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 public class EntityInfo extends Module {
 
-    private final ModeSetting type = new ModeSetting("Mode", "Cursor", "All", "Players", "Mobs", "Animals", "Cursor", "Aimbot");
+    private final ModeSetting type = new ModeSetting("Type", "Cursor", "Cursor", "Radius", "Aimbot");
+    private final ModeSetting filter = new ModeSetting("Filter", "Players", "All", "Players", "Mobs", "Animals");
     private final RangeSetting distance = new RangeSetting("Distance", 10, 1, 100, 0.5);
     private final BooleanSetting invisibility = new BooleanSetting("Show Invisible", true);
+    private final DecimalFormat format = new DecimalFormat("0.0");
 
     public EntityInfo() {
         super("Entity Info", "Shows information about a target.", true, Category.RENDER, -1);
         settings.add(type);
+        settings.add(filter);
         settings.add(distance);
         settings.add(invisibility);
     }
 
     @Override
-    public void onEnable() {}
+    public void onDisable() {
+        clearAvatarCache();
+    }
 
     @Override
     public void onEvent(Event<?> event) {
@@ -52,6 +64,14 @@ public class EntityInfo extends Module {
                 return;
             }
             List<Entity> entityList = Lists.newArrayList(mc.world.getEntities()).stream().filter(entity -> entity instanceof LivingEntity && entity != mc.player && mc.player.squaredDistanceTo(entity) < distance.getValue()*distance.getValue()).collect(Collectors.toList());
+
+            switch (filter.getMode()) {
+                case "All": break;
+                case "Players": entityList = entityList.stream().filter(PlayerEntity.class::isInstance).collect(Collectors.toList()); break;
+                case "Mobs": entityList = entityList.stream().filter(HostileEntity.class::isInstance).collect(Collectors.toList()); break;
+                case "Animals": entityList = entityList.stream().filter(AnimalEntity.class::isInstance).collect(Collectors.toList()); break;
+            }
+
             if(type.getMode().equals("Cursor")) {
                 entityList.sort(Comparator.comparingDouble(entity -> 5 * entity.squaredDistanceTo(mc.player) + 1 * MathUtils.squaredCursorDistanceTo(entity)/5));
                 if(entityList.size() == 0) return;
@@ -60,12 +80,7 @@ public class EntityInfo extends Module {
                 return;
             }
 
-            switch (type.getMode()) {
-                case "All": break;
-                case "Players": entityList = entityList.stream().filter(PlayerEntity.class::isInstance).collect(Collectors.toList()); break;
-                case "Mobs": entityList = entityList.stream().filter(HostileEntity.class::isInstance).collect(Collectors.toList()); break;
-                case "Animals": entityList = entityList.stream().filter(AnimalEntity.class::isInstance).collect(Collectors.toList()); break;
-            }
+
 
             if(!invisibility.getValue()) entityList = entityList.stream().filter(entity -> !entity.isInvisibleTo(mc.player)).toList();
             entityList.sort(Comparator.comparingDouble(entity -> entity.squaredDistanceTo(mc.player)));
@@ -80,26 +95,54 @@ public class EntityInfo extends Module {
         }
 
     public void drawInfoBox(DrawContext context, float tickDelta, LivingEntity entity) {
+        double fov = ((MixinGameRenderer.Accessor)mc.gameRenderer).getCurrentFov(mc.gameRenderer.getCamera(), tickDelta, true)/90;
+        FontRenderer fr = Falsify.fontRenderer;
         MatrixStack matrices = context.getMatrices();
         matrices.push();
         Vec3d entityPos = MathUtils.getInterpolatedPos(entity, tickDelta);
         Vec2f pos = ProjectionUtils.toScreenXY(entityPos.subtract(0, 1,0));
-        double dist = entityPos.distanceTo(mc.gameRenderer.getCamera().getPos());
+        double dist = fov*entityPos.distanceTo(mc.gameRenderer.getCamera().getPos());
         matrices.translate(pos.x, pos.y, 0);
         matrices.scale((float) (5/dist), (float) (5/dist), 1);
-        //RenderUtils.push3DPos(matrices, MathUtils.getInterpolatedPos(entity, tickDelta));
+        String name = entity.getName().getString();
+        float xRange = (Math.max(fr.getStringWidth("WWWWWWWWWWWW"), fr.getStringWidth(name)) + 46)/2;
+        RenderHelper.drawSmoothRect(new Color(0, 0, 0, 181), matrices, -xRange-1,  -26,  xRange+1, 26, 4f, new int[] {5,5,5,5});
+        RenderHelper.drawSmoothRect(new Color(94, 94, 94, 182), matrices, -xRange,  -25,  xRange, 25, 3, new int[] {5,5,5,5});
+        LegacyIdentifier id = getHead(entity.getUuid());
+        if(id == null) {
+            fr.drawCenteredString(matrices, name, 0, -23, Color.WHITE, true);
 
-        RenderUtils.fill(matrices, -75,  -25,  75, 25, new Color(56, 56, 56, 194).getRGB());
-        //RenderUtils.drawText(eventRender3d, pos.add(0, entity.getNameLabelHeight(), 0), entity.getDisplayName().getString(), Color.WHITE);
-        context.drawCenteredTextWithShadow(mc.textRenderer, entity.getDisplayName().getString(), 0, -23, Color.WHITE.getRGB());
-        if(entity instanceof PlayerEntity playerEntity) {
-            context.drawCenteredTextWithShadow(mc.textRenderer, "UUID: " + playerEntity.getGameProfile().getId().toString(), 0, -13, Color.WHITE.getRGB());
+            //fr.drawCenteredString(matrices, "IQ: " + entity.getId() % 150, 0, -13, Color.WHITE, true);
+            fr.drawCenteredString(matrices, "pp size: " + MathUtils.clamp(Math.abs(entity.getUuid().getMostSignificantBits() % 120 / 10f), 3, 12) + " inches", 0, -1, Color.WHITE, true);
+
+            fr.drawCenteredString(matrices, entity.getHealth() + " / " + entity.getMaxHealth(), 0, 11, Color.WHITE, true);
         } else {
-            context.drawCenteredTextWithShadow(mc.textRenderer, "Id: " + entity.getId(), 0, -13, Color.WHITE.getRGB());
+            float width = 2.3f*id.getWidth();
+            float height = 2.3f*id.getHeight();
+            context.drawTexture(id, (int)-xRange+5,-id.getHeight()-5,0,0, (int) width, (int) height, (int) width, (int) height);
+            fr.drawString(matrices, name, -xRange+44, -22, Color.WHITE, true);
+            Color subColor = new Color(199, 199, 199);
+            //fr.drawString(matrices, "IQ: §f" + entity.getId() % 150, -31, -12, subColor, true);
+            fr.drawString(matrices, "Hittable: §f" + ((entity.isInvulnerable()) ? "No" : "Yes"), -xRange+44, -2, subColor, true);
+
+            fr.drawString(matrices, format.format(entity.getHealth()) + " / " + format.format(entity.getMaxHealth()), -xRange+44, 9, Color.WHITE, true);
         }
-        context.drawCenteredTextWithShadow(mc.textRenderer, entity.getHealth() + " / " + entity.getMaxHealth(), 0, 11, Color.WHITE.getRGB());
         float percentage = MathUtils.clamp(entity.getHealth()/ entity.getMaxHealth(), 0.0f, 1.0f);
-        RenderUtils.fill(matrices, -75,  20, (int) (150*percentage-75), 22, new Color((1-percentage), percentage, 56/255f, 219/255f).getRGB());
-        RenderUtils.pop3DPos(matrices);
+        RenderUtils.fill(matrices, (int) -xRange,  20, (int) (2*xRange*percentage-xRange), 22, new Color((1-percentage), percentage, 56/255f, 219/255f).getRGB());
+        matrices.pop();
+    }
+
+    public LegacyIdentifier getHead(UUID uuid) {
+        if(Falsify.textureCacheManager.getIdentifier("avatar-" + uuid) == null) {
+            Falsify.textureCacheManager.cacheTextureFromUrlAsync("avatar-" + uuid, "https://crafatar.com/avatars/"+uuid+"?overlay&default=MHF_Steve&size=16", false);
+            return null;
+        }
+        CompletableFuture<LegacyIdentifier> id = Falsify.textureCacheManager.getIdentifier("avatar-" + uuid);
+        if(id.isDone()) return id.getNow(null);
+        return null;
+    }
+
+    public static void clearAvatarCache() {
+        new ArrayList<>(Falsify.textureCacheManager.getTextures().keySet().stream().filter(s -> s.startsWith("avatar-")).toList()).forEach(s -> Falsify.textureCacheManager.destroyTexture(s));
     }
 }

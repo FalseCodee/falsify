@@ -3,21 +3,16 @@ package falsify.falsify.mixin;
 import falsify.falsify.Falsify;
 import falsify.falsify.listeners.EventType;
 import falsify.falsify.listeners.events.EventEntityRender;
-import net.minecraft.client.model.Model;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.EntityRenderDispatcher;
-import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(LivingEntityRenderer.class)
 public class MixinEntityRenderDispatcher <T extends LivingEntity, M extends EntityModel<T>> {

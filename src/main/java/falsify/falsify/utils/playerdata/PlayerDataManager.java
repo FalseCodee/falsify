@@ -1,11 +1,16 @@
-package falsify.falsify.utils;
+package falsify.falsify.utils.playerdata;
 
 import com.google.gson.JsonObject;
+import falsify.falsify.utils.FalseRunnable;
+import falsify.falsify.utils.JsonHelper;
+import falsify.falsify.utils.playerdata.PlayerData;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class PlayerDataManager {
     private JsonObject playerData;
+    private ArrayList<PlayerData> dataList;
 
     public PlayerDataManager() {
         new FalseRunnable() {
@@ -18,6 +23,10 @@ public class PlayerDataManager {
 
     public void init(JsonObject data) {
         playerData = data.getAsJsonObject("playerdata");
+        dataList = new ArrayList<>();
+        for(String key : playerData.keySet()) {
+            dataList.add(PlayerData.fromUuid(UUID.fromString(key)));
+        }
     }
 
     public JsonObject getPlayerObject(UUID uuid) {
@@ -35,5 +44,9 @@ public class PlayerDataManager {
         JsonObject playerObject = getPlayerObject(uuid);
         if(playerObject == null) return false;
         return playerObject.has("cape");
+    }
+
+    public ArrayList<PlayerData> getDataList() {
+        return dataList;
     }
 }

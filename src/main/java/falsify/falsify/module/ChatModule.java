@@ -15,7 +15,7 @@ public class ChatModule extends Module {
 
 
 
-    public void onEvent(Event event){
+    public void onEvent(Event<?> event){
         if(event instanceof EventPacketRecieve){
             if(((EventPacketRecieve) event).getPacket() instanceof net.minecraft.network.packet.s2c.play.GameMessageS2CPacket){
                 onChat(((EventPacketRecieve) event), ChatModuleUtils.concatArray(((GameMessageS2CPacket) ((EventPacketRecieve) event).getPacket()).content().withoutStyle(), ""));

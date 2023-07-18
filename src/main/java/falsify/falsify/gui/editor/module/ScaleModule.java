@@ -18,9 +18,7 @@ public class ScaleModule extends Clickable implements Draggable {
 
     @Override
     public boolean isHovering(double x, double y) {
-        x /= renderModule.scale;
-        y /= renderModule.scale;
-        return super.isHovering(x, y);
+        return x >= getX() && y >= getY() && x <= getX() + getWidth() * renderModule.getScale() && y <= getY() + getHeight() * renderModule.getScale();
     }
 
     @Override

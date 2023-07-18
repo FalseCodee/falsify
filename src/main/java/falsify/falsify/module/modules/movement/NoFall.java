@@ -13,7 +13,7 @@ public class NoFall extends Module {
     }
 
     @Override
-    public void onEvent(Event event) {
+    public void onEvent(Event<?> event) {
         if(event instanceof EventPacketSend e && e.getPacket() instanceof PlayerMoveC2SPacket packet) {
             if (mc.player.getVelocity().y > -0.1) return;
             ((MixinPlayerMoveC2SPacket)packet).setOnGround(true);

@@ -17,7 +17,7 @@ public class AutoFish extends Module {
 
     final Timer timer = new Timer();
     @Override
-    public void onEvent(Event event) {
+    public void onEvent(Event<?> event) {
         if (event instanceof EventPacketRecieve) {
             if (((EventPacketRecieve) event).getPacket() instanceof PlaySoundS2CPacket) {
                 if (((PlaySoundS2CPacket) ((EventPacketRecieve) event).getPacket()).getSound().equals(

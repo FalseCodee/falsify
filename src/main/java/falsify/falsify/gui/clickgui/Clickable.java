@@ -3,6 +3,7 @@ package falsify.falsify.gui.clickgui;
 import falsify.falsify.gui.clickgui.Renderable;
 import falsify.falsify.utils.RenderHelper;
 import net.minecraft.client.gui.DrawContext;
+import org.joml.Vector2d;
 
 import java.awt.*;
 
@@ -25,6 +26,10 @@ public abstract class Clickable extends RenderHelper implements Renderable {
 
     public boolean isHovering(double x, double y) {
         return x >= getX() && y >= getY() && x <= getX() + getWidth() && y <= getY() + getHeight();
+    }
+
+    public Vector2d getMiddle() {
+        return new Vector2d(x + width/2,  y + height/2);
     }
 
     public boolean isIntersecting(Clickable clickable) {

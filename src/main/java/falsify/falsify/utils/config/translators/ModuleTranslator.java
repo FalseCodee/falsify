@@ -1,6 +1,5 @@
 package falsify.falsify.utils.config.translators;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import falsify.falsify.module.DisplayModule;
 import falsify.falsify.module.Module;
@@ -19,12 +18,11 @@ public class ModuleTranslator {
 
     private static JsonObject translateSettings(List<Setting<?>> settings){
         JsonObject json = new JsonObject();
-        for(int i = 0; i < settings.size(); i++) {
-            Setting<?> setting = settings.get(i);
-            if(setting instanceof BooleanSetting s) json.addProperty(s.getName(),s.getValue());
-            else if(setting instanceof RangeSetting s) json.addProperty(s.getName(),s.getValue());
-            else if(setting instanceof ModeSetting s) json.addProperty(s.getName(),s.getIndex());
-            else if(setting instanceof KeybindSetting s) json.addProperty(s.getName(),s.getValue());
+        for (Setting<?> setting : settings) {
+            if (setting instanceof BooleanSetting s) json.addProperty(s.getName(), s.getValue());
+            else if (setting instanceof RangeSetting s) json.addProperty(s.getName(), s.getValue());
+            else if (setting instanceof ModeSetting s) json.addProperty(s.getName(), s.getIndex());
+            else if (setting instanceof KeybindSetting s) json.addProperty(s.getName(), s.getValue());
         }
         return json;
     }

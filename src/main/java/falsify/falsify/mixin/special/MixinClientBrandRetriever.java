@@ -12,7 +12,7 @@ public abstract class MixinClientBrandRetriever {
 
     /**
      * @author FalseCode
-     * @reason Why not.
+     * @reason Change Client Brand.
      */
     @DontObfuscate
     @Overwrite(remap = false)

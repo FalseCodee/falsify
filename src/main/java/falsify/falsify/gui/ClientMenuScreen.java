@@ -2,6 +2,7 @@ package falsify.falsify.gui;
 
 import falsify.falsify.Falsify;
 import falsify.falsify.gui.clickgui.Clickable;
+import falsify.falsify.gui.credits.CreditScreen;
 import falsify.falsify.gui.other.FollowerGuy;
 import falsify.falsify.module.ModuleManager;
 import falsify.falsify.module.modules.render.BlurModule;
@@ -19,7 +20,6 @@ import net.minecraft.client.network.ServerAddress;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -34,10 +34,10 @@ public class ClientMenuScreen extends Screen {
     private Color color4 = new Color(0, 0, 0);
 
     private LegacyIdentifier title;
-    private ArrayList<FollowerGuy> guys;
+    private final ArrayList<FollowerGuy> guys;
 
     private final ServerInfo warSpree = new ServerInfo("warspree", "warspree.minehut.gg", false);
-    private BlurModule blur;
+    private final BlurModule blur;
 
     public ClientMenuScreen() {
         super(Text.of("Menu Screen"));
@@ -45,19 +45,20 @@ public class ClientMenuScreen extends Screen {
         addButton("Multiplayer", new MultiplayerScreen(this));
         addButton("Settings", new OptionsScreen(this, Falsify.mc.options));
         addButton("Warspree.net", () -> ConnectScreen.connect(this, Falsify.mc, ServerAddress.parse(warSpree.address), warSpree, false));
+        addButton("Credits", new CreditScreen(this));
         guys = new ArrayList<>();
         blur = ModuleManager.getModule(BlurModule.class);
     }
 
     @Override
-    protected void init() {
+    public void init() {
         super.init();
         guys.clear();
         for(int i = 0; i < (int) (0.00082*width*height); i++) {
             guys.add(new FollowerGuy(MathUtils.random(10, width-10), MathUtils.random(10, height-10)));
         }
 
-        int padding = 2;
+        int padding = 1;
         for(int i = 0; i < buttons.size(); i++) {
             Clickable c = buttons.get(i);
 
@@ -88,9 +89,8 @@ public class ClientMenuScreen extends Screen {
                     RenderHelper.drawSmoothRect(hover.darker().darker(),context.getMatrices(), (int)(-clickable.getWidth()/2f), (int)(-clickable.getHeight()/2f), (int)(clickable.getWidth()/2f), (int)(clickable.getHeight()/2f), 7, new int[] {5, 5, 5, 5});
                     RenderHelper.drawSmoothRect(hover,context.getMatrices(),  (int)(-clickable.getWidth()/2f)+1, (int)(-clickable.getHeight()/2f)+1, (int)(clickable.getWidth()/2f)-1, (int)(clickable.getHeight()/2f)-1, 7, new int[] {5, 5, 5, 5});
                     int scale = 1;
-                    //matrices.translate(clickable.getWidth()/2,clickable.getHeight()/2,0);
                     matrices.scale(scale, scale, 1);
-                    Falsify.fontRenderer.drawCenteredString(context.getMatrices(), name, 0, -Falsify.fontRenderer.getStringHeight(name)/2, Color.WHITE);
+                    Falsify.fontRenderer.drawCenteredString(context.getMatrices(), name, 0, -Falsify.fontRenderer.getStringHeight(name)/2, Color.WHITE, true);
                     matrices.pop();
                 }).build());
     }
@@ -98,15 +98,6 @@ public class ClientMenuScreen extends Screen {
     @Override
     public void tick() {
         super.tick();
-//        int padding = 5;
-//        for(int i = 0; i < buttons.size(); i++) {
-//            Clickable c = buttons.get(i);
-//
-//            c.setX(width/(double)buttons.size()*i + padding*(i+1));
-//            c.setWidth(width/(double)buttons.size()-padding*2);
-//            c.setY(height-c.getHeight() - padding);
-//
-//        }
     }
 
     @Override
@@ -129,14 +120,7 @@ public class ClientMenuScreen extends Screen {
         }
     }
 
-    @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        super.render(context, mouseX, mouseY, delta);
-        if(title == null) {
-            setTitle();
-            return;
-        }
-
+    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
         color1 = RenderHelper.colorLerp(color1, new Color(Color.HSBtoRGB((mouseY/(float)height*1.5f + 0.23f), 1.00f, 0.25f)), MathUtils.clamp(0.1f*Falsify.mc.getLastFrameDuration(), 0.0f, 1.0f));
         color2 = RenderHelper.colorLerp(color2, new Color(Color.HSBtoRGB((mouseX/(float)width*0.5f  + 0.86f), 1.00f, 0.25f)), MathUtils.clamp(0.1f*Falsify.mc.getLastFrameDuration(), 0.0f, 1.0f));
         color3 = RenderHelper.colorLerp(color3, new Color(Color.HSBtoRGB((mouseY/(float)height*0.8f + 0.45f), 1.00f, 0.25f)), MathUtils.clamp(0.1f*Falsify.mc.getLastFrameDuration(), 0.0f, 1.0f));
@@ -151,6 +135,17 @@ public class ClientMenuScreen extends Screen {
             guy.update(mouseX, mouseY, delta, guys, flag);
             guy.render(context, mouseX, mouseY, delta);
         }
+    }
+
+    @Override
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        super.render(context, mouseX, mouseY, delta);
+        if(title == null) {
+            setTitle();
+            return;
+        }
+
+        renderBackground(context, mouseX, mouseY, delta);
 
         for(Clickable button : buttons)  {
             button.render(context, mouseX, mouseY, delta);

@@ -4,8 +4,6 @@ import falsify.falsify.Falsify;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public class Cape {

@@ -7,14 +7,14 @@ import falsify.falsify.module.Module;
 import falsify.falsify.module.settings.RangeSetting;
 
 public class ElytraFly extends Module {
-    RangeSetting speed = new RangeSetting("Speed", 1.1, 0.1, 20, 0.01);
+    private final RangeSetting speed = new RangeSetting("Speed", 1.1, 0.1, 20, 0.01);
     public ElytraFly() {
         super("ElytraFly", "Infinite elytra boost.", true, Category.MOVEMENT, -1);
         settings.add(speed);
     }
 
     @Override
-    public void onEvent(Event event) {
+    public void onEvent(Event<?> event) {
         if(event instanceof EventMouse e && mc.player.isFallFlying() && e.button == 1){
             mc.player.setVelocity(mc.player.getVelocity().multiply(speed.getValue()));
         }

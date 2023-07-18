@@ -6,7 +6,6 @@ import falsify.falsify.gui.clickgui.Draggable;
 import falsify.falsify.gui.clickgui.settings.SettingsGUI;
 import falsify.falsify.module.Module;
 import falsify.falsify.utils.RenderHelper;
-import falsify.falsify.utils.RenderUtils;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
 
@@ -40,7 +39,7 @@ public class ModuleItem extends Clickable implements Draggable {
             drawRect(color , context.getMatrices(), (int) this.x+1, (int) this.y, (int) this.x + (int) this.width-1, (int) this.y + (int) this.height-1);
 
         }
-        Falsify.fontRenderer.drawCenteredString(context.getMatrices(), module.name, (float) (x + width/2), (float) (y + height/2 - Falsify.fontRenderer.getStringHeight(module.name)/2), Color.WHITE);
+        Falsify.fontRenderer.drawCenteredString(context.getMatrices(), module.name, (float) (x + width/2), (float) (y + height/2 - Falsify.fontRenderer.getStringHeight(module.name)/2), Color.WHITE, true);
         fade.tick();
         fade2.tick();
     }
@@ -54,7 +53,7 @@ public class ModuleItem extends Clickable implements Draggable {
         float descriptionWidth = Falsify.fontRenderer.getStringWidth(description);
         RenderHelper.drawSmoothRect(module.category.getColor().darker(),matrices,-1,-1, descriptionWidth + 2 * padding + 1, Falsify.mc.textRenderer.fontHeight + 2 * padding + 1, padding/2f, new int[] {5,5,5,5});
         RenderHelper.drawSmoothRect(module.category.getColor(),matrices,0,0, descriptionWidth + 2 * padding, Falsify.mc.textRenderer.fontHeight + 2 * padding, padding/2f, new int[] {5,5,5,5});
-        Falsify.fontRenderer.drawString(matrices, description, padding, padding, Color.WHITE);
+        Falsify.fontRenderer.drawString(matrices, description, padding, padding, Color.WHITE, true);
         matrices.pop();
     }
 
