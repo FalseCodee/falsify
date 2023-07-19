@@ -40,8 +40,7 @@ class ArmorRenderModule extends RenderModule<ArmorModule> {
             context.drawTextWithShadow(Falsify.mc.textRenderer, Text.of("" + (itemStack.getMaxDamage() - itemStack.getDamage())), (int) (double) padding + 20, (int)y + Falsify.mc.textRenderer.fontHeight/2, module.getTextColor().getRGB());
             y += 16 + padding;
         }
-        Anchor anchor = getAnchor();
-        if(anchor == Anchor.BOTTOM_LEFT || anchor == Anchor.BOTTOM_CENTER || anchor == Anchor.BOTTOM_RIGHT) this.relativeY -=
+
         this.height = Math.max(y, 16 + padding);
     }
 }
