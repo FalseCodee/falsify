@@ -20,6 +20,7 @@ import static org.lwjgl.opengl.GL32C.*;
 
 
 import java.awt.*;
+import java.util.List;
 import java.util.SortedMap;
 
 import static falsify.falsify.Falsify.mc;
@@ -307,6 +308,10 @@ public class RenderUtils {
         glDisable(GL_LINE_SMOOTH);
         RenderSystem.enableCull();
     }
+    public static void line(EventRender3d eventRender3d, List<Vec3d> vec3d, Color color) {
+        Vec3d[] list = new Vec3d[vec3d.size()];
+        line(eventRender3d, vec3d.toArray(list), color);
+    }
     public static void line(EventRender3d eventRender3d, Vec3d[] vec3d, Color color) {
         MatrixStack matrices = eventRender3d.getMatrices();
         Camera camera = eventRender3d.getCamera();
@@ -321,26 +326,22 @@ public class RenderUtils {
         matrices.translate(-camera.getPos().x, -camera.getPos().y, -camera.getPos().z);
 
 
-        RenderSystem.disableDepthTest();
-        RenderSystem.disableCull();
+        //RenderSystem.disableDepthTest();
+        //RenderSystem.disableCull();
         RenderSystem.setShader(GameRenderer::getPositionColorProgram);
-        RenderSystem.lineWidth(50.0f);
+        RenderSystem.lineWidth(5.0f);
 
-        buffer.begin(VertexFormat.DrawMode.DEBUG_LINES, VertexFormats.POSITION_COLOR);
-        RenderSystem.lineWidth(50.0F);
-        buffer.vertex(matrices.peek().getPositionMatrix(), (float) vec3d[0].x, (float) vec3d[0].y, (float) vec3d[0].z).color(color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F, color.getAlpha() / 255F).next();//.normal(matrices.peek().getNormalMatrix(), (float) vec3d[0].x, (float) vec3d[0].y, (float) vec3d[0].z).next();
-        for(int i = 1; i < vec3d.length; i++) {
-            Vec3d from = vec3d[i-1];
-            Vec3d to = vec3d[i];
-            Vec3d vector = to.subtract(from);
+        buffer.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR);
+        RenderSystem.lineWidth(5.0F);
+        for (Vec3d to : vec3d) {
             buffer.vertex(matrices.peek().getPositionMatrix(), (float) to.x, (float) to.y, (float) to.z).color(color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F, color.getAlpha() / 255F).next();//.normal(matrices.peek().getNormalMatrix(), (float) vector.x, (float) vector.y, (float) vector.z).next();
         }
         tessellator.draw();
 
         matrices.pop();
 
-        RenderSystem.enableCull();
-        RenderSystem.enableDepthTest();
+        //RenderSystem.enableCull();
+        //RenderSystem.enableDepthTest();
         RenderSystem.disableBlend();
         //RenderSystem.enableTexture();
     }

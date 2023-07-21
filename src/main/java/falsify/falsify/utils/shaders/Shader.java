@@ -31,8 +31,6 @@ public class Shader {
         GlStateManager.glCompileShader(vert);
 
         int frag = GlStateManager.glCreateShader(GL_FRAGMENT_SHADER);
-        String str = read(fragPath);
-        System.out.println(str);
         GlStateManager.glShaderSource(frag, ImmutableList.of(read(fragPath)));
         GlStateManager.glCompileShader(frag);
 

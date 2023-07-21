@@ -21,6 +21,9 @@ public interface MixinMinecraft {
     @Invoker("doAttack")
     boolean leftClick();
 
+    @Invoker("doItemUse")
+    void rightClick();
+
     @Accessor("currentFps")
     int getCurrentFps();
 }

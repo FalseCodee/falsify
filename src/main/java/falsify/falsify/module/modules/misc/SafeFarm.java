@@ -25,7 +25,7 @@ public class SafeFarm extends Module {
     private final RangeSetting dist = new RangeSetting("Distance", 25, 0, 50, 1);
     private final RangeSetting dur = new RangeSetting("Duration", 200, 0, 1000, 5);
 
-    Timer timer = new Timer();
+    final Timer timer = new Timer();
     public SafeFarm() {
         super("Safe Farm", "Automatically Farms. Requires Trajectories to be enabled.", true, Category.PLAYER, -1);
         settings.add(dist);

@@ -51,6 +51,9 @@ public class ModuleManager {
         modules.add(new Zoom());
         modules.add(new Quote());
         modules.add(new SafeWalk());
+        modules.add(new Perspective());
+        modules.add(new FastJump());
+        modules.add(new Breadcrumbs());
 
         modules.add(new FPSModule());
         modules.add(new TimeModule());
@@ -63,6 +66,9 @@ public class ModuleManager {
         modules.add(new ArmorModule());
         modules.add(new TitleModule());
         modules.add(new WASDModule());
+        modules.add(new VelocityModule());
+        modules.add(new PositionModule());
+        modules.add(new GifModule());
     }
 
     public static <T extends Module> T getModule(Class<T> module){

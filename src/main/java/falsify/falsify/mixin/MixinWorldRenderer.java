@@ -2,7 +2,6 @@ package falsify.falsify.mixin;
 
 import falsify.falsify.module.ModuleManager;
 import falsify.falsify.module.modules.render.ESP;
-import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;

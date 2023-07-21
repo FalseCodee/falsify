@@ -17,16 +17,18 @@ public class MathUtils {
         return getRotationsNeeded(pos.getX(), pos.getY(), pos.getZ());
     }
     public static float[] getRotationsNeeded(double x, double y, double z) {
-        double diffX = x - Falsify.mc.gameRenderer.getCamera().getPos().getX();
+        if(Falsify.mc.player == null) return null;
+        Vec3d pos = interpolateEntity(Falsify.mc.player, Falsify.mc.getTickDelta()).add(0, Falsify.mc.player.getEyeHeight(Falsify.mc.player.getPose()), 0);
+        double diffX = x - pos.getX();
         double diffY;
 
-       diffY = y - Falsify.mc.gameRenderer.getCamera().getPos().getY();
-        double diffZ = z - Falsify.mc.gameRenderer.getCamera().getPos().getZ();
+       diffY = y - pos.getY();
+        double diffZ = z - pos.getZ();
         double dist = Math.sqrt(diffX * diffX + diffZ * diffZ);
         float yaw = (float) (Math.atan2(diffZ, diffX) * 180.0D / Math.PI) - 90.0F;
         float pitch = (float) -(Math.atan2(diffY, dist) * 180.0D / Math.PI);
-        return new float[] {Falsify.mc.gameRenderer.getCamera().getYaw() + MathHelper.wrapDegrees(yaw - Falsify.mc.gameRenderer.getCamera().getYaw()),
-                Falsify.mc.gameRenderer.getCamera().getPitch() + MathHelper.wrapDegrees(pitch - Falsify.mc.gameRenderer.getCamera().getPitch())};
+        return new float[] {Falsify.mc.player.getYaw() + MathHelper.wrapDegrees(yaw - Falsify.mc.player.getYaw()),
+                Falsify.mc.player.getPitch() + MathHelper.wrapDegrees(pitch - Falsify.mc.player.getPitch())};
 
     }
 

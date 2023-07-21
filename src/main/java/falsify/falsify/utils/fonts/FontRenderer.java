@@ -48,7 +48,7 @@ public class FontRenderer implements Closeable {
     private Font[] fonts;
     private int previousGameScale = -1;
 
-    private float downScaleFactor;
+    private final float downScaleFactor;
 
     /**
      * Initializes a new FontRenderer with the specified fonts

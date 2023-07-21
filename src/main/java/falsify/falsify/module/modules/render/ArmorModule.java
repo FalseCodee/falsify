@@ -1,7 +1,6 @@
 package falsify.falsify.module.modules.render;
 
 import falsify.falsify.Falsify;
-import falsify.falsify.gui.editor.module.Anchor;
 import falsify.falsify.gui.editor.module.RenderModule;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.DisplayModule;

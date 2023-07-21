@@ -6,7 +6,6 @@ import falsify.falsify.gui.clickgui.Draggable;
 import falsify.falsify.gui.editor.EditGUI;
 import falsify.falsify.module.DisplayModule;
 import falsify.falsify.utils.MathUtils;
-import falsify.falsify.utils.RenderHelper;
 import net.minecraft.client.gui.DrawContext;
 import org.joml.Vector2d;
 
@@ -108,8 +107,14 @@ public abstract class RenderModule<T extends DisplayModule<?>> extends Clickable
         context.getMatrices().push();
         context.getMatrices().translate(x,y,0);
         context.getMatrices().scale((float) scale, (float) scale, 1);
-        double sf = getScaleFactor();
+
         renderModule(context, mouseX, mouseY, delta);
+        if(Falsify.mc.currentScreen instanceof EditGUI) {
+            context.drawVerticalLine(0, 0, (int) (height), Color.WHITE.getRGB());
+            context.drawVerticalLine((int) width, 0, (int) height, Color.WHITE.getRGB());
+            context.drawHorizontalLine(0, (int) width, 0, Color.WHITE.getRGB());
+            context.drawHorizontalLine(0, (int) width, (int) (height), Color.WHITE.getRGB());
+        }
         scaleModule.setX(this.x + (this.width-5+2.5)*scale);
         scaleModule.setY(this.y + (this.height-5+2.5)*scale);
 

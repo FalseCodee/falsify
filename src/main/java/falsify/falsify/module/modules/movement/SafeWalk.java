@@ -6,7 +6,6 @@ import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
 import falsify.falsify.module.settings.BooleanSetting;
 import falsify.falsify.module.settings.RangeSetting;
-import net.minecraft.text.Text;
 
 public class SafeWalk extends Module {
     private final RangeSetting fallDistance = new RangeSetting("Fall Distance", 1, 1, 10, 0.1);

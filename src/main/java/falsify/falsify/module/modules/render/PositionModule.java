@@ -31,11 +31,11 @@ class PositionRenderModule extends RenderModule<PositionModule> {
     public void renderModule(DrawContext context, int mouseX, int mouseY, float delta) {
         BlockPos pos = Falsify.mc.player.getBlockPos();
         if(getModule().getMode().equals("Horizontal")) {
-            drawRect(module.getBackgroundColor(), context.getMatrices(), (float) getX(), (float) getY(), (float) (getX() + width), (float) (getY() + height));
-            context.drawCenteredTextWithShadow(Falsify.mc.textRenderer, pos.getX() + ", " + pos.getY() + ", " + pos.getZ(), (int) getX() + (int) width / 2, (int) getY() + (int) height / 2 - Falsify.mc.textRenderer.fontHeight / 2, module.getTextColor().getRGB());
+            drawRect(module.getBackgroundColor(), context.getMatrices(), (float) 0, (float) 0, (float) (width), (float) (height));
+            context.drawCenteredTextWithShadow(Falsify.mc.textRenderer, pos.getX() + ", " + pos.getY() + ", " + pos.getZ(), (int) width / 2, (int) height / 2 - Falsify.mc.textRenderer.fontHeight / 2, module.getTextColor().getRGB());
         } else if(getModule().getMode().equals("Vertical")) {
-            drawRect(module.getBackgroundColor(), context.getMatrices(), (float) getX(), (float) getY(), (float) (getX() + width), (float) (getY() + height));
-            context.drawCenteredTextWithShadow(Falsify.mc.textRenderer, pos.getX() + ", " + pos.getY() + ", " + pos.getZ(), (int) getX() + (int) width / 2, (int) getY() + (int) height / 2 - Falsify.mc.textRenderer.fontHeight / 2, module.getTextColor().getRGB());
+            drawRect(module.getBackgroundColor(), context.getMatrices(), (float) 0, (float) 0, (float) (width), (float) (height));
+            context.drawCenteredTextWithShadow(Falsify.mc.textRenderer, pos.getX() + ", " + pos.getY() + ", " + pos.getZ(), (int) width / 2, (int) height / 2 - Falsify.mc.textRenderer.fontHeight / 2, module.getTextColor().getRGB());
         }
 
     }

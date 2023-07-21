@@ -12,7 +12,7 @@ import java.awt.*;
 public class RenderHelper {
 
     public static final Window WINDOW = Falsify.mc.getWindow();
-    public static double SCALE = 2.0;
+    public static final double SCALE = 2.0;
 
     public static double getScaleFactor() {
         return SCALE/WINDOW.getScaleFactor();

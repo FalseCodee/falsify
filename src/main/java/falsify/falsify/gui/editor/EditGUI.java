@@ -11,7 +11,6 @@ import net.minecraft.text.Text;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -27,7 +26,7 @@ public class EditGUI extends Screen {
     protected void init() {
        renderModules.clear();
 
-        ModuleManager.modules.stream()
+        ModuleManager.enabledModules.stream()
                 .filter(DisplayModule.class::isInstance)
                 .forEach(module -> renderModules.add(((DisplayModule<?>) module).getRenderModule()));
         snapper.update(RenderHelper.WINDOW.getScaledWidth()/2f, RenderHelper.WINDOW.getScaledHeight()/2f);

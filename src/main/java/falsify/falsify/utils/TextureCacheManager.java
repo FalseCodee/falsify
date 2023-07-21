@@ -115,8 +115,12 @@ public class TextureCacheManager {
         LegacyIdentifier identifier = textures.get(textureName).getNow(null);
         if(identifier == null) return;
 
-        Falsify.mc.getTextureManager().destroyTexture(identifier);
+        destroyTexture(identifier);
         textures.remove(textureName);
+    }
+
+    public void destroyTexture(Identifier id) {
+        Falsify.mc.getTextureManager().destroyTexture(id);
     }
 
     public CompletableFuture<LegacyIdentifier> getIdentifier(String textureName) {

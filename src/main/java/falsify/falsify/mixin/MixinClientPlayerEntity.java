@@ -5,6 +5,8 @@ import falsify.falsify.listeners.EventType;
 import falsify.falsify.listeners.events.EventFrame;
 import net.minecraft.client.network.ClientPlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Mutable;
+import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -26,6 +28,13 @@ public class MixinClientPlayerEntity {
         EventFrame motion = new EventFrame();
         motion.setEventType(EventType.POST);
         Falsify.onEvent(motion);
+    }
+
+    @Mixin(ClientPlayerEntity.class)
+    public interface MixinAccessor {
+        @Accessor("ticksToNextAutojump")
+        @Mutable
+        void setTicks(int ticks);
     }
 
 }

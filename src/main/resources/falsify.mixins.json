@@ -21,6 +21,8 @@
     "special.MixinPlayerMoveC2SPacket"
   ],
   "client": [
+    "MixinCamera",
+    "MixinClientPlayerEntity$MixinAccessor",
     "MixinClientWorld",
     "MixinEntityRenderDispatcher",
     "MixinGameRenderer",

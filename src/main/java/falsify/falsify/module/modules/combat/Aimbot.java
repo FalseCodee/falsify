@@ -2,7 +2,7 @@ package falsify.falsify.module.modules.combat;
 
 import com.google.common.collect.Lists;
 import falsify.falsify.listeners.Event;
-import falsify.falsify.listeners.events.EventFrame;
+import falsify.falsify.listeners.events.EventRender;
 import falsify.falsify.listeners.events.EventUpdate;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
@@ -104,7 +104,7 @@ public class Aimbot extends Module {
                 target = new AimbotTarget(new Vec3d(manYaw.getValue(), manPitch.getValue(), 0));
             }
         }
-        else if(event instanceof EventFrame) {
+        else if(event instanceof EventRender) {
             if (this.timer.hasTimeElapsed(tickSpeed.getValue().longValue(), true)) {
                 if (!this.type.getMode().equals("Manual") && target != null && target.getEntity() != null) {
                     if (target.getEntity().isRemoved()) {

@@ -1,14 +1,11 @@
 package falsify.falsify.gui.editor.module;
 
-import falsify.falsify.utils.RenderHelper;
 import org.joml.Vector2d;
-
-import java.awt.*;
 
 public class Snapper {
     private final double[] xSnaps;
     private final double[] ySnaps;
-    private static final double SNAPPING_DISTANCE = 10.0;
+    private static final double SNAPPING_DISTANCE = 5.0;
 
     public static double currentSnapX;
     public static double currentSnapY;
