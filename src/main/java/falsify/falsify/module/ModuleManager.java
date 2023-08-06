@@ -54,6 +54,7 @@ public class ModuleManager {
         modules.add(new Perspective());
         modules.add(new FastJump());
         modules.add(new Breadcrumbs());
+        modules.add(new ServerCrasher());
 
         modules.add(new FPSModule());
         modules.add(new TimeModule());

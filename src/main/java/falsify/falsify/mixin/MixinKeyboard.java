@@ -2,6 +2,7 @@ package falsify.falsify.mixin;
 
 import falsify.falsify.Falsify;
 import falsify.falsify.gui.clickgui.ClickGUI;
+import falsify.falsify.gui.modmenu.ModMenuScreen;
 import falsify.falsify.listeners.events.EventKey;
 import net.minecraft.client.Keyboard;
 import net.minecraft.client.MinecraftClient;
@@ -20,7 +21,7 @@ public class MixinKeyboard {
             Falsify.onEvent(e);
 
             if(key == GLFW.GLFW_KEY_RIGHT_SHIFT) {
-                MinecraftClient.getInstance().setScreen(new ClickGUI());
+                MinecraftClient.getInstance().setScreen(new ModMenuScreen());
             }
         }
     }

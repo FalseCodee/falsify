@@ -3,6 +3,7 @@ package falsify.falsify.gui.clickgui;
 import falsify.falsify.gui.clickgui.Renderable;
 import falsify.falsify.utils.RenderHelper;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.util.math.MatrixStack;
 import org.joml.Vector2d;
 
 import java.awt.*;
@@ -103,6 +104,11 @@ public abstract class Clickable extends RenderHelper implements Renderable {
         this.height = height;
     }
 
+    public void pushStackToPosition(MatrixStack matrixStack) {
+        matrixStack.push();
+        matrixStack.translate(x,y,0);
+    }
+
     public static class ButtonBuilder {
         private double x;
         private double y;
@@ -150,15 +156,14 @@ public abstract class Clickable extends RenderHelper implements Renderable {
                 }
             };
         }
-
     }
 
     @FunctionalInterface
     public interface ClickableRunnable{
-        boolean run(Clickable clickable, double x, double y, double button);
+        boolean run(Clickable instance, double x, double y, double button);
     }
 @FunctionalInterface
     public interface RenderableRunnable{
-        void run(Clickable clickable, DrawContext context, int mouseX, int mouseY, float delta);
+        void run(Clickable instance, DrawContext context, int mouseX, int mouseY, float delta);
     }
 }
