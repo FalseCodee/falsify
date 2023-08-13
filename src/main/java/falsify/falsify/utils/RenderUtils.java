@@ -1,5 +1,6 @@
 package falsify.falsify.utils;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import falsify.falsify.Falsify;
 import falsify.falsify.listeners.events.EventRender3d;
@@ -56,25 +57,23 @@ public class RenderUtils {
 
     public static void AlignText(DrawContext context, String text, float x1, float y1, Color color, Alignment alignment) {
         FontRenderer fr = Falsify.fontRenderer;
-        MatrixStack matrices = context.getMatrices();
         switch (alignment) {
-            case LEFT -> fr.drawString(matrices, text, x1, y1, color, true);
-            case RIGHT -> fr.drawString(matrices, text, mc.getWindow().getScaledWidth() - x1 - fr.getStringWidth(text), y1, color, true);
-            case XCENTER -> fr.drawString(matrices, text, mc.getWindow().getScaledWidth() / 2f + x1, y1, color, true);
-            case YCENTER -> fr.drawString(matrices, text, x1, mc.getWindow().getScaledHeight() / 2f + y1, color, true);
-            case CENTER -> fr.drawString(matrices, text, mc.getWindow().getScaledWidth() / 2f + x1, mc.getWindow().getScaledHeight() / 2f + y1, color, true);
+            case LEFT -> fr.drawString(context, text, x1, y1, color, true);
+            case RIGHT -> fr.drawString(context, text, mc.getWindow().getScaledWidth() - x1 - fr.getStringWidth(text), y1, color, true);
+            case XCENTER -> fr.drawString(context, text, mc.getWindow().getScaledWidth() / 2f + x1, y1, color, true);
+            case YCENTER -> fr.drawString(context, text, x1, mc.getWindow().getScaledHeight() / 2f + y1, color, true);
+            case CENTER -> fr.drawString(context, text, mc.getWindow().getScaledWidth() / 2f + x1, mc.getWindow().getScaledHeight() / 2f + y1, color, true);
         }
     }
 
     public static void AlignCenteredText(DrawContext context, String text, float x1, float y1, Color color, Alignment alignment) {
         FontRenderer fr = Falsify.fontRenderer;
-        MatrixStack matrices = context.getMatrices();
         switch (alignment) {
-            case LEFT -> fr.drawCenteredString(matrices, text, x1, y1, color, true);
-            case RIGHT -> fr.drawCenteredString(matrices, text,mc.getWindow().getScaledWidth() - x1, y1, color, true);
-            case XCENTER -> fr.drawCenteredString(matrices, text, mc.getWindow().getScaledWidth() / 2f + x1, y1, color, true);
-            case YCENTER -> fr.drawCenteredString(matrices, text, x1, mc.getWindow().getScaledHeight() / 2f + y1, color, true);
-            case CENTER -> fr.drawCenteredString(matrices, text, mc.getWindow().getScaledWidth() / 2f + x1, mc.getWindow().getScaledHeight() / 2f + y1, color, true);
+            case LEFT -> fr.drawCenteredString(context, text, x1, y1, color, true);
+            case RIGHT -> fr.drawCenteredString(context, text,mc.getWindow().getScaledWidth() - x1, y1, color, true);
+            case XCENTER -> fr.drawCenteredString(context, text, mc.getWindow().getScaledWidth() / 2f + x1, y1, color, true);
+            case YCENTER -> fr.drawCenteredString(context, text, x1, mc.getWindow().getScaledHeight() / 2f + y1, color, true);
+            case CENTER -> fr.drawCenteredString(context, text, mc.getWindow().getScaledWidth() / 2f + x1, mc.getWindow().getScaledHeight() / 2f + y1, color, true);
         }
     }
 
@@ -286,6 +285,7 @@ public class RenderUtils {
     }
 
     public static void renderShader(MatrixStack matrices) {
+        RenderSystem.enableBlend();
         Matrix4f matrix4f = matrices.peek().getPositionMatrix();
         BufferBuilder bufferBuilder = RenderSystem.renderThreadTesselator().getBuffer();
         bufferBuilder.begin(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION);
@@ -294,6 +294,7 @@ public class RenderUtils {
         bufferBuilder.vertex(matrix4f, 1, 1, 0f).next();
         bufferBuilder.vertex(matrix4f, 1, -1, 0f).next();
         BufferRenderer.draw(bufferBuilder.end());
+        RenderSystem.disableBlend();
     }
 
     public static void renderShaderBegin() {
@@ -301,12 +302,13 @@ public class RenderUtils {
         glEnable(GL_LINE_SMOOTH);
         glLineWidth(1);
         RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
+        RenderSystem.blendFunc(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA);
     }
     public static void renderShaderEnd() {
         RenderSystem.disableBlend();
         glDisable(GL_LINE_SMOOTH);
         RenderSystem.enableCull();
+
     }
     public static void line(EventRender3d eventRender3d, List<Vec3d> vec3d, Color color) {
         Vec3d[] list = new Vec3d[vec3d.size()];

@@ -1,11 +1,9 @@
 package falsify.falsify.gui;
 
 import falsify.falsify.Falsify;
-import falsify.falsify.gui.clickgui.Clickable;
+import falsify.falsify.gui.utils.Clickable;
 import falsify.falsify.gui.credits.CreditScreen;
 import falsify.falsify.gui.other.FollowerGuy;
-import falsify.falsify.module.ModuleManager;
-import falsify.falsify.module.modules.render.BlurModule;
 import falsify.falsify.utils.LegacyIdentifier;
 import falsify.falsify.utils.MathUtils;
 import falsify.falsify.utils.RenderHelper;
@@ -36,18 +34,15 @@ public class ClientMenuScreen extends Screen {
     private LegacyIdentifier title;
     private final ArrayList<FollowerGuy> guys;
 
-    private final ServerInfo warSpree = new ServerInfo("warspree", "warspree.minehut.gg", false);
-    private final BlurModule blur;
-
+    private final ServerInfo warSpree = new ServerInfo("achieved", "achieved.minehut.gg", false);
     public ClientMenuScreen() {
         super(Text.of("Menu Screen"));
         addButton("Singleplayer", new SelectWorldScreen(this));
         addButton("Multiplayer", new MultiplayerScreen(this));
         addButton("Settings", new OptionsScreen(this, Falsify.mc.options));
-        addButton("Warspree.net", () -> ConnectScreen.connect(this, Falsify.mc, ServerAddress.parse(warSpree.address), warSpree, false));
+        addButton("Join Achieved", () -> ConnectScreen.connect(this, Falsify.mc, ServerAddress.parse(warSpree.address), warSpree, false));
         addButton("Credits", new CreditScreen(this));
         guys = new ArrayList<>();
-        blur = ModuleManager.getModule(BlurModule.class);
     }
 
     @Override
@@ -90,7 +85,7 @@ public class ClientMenuScreen extends Screen {
                     RenderHelper.drawSmoothRect(hover,context.getMatrices(),  (int)(-clickable.getWidth()/2f)+1, (int)(-clickable.getHeight()/2f)+1, (int)(clickable.getWidth()/2f)-1, (int)(clickable.getHeight()/2f)-1, 7, new int[] {5, 5, 5, 5});
                     int scale = 1;
                     matrices.scale(scale, scale, 1);
-                    Falsify.fontRenderer.drawCenteredString(context.getMatrices(), name, 0, -Falsify.fontRenderer.getStringHeight(name)/2, Color.WHITE, true);
+                    Falsify.fontRenderer.drawCenteredString(context, name, 0, -Falsify.fontRenderer.getStringHeight(name)/2, Color.WHITE, true);
                     matrices.pop();
                 }).build());
     }
@@ -146,7 +141,6 @@ public class ClientMenuScreen extends Screen {
         }
 
         renderBackground(context, mouseX, mouseY, delta);
-
         for(Clickable button : buttons)  {
             button.render(context, mouseX, mouseY, delta);
         }

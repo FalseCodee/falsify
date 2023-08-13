@@ -1,7 +1,6 @@
 package falsify.falsify.mixin;
 
 import falsify.falsify.Falsify;
-import falsify.falsify.gui.clickgui.ClickGUI;
 import falsify.falsify.gui.modmenu.ModMenuScreen;
 import falsify.falsify.listeners.events.EventKey;
 import net.minecraft.client.Keyboard;

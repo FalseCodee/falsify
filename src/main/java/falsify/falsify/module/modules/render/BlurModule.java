@@ -1,39 +1,28 @@
 package falsify.falsify.module.modules.render;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import falsify.falsify.gui.clickgui.primatives.Animation;
+import falsify.falsify.Falsify;
+import falsify.falsify.gui.utils.Animation;
 import falsify.falsify.listeners.Event;
-import falsify.falsify.listeners.events.EventPacketSend;
-import falsify.falsify.listeners.events.EventRender3d;
-import falsify.falsify.listeners.events.EventWindowResize;
+import falsify.falsify.listeners.events.*;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
 import falsify.falsify.module.settings.RangeSetting;
-import falsify.falsify.utils.RenderUtils;
-import falsify.falsify.utils.Timer;
-import falsify.falsify.utils.shaders.Framebuffer;
 import falsify.falsify.utils.shaders.Shader;
 import net.minecraft.client.gui.screen.ChatScreen;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
-
-import static org.lwjgl.opengl.GL32C.*;
 
 public class BlurModule extends Module {
 
-    private Shader shader;
-    private Shader shadePassthrough;
-    private Framebuffer framebuffer;
-
-    private final MatrixStack matrices = new MatrixStack();
-    private final RangeSetting radius = new RangeSetting("Radius", 3, 1, 100, 1);
-
-    private final Timer timer = new Timer();
-
+    private final RangeSetting radius = new RangeSetting("Radius", 3, 0, 100, 1);
+    private final RangeSetting passes = new RangeSetting("Passes", 3, 1, 20, 1);
+    private final RangeSetting downscale = new RangeSetting("Downsample", 3, 1, 100, 0.01);
+    private float currentRadius;
     private final Animation fadeInOut = new Animation(250, Animation.Type.EASE_IN_OUT);
     public BlurModule() {
         super("Blur", "Blurs the background", false, Category.RENDER, -1);
         settings.add(radius);
+        settings.add(passes);
+        settings.add(downscale);
     }
 
     @Override
@@ -47,43 +36,32 @@ public class BlurModule extends Module {
             fadeInOut.tick();
             if(fadeInOut.getProgress() == 0.0) return;
 
-            blurScreen(fadeInOut.run());
+            currentRadius = (float) (radius.getValue() / 10 * (fadeInOut.run()));
+
+            Falsify.shaderManager.KAWASE_BLUR.renderShader(Falsify.mc.getFramebuffer().getColorAttachment());
 
         } else if(event instanceof EventPacketSend e && e.getPacket() instanceof ChatMessageC2SPacket packet && packet.chatMessage().toLowerCase().startsWith(".reload")) {
-            shader = null;
-        } else if(event instanceof EventWindowResize && framebuffer != null) {
-            framebuffer.resize();
+            Falsify.shaderManager.GLOW.setShader(new Shader("blur.vert", "glow.frag"));
+            Falsify.shaderManager.GLOW_OUTLINE.setShader(new Shader("blur.vert", "glowoutline.frag"));
+            Falsify.shaderManager.BLUR_INSIDE.setShader(new Shader("blur.vert", "blurinside.frag"));
+            Falsify.shaderManager.KAWASE_BLUR.setShader(new Shader("blur.vert", "kawase_down.frag"));
+            event.setCancelled(true);
+        } else if(event instanceof EventWindowResize) {
+            Falsify.shaderManager.KAWASE_BLUR.loadFramebuffers();
+        } else if(event instanceof EventSettingChange<?> e && (e.getSetting() == passes || e.getSetting() == downscale)) {
+            Falsify.shaderManager.KAWASE_BLUR.loadFramebuffers();
         }
     }
 
-    public void blurScreen(double progress) {
-        if (shader == null) {
-            shader = new Shader("blur.vert", "blur.frag");
-            shadePassthrough = new Shader("passthrough.vert", "passthrough.frag");
-            framebuffer = new Framebuffer();
-        }
-
-        int texture = mc.getFramebuffer().getColorAttachment();
-        RenderUtils.renderShaderBegin();
-        renderToFbo(framebuffer, texture, shader, progress);
-        mc.getFramebuffer().beginWrite(true);
-        shadePassthrough.bind();
-        GlStateManager._activeTexture(GL_TEXTURE0);
-        GlStateManager._bindTexture(framebuffer.texture);
-        shadePassthrough.set("uTexture", 0);
-        RenderUtils.renderShader(matrices);
-        RenderUtils.renderShaderEnd();
+    public float getCurrentRadius() {
+        return currentRadius;
     }
 
-    private void renderToFbo(Framebuffer targetFbo, int sourceText, Shader shader, double progress) {
-        targetFbo.bind();
-        targetFbo.setViewport();
-        shader.bind();
-        GlStateManager._activeTexture(GL_TEXTURE0);
-        GlStateManager._bindTexture(sourceText);
-        shader.set("u_Size", mc.getWindow().getFramebufferWidth(), mc.getWindow().getFramebufferHeight());
-        shader.set("u_Texture", 0);
-        shader.set("u_Radius", radius.getValue()*progress);
-        RenderUtils.renderShader(matrices);
+    public int getPasses() {
+        return passes.getValue().intValue();
+    }
+
+    public float getDownscaleFactor() {
+        return downscale.getValue().floatValue();
     }
 }

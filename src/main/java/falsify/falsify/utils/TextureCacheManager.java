@@ -26,6 +26,7 @@ public class TextureCacheManager {
         this.textures = new ConcurrentHashMap<>();
         this.textureDir = new File(Falsify.clientDir + "\\textures");
         textureDir.mkdirs();
+        Falsify.logger.info("Created: Texture Cache Manager");
     }
 
     public void registerTextures() {

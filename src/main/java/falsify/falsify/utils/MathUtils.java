@@ -10,6 +10,10 @@ public class MathUtils {
         return Math.max(min, Math.min(max, val));
     }
 
+    public static double clamp(double val, double min, double max) {
+        return Math.max(min, Math.min(max, val));
+    }
+
     public static float[] getRotationsNeeded(Entity entity) {
         return getRotationsNeeded(entity.getX(), entity.getBoundingBox().getCenter().getY(), entity.getZ());
     }
@@ -48,6 +52,10 @@ public class MathUtils {
     }
     public static double lerp(double a, double b, double t){
         return (a+(b-a)*t);
+    }
+
+    public static double inverseLerp(double a, double b, double t){
+        return (t-a)/(b-a);
     }
 
     public static Vec3d interpolateVec3d(Vec3d current, Vec3d last, float partialTicks) {

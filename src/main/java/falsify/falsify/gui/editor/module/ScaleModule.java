@@ -1,7 +1,7 @@
 package falsify.falsify.gui.editor.module;
 
-import falsify.falsify.gui.clickgui.Clickable;
-import falsify.falsify.gui.clickgui.Draggable;
+import falsify.falsify.gui.utils.Clickable;
+import falsify.falsify.gui.utils.Draggable;
 import net.minecraft.client.gui.DrawContext;
 
 import java.awt.*;

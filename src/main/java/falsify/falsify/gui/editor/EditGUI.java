@@ -1,5 +1,6 @@
 package falsify.falsify.gui.editor;
 
+import falsify.falsify.Falsify;
 import falsify.falsify.gui.editor.module.RenderModule;
 import falsify.falsify.gui.editor.module.Snapper;
 import falsify.falsify.module.DisplayModule;
@@ -17,9 +18,11 @@ import java.util.List;
 public class EditGUI extends Screen {
     private final List<RenderModule<?>> renderModules = new ArrayList<>();
     private final Snapper snapper = new Snapper();
+    private final Screen parent;
 
-    public EditGUI() {
+    public EditGUI(Screen parent) {
         super(Text.of(""));
+        this.parent = parent;
     }
 
     @Override
@@ -62,12 +65,11 @@ public class EditGUI extends Screen {
                 boolean ySnap = renderModule.verticalSnap(snapper);
                 List<RenderModule<?>> sorted = new ArrayList<>(renderModules.stream().filter(renderModule1 -> renderModule1 != renderModule).sorted(Comparator.comparingDouble(renderModule1 -> Math.pow(renderModule.getX() - renderModule1.getX(), 2) + Math.pow(renderModule.getY() - renderModule1.getY(), 2))).toList());
 
-                for(int i = 0; i < sorted.size(); i++) {
-                    RenderModule<?> renderModule2 = sorted.get(i);
+                for (RenderModule<?> renderModule2 : sorted) {
                     renderModule2.getSnapper().update();
-                    if(!xSnap) xSnap = renderModule.horizontalSnap(renderModule2.getSnapper());
-                    if(!ySnap) ySnap = renderModule.verticalSnap(renderModule2.getSnapper());
-                    if(xSnap && ySnap) break;
+                    if (!xSnap) xSnap = renderModule.horizontalSnap(renderModule2.getSnapper());
+                    if (!ySnap) ySnap = renderModule.verticalSnap(renderModule2.getSnapper());
+                    if (xSnap && ySnap) break;
                 }
                 return true;
             }
@@ -82,5 +84,10 @@ public class EditGUI extends Screen {
             renderModule.setScaleDragging(false);
         }
         return super.mouseReleased(mouseX, mouseY, button);
+    }
+
+    @Override
+    public void close() {
+        Falsify.mc.setScreen(parent);
     }
 }

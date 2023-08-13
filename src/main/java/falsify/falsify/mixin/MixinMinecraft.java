@@ -2,7 +2,7 @@ package falsify.falsify.mixin;
 
 import falsify.falsify.Falsify;
 import falsify.falsify.gui.ClientMenuScreen;
-import falsify.falsify.gui.clickgui.ClickGUI;
+import falsify.falsify.gui.modmenu.ModMenuScreen;
 import falsify.falsify.listeners.events.EventAttack;
 import falsify.falsify.listeners.events.EventUpdate;
 import falsify.falsify.listeners.events.EventWindowResize;
@@ -38,9 +38,9 @@ public class MixinMinecraft {
 
     @ModifyVariable(method = "setScreen", at = @At("HEAD"), ordinal = 0, argsOnly = true)
     public Screen setScreen(Screen screen) {
-        if(Falsify.mc.currentScreen instanceof ClickGUI clickGUI) {
+        if(Falsify.mc.currentScreen instanceof ModMenuScreen gui) {
             Falsify.configManager.saveModules();
-            Falsify.configManager.saveClickGui(clickGUI.getTabs());
+            Falsify.configManager.saveClickGui(gui.getPanel());
             Falsify.configManager.saveConfigFile();
         }
         if(screen == null && Falsify.mc.world == null) return new ClientMenuScreen();
@@ -59,8 +59,7 @@ public class MixinMinecraft {
     @Inject(method = "scheduleStop", at = @At("HEAD"))
     public void scheduleStop(CallbackInfo ci) {
         if(hasRan) return;
-        Falsify.configManager.saveModules();
-        Falsify.configManager.saveConfigFile();
+        Falsify.shutdown();
         hasRan = true;
     }
     @Inject(method = "doAttack", at =@At("HEAD"), cancellable = true)
@@ -82,5 +81,7 @@ public class MixinMinecraft {
     private void onResolutionChange(CallbackInfo ci){
         EventWindowResize event = new EventWindowResize();
         Falsify.onEvent(event);
+
+        if(Falsify.shaderManager != null) Falsify.shaderManager.resize();
     }
 }

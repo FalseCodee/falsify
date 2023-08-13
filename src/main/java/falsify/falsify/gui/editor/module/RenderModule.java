@@ -1,8 +1,8 @@
 package falsify.falsify.gui.editor.module;
 
 import falsify.falsify.Falsify;
-import falsify.falsify.gui.clickgui.Clickable;
-import falsify.falsify.gui.clickgui.Draggable;
+import falsify.falsify.gui.utils.Clickable;
+import falsify.falsify.gui.utils.Draggable;
 import falsify.falsify.gui.editor.EditGUI;
 import falsify.falsify.module.DisplayModule;
 import falsify.falsify.utils.MathUtils;

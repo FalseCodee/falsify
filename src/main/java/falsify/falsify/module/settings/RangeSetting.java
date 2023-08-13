@@ -1,5 +1,8 @@
 package falsify.falsify.module.settings;
 
+import falsify.falsify.Falsify;
+import falsify.falsify.listeners.events.EventSettingChange;
+
 import java.text.DecimalFormat;
 
 public class RangeSetting extends Setting<Double> {
@@ -19,18 +22,22 @@ public class RangeSetting extends Setting<Double> {
 
     @Override
     public void setValue(Double value) {
-        if(increment/2 - value > 0) {
-            value = value - (value % increment);
-        } else {
-            value = value + increment - (value % increment);
-        }
-
         super.setValue(Math.min(max, Math.max(value, min)));
+        EventSettingChange<RangeSetting> event = new EventSettingChange<>(this);
+        Falsify.onEvent(event);
     }
 
     @Override
     public Double getValue() {
-        return Double.valueOf(numberFormat.format(super.getValue()));
+        double val = value;
+        double offset = (val % increment);
+
+        if(offset - increment/2 > 0) {
+            val += increment - offset;
+        } else {
+            val -= offset;
+        }
+        return Double.valueOf(numberFormat.format(val));
     }
 
     public double getMin() {

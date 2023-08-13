@@ -23,11 +23,7 @@ public class Chams extends Module {
     public Chams() {
         super("Chams", "Highlights targets.", true, Category.RENDER, -1);
         settings.add(type);
-        settings.add(color.getRed());
-        settings.add(color.getGreen());
-        settings.add(color.getBlue());
-        settings.add(color.getAlpha());
-
+        settings.add(color);
     }
 
 
@@ -45,7 +41,7 @@ public class Chams extends Module {
         }
 
         if(e.isPre()){
-            Color rgba = color.getColor();
+            Color rgba = color.getValue();
             RenderSystem.setShaderColor(rgba.getRed()/255f, rgba.getGreen()/255f, rgba.getBlue()/255f, rgba.getAlpha()/255f);
             RenderSystem.enableBlend();
             RenderSystem.blendFunc(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA);

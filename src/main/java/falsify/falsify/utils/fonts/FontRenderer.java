@@ -2,6 +2,7 @@ package falsify.falsify.utils.fonts;
 
 import com.google.common.base.Preconditions;
 import com.mojang.blaze3d.systems.RenderSystem;
+import falsify.falsify.Falsify;
 import falsify.falsify.utils.MathUtils;
 import falsify.falsify.utils.RenderHelper;
 import falsify.falsify.utils.TextureCacheManager;
@@ -10,6 +11,7 @@ import it.unimi.dsi.fastutil.chars.Char2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectList;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
@@ -61,6 +63,7 @@ public class FontRenderer implements Closeable {
         this.originalSize = sizePx * downScaleFactor;
         this.downScaleFactor = downScaleFactor;
         init(fonts, sizePx * downScaleFactor);
+        Falsify.logger.info("Created: Font Renderer");
     }
 
     private static int floorNearestMulN(int x, int n) {
@@ -74,6 +77,7 @@ public class FontRenderer implements Closeable {
      * @return The stripped string
      */
     public static String stripControlCodes(String text) {
+        if(text == null) return null;
         char[] chars = text.toCharArray();
         StringBuilder f = new StringBuilder();
         for (int i = 0; i < chars.length; i++) {
@@ -128,14 +132,16 @@ public class FontRenderer implements Closeable {
     /**
      * Draws a string
      *
-     * @param stack The MatrixStack
+     * @param context The Draw Context
      * @param s     The string to draw
      * @param x     X coordinate to draw at
      * @param y     Y coordinate to draw at
      * @param color     The color to draw
 
      */
-    public void drawString(MatrixStack stack, String s, float x, float y, Color color, boolean shadow) {
+    public void drawString(DrawContext context, String s, float x, float y, Color color, boolean shadow) {
+        if(s == null) return;
+        MatrixStack stack = context.getMatrices();
         float r = color.getRed() / 255f;
         float g = color.getGreen() / 255f;
         float b = color.getBlue() / 255f;
@@ -147,8 +153,7 @@ public class FontRenderer implements Closeable {
         stack.scale(1f / this.scaleMul / downScaleFactor, 1f / this.scaleMul / downScaleFactor, 1f);
 
         RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
-        RenderSystem.disableCull();
+        //RenderSystem.disableCull();
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
 
@@ -188,7 +193,8 @@ public class FontRenderer implements Closeable {
                 continue;
             }
             Glyph glyph = locateGlyph1(c);
-            if (glyph.value() != ' ') { // we only need to really draw the glyph if it's not blank, otherwise we can just skip its width and that'll be it
+            if(glyph == null) glyph = locateGlyph1('N');
+            if (glyph.value() != ' ') {
                 Identifier i1 = glyph.owner().bindToTexture;
                 DrawEntry entry = new DrawEntry(xOffset, yOffset, r2, g2, b2, glyph);
                 GLYPH_PAGE_CACHE.computeIfAbsent(i1, integer -> new ObjectArrayList<>()).add(entry);
@@ -221,10 +227,10 @@ public class FontRenderer implements Closeable {
                     bb.vertex(mat, xo + w + 2, yo + 0 + 2, 0).texture(u2, v1).color(0, 0, 0, a).next();
                     bb.vertex(mat, xo + 0 + 2, yo + 0 + 2, 0).texture(u1, v1).color(0, 0, 0, a).next();
                 }
-                bb.vertex(mat, xo + 0, yo + h, 0).texture(u1, v2).color(cr, cg, cb, a).next();
-                bb.vertex(mat, xo + w, yo + h, 0).texture(u2, v2).color(cr, cg, cb, a).next();
-                bb.vertex(mat, xo + w, yo + 0, 0).texture(u2, v1).color(cr, cg, cb, a).next();
-                bb.vertex(mat, xo + 0, yo + 0, 0).texture(u1, v1).color(cr, cg, cb, a).next();
+                bb.vertex(mat, xo + 0, yo + h, 0f).texture(u1, v2).color(cr, cg, cb, a).next();
+                bb.vertex(mat, xo + w, yo + h, 0f).texture(u2, v2).color(cr, cg, cb, a).next();
+                bb.vertex(mat, xo + w, yo + 0, 0f).texture(u2, v1).color(cr, cg, cb, a).next();
+                bb.vertex(mat, xo + 0, yo + 0, 0f).texture(u1, v1).color(cr, cg, cb, a).next();
             }
             BufferRenderer.drawWithGlobalProgram(bb.end());
         }
@@ -236,14 +242,14 @@ public class FontRenderer implements Closeable {
     /**
      * Draws a string centered on the X coordinate
      *
-     * @param stack The MatrixStack
+     * @param context The Draw Context
      * @param s     The string to draw
      * @param x     X center coordinate of the text to draw
      * @param y     Y coordinate of the text to draw
      * @param color     The color to draw
      */
-    public void drawCenteredString(MatrixStack stack, String s, float x, float y, Color color, boolean shadow) {
-        drawString(stack, s, x - getStringWidth(s) / 2f, y, color, shadow);
+    public void drawCenteredString(DrawContext context, String s, float x, float y, Color color, boolean shadow) {
+        drawString(context, s, x - getStringWidth(s) / 2f, y, color, shadow);
     }
 
     /**
@@ -253,6 +259,7 @@ public class FontRenderer implements Closeable {
      * @return The width of the string if it'd be drawn on the screen
      */
     public float getStringWidth(String text) {
+        if(text == null) return 0.0f;
         char[] c = stripControlCodes(text).toCharArray();
         float currentLine = 0;
         float maxPreviousLines = 0;
@@ -268,6 +275,20 @@ public class FontRenderer implements Closeable {
         return Math.max(currentLine, maxPreviousLines);
     }
 
+    public String trimToWidth(String text, float width) {
+        while (text.length() > 0 && getStringWidth(text) > width) {
+            text = text.substring(1);
+        }
+        return text;
+    }
+
+    public String trimToWidthBackwards(String text, float width) {
+        while (text.length() > 0 && getStringWidth(text) > width) {
+            text = text.substring(0, text.length()-1);
+        }
+        return text;
+    }
+
     /**
      * Calculates the height of the string, if it were drawn on the screen. This is necessary, because the fonts in this FontRenderer might have a different height for each char.
      *
@@ -275,6 +296,7 @@ public class FontRenderer implements Closeable {
      * @return The height of the string if it'd be drawn on the screen
      */
     public float getStringHeight(String text) {
+        if(text == null) return 0.0f;
         char[] c = stripControlCodes(text).toCharArray();
         if (c.length == 0) {
             c = new char[]{' '};

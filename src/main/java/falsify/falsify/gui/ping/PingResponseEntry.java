@@ -2,8 +2,8 @@ package falsify.falsify.gui.ping;
 
 import com.mojang.authlib.GameProfile;
 import falsify.falsify.Falsify;
-import falsify.falsify.gui.clickgui.Clickable;
-import falsify.falsify.gui.clickgui.primatives.Animation;
+import falsify.falsify.gui.utils.Clickable;
+import falsify.falsify.gui.utils.Animation;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.network.ServerInfo;
 

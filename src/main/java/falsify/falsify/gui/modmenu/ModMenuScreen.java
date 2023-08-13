@@ -1,36 +1,53 @@
 package falsify.falsify.gui.modmenu;
 
-import falsify.falsify.gui.modmenu.primitives.FilterWidget;
-import falsify.falsify.gui.modmenu.primitives.ModPanel;
-import falsify.falsify.gui.modmenu.primitives.ModuleEntry;
+import falsify.falsify.Falsify;
+import falsify.falsify.gui.utils.Clickable;
+import falsify.falsify.gui.editor.EditGUI;
+import falsify.falsify.gui.modmenu.primitives.Panel;
+import falsify.falsify.utils.RenderHelper;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.function.Predicate;
 
 public class ModMenuScreen extends Screen {
-    private ModPanel panel;
-    private FilterWidget filterWidget;
-
+    private Panel panel;
+    private Clickable editHud;
     public ModMenuScreen() {
         super(Text.of(""));
     }
 
     @Override
     protected void init() {
-        panel = new ModPanel(width/2f-width/8f,height/2f-height/4f, width/2f,height/2f);
-        filterWidget = new FilterWidget(width/4f,height/2f-height/4f, width/8f,height/2f, this);
+        panel = new Panel(width/2f-3*width/10f,height/2f-3*height/10f, 3*width/5f,3*height/5f);
+        editHud = new Clickable.ButtonBuilder()
+                .pos(width-100, 10)
+                .dimensions(90, 40)
+                .onClick((instance, x, y, button) -> {
+                    if(instance.isHovering(x, y)) {
+                        Falsify.mc.setScreen(new EditGUI(this));
+                        return true;
+                    }
+                    return false;
+                })
+                .onRender((instance, context, mouseX, mouseY, delta) -> {
+                    Color color = panel.getTheme().primaryColor();
+                    if(instance.isHovering(mouseX, mouseY)) color = color.brighter();
+
+                    instance.pushStackToPosition(context.getMatrices());
+                    RenderHelper.drawSmoothRect(panel.getTheme().secondaryColor(), context.getMatrices(), 0, 0, (float) instance.getWidth(), (float) instance.getHeight(), 5, new int[] {10, 10, 10, 10});
+                    RenderHelper.drawSmoothRect(color, context.getMatrices(), 2, 2, (float) instance.getWidth()-2, (float) instance.getHeight()-2, 4, new int[] {10, 10, 10, 10});
+
+                    Falsify.fontRenderer.drawCenteredString(context, "Edit Hud", (float) (instance.getWidth()/2f), (float) (instance.getHeight()/2f - Falsify.fontRenderer.getStringHeight("Edit Hud")/2f), panel.getTheme().primaryTextColor(), true);
+                })
+                .build();
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if(panel.handleClick(mouseX, mouseY, button)) return true;
-        if(filterWidget.handleClick(mouseX, mouseY, button)) return true;
-        return false;
+        return editHud.handleClick(mouseX, mouseY, button);
     }
 
     @Override
@@ -39,12 +56,42 @@ public class ModMenuScreen extends Screen {
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        panel.render(context, mouseX, mouseY, delta);
-        filterWidget.render(context, mouseX, mouseY, delta);
+    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        return panel.mouseReleased(mouseX, mouseY, button);
     }
 
-    public void setFilter(Predicate<? super ModuleEntry> predicate) {
-        panel.setFilter(predicate);
+    @Override
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        panel.render(context, mouseX, mouseY, delta);
+        editHud.render(context, mouseX, mouseY, delta);
+    }
+
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        return panel.keyPressed(keyCode, scanCode, modifiers);
+    }
+
+    @Override
+    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
+        return panel.onDrag(mouseX, mouseY, button, deltaX, deltaY);
+    }
+
+    @Override
+    public boolean charTyped(char chr, int modifiers) {
+        return panel.charTyped(chr, modifiers);
+    }
+
+    @Override
+    public boolean shouldCloseOnEsc() {
+        return false;
+    }
+
+    @Override
+    public boolean shouldPause() {
+        return false;
+    }
+
+    public Panel getPanel() {
+        return panel;
     }
 }

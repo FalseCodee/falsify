@@ -28,7 +28,7 @@ class TitleRenderModule extends RenderModule<TitleModule> {
         CompletableFuture<LegacyIdentifier> futureTitle = Falsify.textureCacheManager.getIdentifier("title");
         if(futureTitle.isDone()) {
             this.title = futureTitle.getNow(null);
-            System.out.println("Title done: " + (title == null));
+            Falsify.logger.info("Title done: " + (title == null));
         }
     }
 
@@ -38,7 +38,7 @@ class TitleRenderModule extends RenderModule<TitleModule> {
             setTitle();
             return;
         }
-        drawRect(module.getBackgroundColor(), context.getMatrices(), (float) 0, (float) 0, (float) (width), (float) (height));
+        module.drawBackground(context, mouseX, mouseY, delta);
         context.drawTexture(title, 0, 0, 0,0,(int)width, (int)height, (int)width, (int)height);
     }
 }

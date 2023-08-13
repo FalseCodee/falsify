@@ -26,5 +26,5 @@ void main()
         }
     }
     Color /= float(Quality)*float(Directions)+1.0;
-    color =  vec4(Color.xyz, 1.0);
+    color = vec4(Color.xyz, 1.0);
 }

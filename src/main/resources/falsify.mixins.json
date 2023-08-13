@@ -29,6 +29,7 @@
     "MixinGameRenderer$Accessor",
     "MixinLightmapTextureManager",
     "MixinMouse",
+    "MixinPlayerListHud",
     "MixinTextRenderer",
     "special.FrameBufferAccessor",
     "special.MixinAbstractClientPlayerEntity",

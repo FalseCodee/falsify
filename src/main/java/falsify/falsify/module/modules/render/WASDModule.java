@@ -1,7 +1,7 @@
 package falsify.falsify.module.modules.render;
 
 import falsify.falsify.Falsify;
-import falsify.falsify.gui.clickgui.primatives.Animation;
+import falsify.falsify.gui.utils.Animation;
 import falsify.falsify.gui.editor.module.RenderModule;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.DisplayModule;

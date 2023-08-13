@@ -2,9 +2,13 @@ package falsify.falsify.utils;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import falsify.falsify.Falsify;
+import falsify.falsify.utils.shaders.ShaderRenderer;
+import net.minecraft.client.gl.GlProgramManager;
+import net.minecraft.client.gl.VertexBuffer;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.Window;
 import net.minecraft.client.util.math.MatrixStack;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 
 import java.awt.*;
@@ -13,6 +17,8 @@ public class RenderHelper {
 
     public static final Window WINDOW = Falsify.mc.getWindow();
     public static final double SCALE = 2.0;
+    @Nullable
+    private static VertexBuffer currentVertexBuffer;
 
     public static double getScaleFactor() {
         return SCALE/WINDOW.getScaleFactor();
@@ -135,7 +141,7 @@ public class RenderHelper {
                                 (q) * (q - 1) * (q - 2) / 6 * y2
                 };
 
-                for (int s = q * 90; s < (q + 1) * 90; s += 90 / (a[q]+1)) {
+                for (int s = q * 90; s <= (q+1) * 90; s += 90 / (a[q])) {
                     float radians = (float) Math.toRadians(s);
                     bufferBuilder.vertex(matrix, (float) Math.sin(radians) * r + center[0], (float) Math.cos(radians) * r + center[1], 0.0F).color(f, g, h, i).next();
                 }
@@ -158,6 +164,29 @@ public class RenderHelper {
         //RenderSystem.enableTexture();
         RenderSystem.disableBlend();
     }
+
+    public static void drawRainbowCircle(MatrixStack matrices, float centerX, float centerY, float r, int quality, float brightness) {
+        RenderSystem.setShaderColor(1,1,1,1);
+        Matrix4f matrix = matrices.peek().getPositionMatrix();
+
+        BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
+        RenderSystem.enableBlend();
+
+        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
+        bufferBuilder.begin(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION_COLOR);
+        Color color = Color.WHITE;
+        bufferBuilder.vertex(matrix, centerX, centerY, 0.0F).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).next();
+        for (int s = 0; s <= 360; s += 360 / quality) {
+            float radians = (float) Math.toRadians(s);
+            color = Color.getHSBColor(s/360f, 1.0f, brightness);
+            bufferBuilder.vertex(matrix, (float) Math.sin(radians) * r + centerX, (float) Math.cos(radians) * r + centerY, 0.0F).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).next();
+        }
+        BufferRenderer.drawWithGlobalProgram(bufferBuilder.end());
+
+        RenderSystem.disableBlend();
+    }
+
+
     public static void drawSmoothRectOutline(Color color, MatrixStack matrices, float x1, float y1, float x2, float y2, float r, int[] a) {
         RenderSystem.setShaderColor(1,1,1,1);
         x1 += r;
@@ -225,6 +254,44 @@ public class RenderHelper {
     }
     public static void enableScissor(int x1, int y1, int x2, int y2) {
         RenderSystem.enableScissor((int) (x1 * Falsify.mc.getWindow().getScaleFactor()), (int) ((Falsify.mc.getWindow().getScaledHeight() - y2) * Falsify.mc.getWindow().getScaleFactor()), (int) ((x2-x1) * Falsify.mc.getWindow().getScaleFactor()), (int) ((y2-y1) * Falsify.mc.getWindow().getScaleFactor()));
+    }
+
+    public static void enableScissor(double x1, double y1, double x2, double y2) {
+        RenderSystem.enableScissor((int) (x1 * Falsify.mc.getWindow().getScaleFactor()), (int) ((Falsify.mc.getWindow().getScaledHeight() - y2) * Falsify.mc.getWindow().getScaleFactor()), (int) ((x2-x1) * Falsify.mc.getWindow().getScaleFactor()), (int) ((y2-y1) * Falsify.mc.getWindow().getScaleFactor()));
+    }
+
+    public static void drawWithShader(BufferBuilder.BuiltBuffer buffer, ShaderRenderer shader) {
+        VertexBuffer vertexBuffer = upload(buffer);
+        RenderUtils.renderShaderBegin();
+        shader.getShader().bind();
+        shader.loadVariables();
+        vertexBuffer.draw();
+        GlProgramManager.useProgram(0);
+        RenderUtils.renderShaderEnd();
+    }
+
+    private static VertexBuffer upload(BufferBuilder.BuiltBuffer buffer) {
+        RenderSystem.assertOnRenderThread();
+        if (buffer.isEmpty()) {
+            buffer.release();
+            return null;
+        }
+        VertexBuffer vertexBuffer = bind(buffer.getParameters().format());
+        vertexBuffer.upload(buffer);
+        return vertexBuffer;
+    }
+
+    private static VertexBuffer bind(VertexFormat vertexFormat) {
+        VertexBuffer vertexBuffer = vertexFormat.getBuffer();
+        bind(vertexBuffer);
+        return vertexBuffer;
+    }
+
+    private static void bind(VertexBuffer vertexBuffer) {
+        if (vertexBuffer != currentVertexBuffer) {
+            vertexBuffer.bind();
+            currentVertexBuffer = vertexBuffer;
+        }
     }
 
     public static void disableScissor() {

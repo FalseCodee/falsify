@@ -106,30 +106,34 @@ public class EntityInfo extends Module {
         matrices.scale((float) (5/dist), (float) (5/dist), 1);
         String name = entity.getName().getString();
         float xRange = (Math.max(fr.getStringWidth("WWWWWWWWWWWW"), fr.getStringWidth(name)) + 46)/2;
-        RenderHelper.drawSmoothRect(new Color(0, 0, 0, 181), matrices, -xRange-1,  -26,  xRange+1, 26, 4f, new int[] {5,5,5,5});
-        RenderHelper.drawSmoothRect(new Color(94, 94, 94, 182), matrices, -xRange,  -25,  xRange, 25, 3, new int[] {5,5,5,5});
+        Falsify.shaderManager.BLUR_INSIDE.startCapture(false);
+        RenderHelper.drawSmoothRect(new Color(25, 255, 229, 181), matrices, -xRange-1,  -26,  xRange+1, 26, 4f, new int[] {5,5,5,5});
+        RenderHelper.drawSmoothRect(new Color(202, 255, 242, 182), matrices, -xRange,  -25,  xRange, 25, 3, new int[] {5,5,5,5});
+//        matrices.translate(0,0,-0.03);
         LegacyIdentifier id = getHead(entity.getUuid());
         if(id == null) {
-            fr.drawCenteredString(matrices, name, 0, -23, Color.WHITE, true);
+            fr.drawCenteredString(context, name, 0, -23, Color.WHITE, true);
 
-            //fr.drawCenteredString(matrices, "IQ: " + entity.getId() % 150, 0, -13, Color.WHITE, true);
-            fr.drawCenteredString(matrices, "pp size: " + MathUtils.clamp(Math.abs(entity.getUuid().getMostSignificantBits() % 120 / 10f), 3, 12) + " inches", 0, -1, Color.WHITE, true);
+            fr.drawCenteredString(context, "pp size: " + MathUtils.clamp(Math.abs(entity.getUuid().getMostSignificantBits() % 120 / 10f), 3, 12) + " inches", 0, -1, Color.WHITE, true);
 
-            fr.drawCenteredString(matrices, entity.getHealth() + " / " + entity.getMaxHealth(), 0, 11, Color.WHITE, true);
+            fr.drawCenteredString(context, entity.getHealth() + " / " + entity.getMaxHealth(), 0, 11, Color.WHITE, true);
         } else {
+            Color normalColor = new Color(255, 255, 255, 255);
+            Color subColor = new Color(199, 199, 199, 255);
+
             float width = 2.3f*id.getWidth();
             float height = 2.3f*id.getHeight();
-            context.drawTexture(id, (int)-xRange+5,-id.getHeight()-5,0,0, (int) width, (int) height, (int) width, (int) height);
-            fr.drawString(matrices, name, -xRange+44, -22, Color.WHITE, true);
-            Color subColor = new Color(199, 199, 199);
-            //fr.drawString(matrices, "IQ: §f" + entity.getId() % 150, -31, -12, subColor, true);
-            fr.drawString(matrices, "Hittable: §f" + ((entity.isInvulnerable()) ? "No" : "Yes"), -xRange+44, -2, subColor, true);
 
-            fr.drawString(matrices, format.format(entity.getHealth()) + " / " + format.format(entity.getMaxHealth()), -xRange+44, 9, Color.WHITE, true);
+            context.drawTexture(id, (int)-xRange+5,-id.getHeight()-5,0,0, (int) width, (int) height, (int) width, (int) height);
+
+            fr.drawString(context, name, -xRange+44, -22, normalColor, true);
+            fr.drawString(context, "Hittable: §f" + ((entity.isInvulnerable()) ? "No" : "Yes"), -xRange+44, -2, subColor, true);
+            fr.drawString(context, format.format(entity.getHealth()) + " / " + format.format(entity.getMaxHealth()), -xRange+44, 9, normalColor, true);
         }
         float percentage = MathUtils.clamp(entity.getHealth()/ entity.getMaxHealth(), 0.0f, 1.0f);
         RenderUtils.fill(matrices, (int) -xRange,  20, (int) (2*xRange*percentage-xRange), 22, new Color((1-percentage), percentage, 56/255f, 219/255f).getRGB());
         matrices.pop();
+        Falsify.shaderManager.BLUR_INSIDE.endCapture();
     }
 
     public LegacyIdentifier getHead(UUID uuid) {

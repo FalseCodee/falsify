@@ -1,5 +1,6 @@
 package falsify.falsify.module.modules.render;
 
+import falsify.falsify.Falsify;
 import falsify.falsify.gui.editor.module.RenderModule;
 import falsify.falsify.listeners.Event;
 import falsify.falsify.listeners.events.EventPacketSend;
@@ -9,6 +10,7 @@ import falsify.falsify.module.settings.RangeSetting;
 import falsify.falsify.utils.FalseRunnable;
 import falsify.falsify.utils.GifReader;
 import falsify.falsify.utils.LegacyIdentifier;
+import falsify.falsify.utils.RenderUtils;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 
@@ -74,7 +76,9 @@ class GifRenderModule extends RenderModule<GifModule> {
 
         double width = frame.getWidth() * module.scale.getValue();
         double height = frame.getHeight() * module.scale.getValue();
+        Falsify.shaderManager.GLOW.startCapture(false);
+        RenderUtils.drawTexture(frame, context.getMatrices(), 0,0,0,0, (int) width, (int) height, (int) width, (int) height);
+        Falsify.shaderManager.GLOW.endCapture();
 
-        context.drawTexture(frame, 0,0,0,0, (int) width, (int) height, (int) width, (int) height);
     }
 }

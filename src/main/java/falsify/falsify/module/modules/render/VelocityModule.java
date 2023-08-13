@@ -23,7 +23,7 @@ class VelocityRenderModule extends RenderModule<VelocityModule> {
 
     @Override
     public void renderModule(DrawContext context, int mouseX, int mouseY, float delta) {
-        drawRect(module.getBackgroundColor(), context.getMatrices(), (float) 0, (float) 0, (float) (width), (float) (height));
+        module.drawBackground(context, mouseX, mouseY, delta);
         ClientPlayerEntity pl = Falsify.mc.player;
         double speed = pl.getPos().distanceTo(new Vec3d(pl.prevX, pl.prevY, pl.prevZ))*20;
         context.drawCenteredTextWithShadow(Falsify.mc.textRenderer, String.format("%.1f", speed) +" m/s", (int) width/2, (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, module.getTextColor().getRGB());

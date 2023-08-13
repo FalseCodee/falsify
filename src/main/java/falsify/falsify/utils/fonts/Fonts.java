@@ -17,9 +17,10 @@ public class Fonts {
     public Fonts() {
         fonts = new ArrayList<>();
         init();
+        Falsify.logger.info("Created: Fonts");
     }
     public void init() {
-        addFont("Comfortaa-Regular.ttf");
+        addFont("HindMadurai-SemiBold.ttf");
     }
 
     public void addFont(String fontName) {

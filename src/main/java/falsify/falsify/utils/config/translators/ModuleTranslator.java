@@ -23,6 +23,16 @@ public class ModuleTranslator {
             else if (setting instanceof RangeSetting s) json.addProperty(s.getName(), s.getValue());
             else if (setting instanceof ModeSetting s) json.addProperty(s.getName(), s.getIndex());
             else if (setting instanceof KeybindSetting s) json.addProperty(s.getName(), s.getValue());
+            else if (setting instanceof ColorSetting s) {
+                JsonObject colorObj = new JsonObject();
+                colorObj.addProperty("hue", s.getHue());
+                colorObj.addProperty("saturation", s.getSaturation());
+                colorObj.addProperty("brightness", s.getBrightness());
+                colorObj.addProperty("alpha", s.getAlpha());
+                colorObj.addProperty("rainbow", s.isRainbow());
+                colorObj.addProperty("rainbowSpeed", s.getRpm());
+                json.add(s.getName(), colorObj);
+            }
         }
         return json;
     }
@@ -45,6 +55,15 @@ public class ModuleTranslator {
                 s.setIndex(settingsJson.getAsJsonPrimitive(s.getName()).getAsInt());
             else if (setting instanceof KeybindSetting s)
                 s.setValue(settingsJson.getAsJsonPrimitive(s.getName()).getAsInt());
+            else if (setting instanceof ColorSetting s) {
+                JsonObject colorObj = settingsJson.getAsJsonObject(s.getName());
+                s.setHue(colorObj.getAsJsonPrimitive("hue").getAsFloat());
+                s.setSaturation(colorObj.getAsJsonPrimitive("saturation").getAsFloat());
+                s.setBrightness(colorObj.getAsJsonPrimitive("brightness").getAsFloat());
+                s.setAlpha(colorObj.getAsJsonPrimitive("alpha").getAsFloat());
+                s.setRainbow(colorObj.getAsJsonPrimitive("rainbow").getAsBoolean());
+                s.setRpm(colorObj.getAsJsonPrimitive("rainbowSpeed").getAsFloat());
+            }
         }
     }
 }

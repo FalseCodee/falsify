@@ -23,10 +23,7 @@ public class Breadcrumbs extends Module {
         super("Breadcrumbs", "Draws a line from where you've been.", true, Category.RENDER, -1);
         settings.add(count);
         settings.add(quality);
-        settings.add(colorSetting.getRed());
-        settings.add(colorSetting.getGreen());
-        settings.add(colorSetting.getBlue());
-        settings.add(colorSetting.getAlpha());
+        settings.add(colorSetting);
     }
 
     @Override
@@ -39,7 +36,7 @@ public class Breadcrumbs extends Module {
     public void onEvent(Event<?> event) {
         if(event instanceof EventRender3d eventRender3d) {
             if(mc.world == null || crumbs.size() == 0) return;
-            RenderUtils.line(eventRender3d, crumbs, colorSetting.getColor());
+            RenderUtils.line(eventRender3d, crumbs, colorSetting.getValue());
 
         } else if(event instanceof EventUpdate) {
             if(mc.player == null) return;

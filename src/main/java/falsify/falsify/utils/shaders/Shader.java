@@ -26,13 +26,18 @@ public class Shader {
 
     public Shader(String vertPath, String fragPath) {
         int vert = GlStateManager.glCreateShader(GL_VERTEX_SHADER);
-
         GlStateManager.glShaderSource(vert, ImmutableList.of(read(vertPath)));
         GlStateManager.glCompileShader(vert);
+        if (GlStateManager.glGetShaderi(vert, GL_COMPILE_STATUS) == GL_FALSE) {
+            Falsify.logger.info(GlStateManager.glGetShaderInfoLog(vert, 512));
+        }
 
         int frag = GlStateManager.glCreateShader(GL_FRAGMENT_SHADER);
         GlStateManager.glShaderSource(frag, ImmutableList.of(read(fragPath)));
         GlStateManager.glCompileShader(frag);
+        if (GlStateManager.glGetShaderi(frag, GL_COMPILE_STATUS) == GL_FALSE) {
+            Falsify.logger.info(GlStateManager.glGetShaderInfoLog(frag, 512));
+        }
 
         this.id = glCreateProgram();
 
@@ -41,7 +46,7 @@ public class Shader {
         GlStateManager.glLinkProgram(id);
 
         if (GlStateManager.glGetProgrami(id, GL_LINK_STATUS) == GL_FALSE) {
-            System.out.println(GlStateManager.glGetProgramInfoLog(id, 512));
+            Falsify.logger.info(GlStateManager.glGetProgramInfoLog(id, 512));
         }
 
         GlStateManager.glDeleteShader(vert);

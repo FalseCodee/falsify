@@ -1,5 +1,6 @@
 package falsify.falsify.module;
 
+import falsify.falsify.Falsify;
 import falsify.falsify.module.modules.chat.*;
 import falsify.falsify.module.modules.combat.Aimbot;
 import falsify.falsify.module.modules.combat.AutoClick;
@@ -55,6 +56,9 @@ public class ModuleManager {
         modules.add(new FastJump());
         modules.add(new Breadcrumbs());
         modules.add(new ServerCrasher());
+        modules.add(new Notifications());
+        modules.add(new PrivateChat());
+        modules.add(new Icons());
 
         modules.add(new FPSModule());
         modules.add(new TimeModule());
@@ -70,6 +74,9 @@ public class ModuleManager {
         modules.add(new VelocityModule());
         modules.add(new PositionModule());
         modules.add(new GifModule());
+
+        Falsify.postProcess = new PostProcess();
+        modules.add(Falsify.postProcess);
     }
 
     public static <T extends Module> T getModule(Class<T> module){

@@ -4,13 +4,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import falsify.falsify.Falsify;
-import falsify.falsify.gui.clickgui.primatives.Tab;
+import falsify.falsify.gui.modmenu.primitives.Panel;
 import falsify.falsify.module.Category;
 import falsify.falsify.utils.config.translators.CategoryTranslator;
-import falsify.falsify.utils.config.translators.ClickGuiTranslator;
+import falsify.falsify.utils.config.translators.ModMenuTranslator;
 
 import java.io.*;
-import java.util.List;
 
 public class ConfigManager {
     public JsonObject config;
@@ -27,6 +26,7 @@ public class ConfigManager {
                 throw new RuntimeException(e);
             }
         }
+        Falsify.logger.info("Created: Config Manager");
     }
 
     public void loadModules() {
@@ -46,16 +46,17 @@ public class ConfigManager {
         config.add("modules", modules);
     }
 
-    public void loadClickGui(List<Tab> tabs) {
-        if(config.has("clickgui"))ClickGuiTranslator.loadClickGui(tabs, config.getAsJsonObject("clickgui"));
+    public void loadPanel(Panel panel) {
+        if(config.has("clickgui")) ModMenuTranslator.loadPanel(panel, config.getAsJsonObject("clickgui"));
     }
 
-    public void saveClickGui(List<Tab> tabs) {
-        config.add("clickgui", ClickGuiTranslator.translateClickGui(tabs));
+    public void saveClickGui(Panel panel) {
+        config.add("clickgui", ModMenuTranslator.translatePanel(panel));
     }
 
     private JsonObject readConfigFile() throws FileNotFoundException {
         JsonElement jsonElement = JsonParser.parseReader(new FileReader(configFile));
+        Falsify.logger.info("Loaded Config");
         return jsonElement.getAsJsonObject();
     }
 

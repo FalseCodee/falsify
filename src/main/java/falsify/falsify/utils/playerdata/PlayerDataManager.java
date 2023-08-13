@@ -1,6 +1,7 @@
 package falsify.falsify.utils.playerdata;
 
 import com.google.gson.JsonObject;
+import falsify.falsify.Falsify;
 import falsify.falsify.utils.FalseRunnable;
 import falsify.falsify.utils.JsonHelper;
 import falsify.falsify.utils.playerdata.PlayerData;
@@ -27,6 +28,7 @@ public class PlayerDataManager {
         for(String key : playerData.keySet()) {
             dataList.add(PlayerData.fromUuid(UUID.fromString(key)));
         }
+        Falsify.logger.info("Loaded Player Data");
     }
 
     public JsonObject getPlayerObject(UUID uuid) {

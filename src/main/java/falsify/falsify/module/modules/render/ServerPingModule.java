@@ -21,7 +21,7 @@ class ServerPingRenderModule extends RenderModule<ServerPingModule> {
 
     @Override
     public void renderModule(DrawContext context, int mouseX, int mouseY, float delta) {
-        drawRect(module.getBackgroundColor(), context.getMatrices(), (float) 0, (float) 0, (float) (width), (float) (height));
+        module.drawBackground(context, mouseX, mouseY, delta);
         int ping;
         if(Falsify.mc.getNetworkHandler() == null || Falsify.mc.player == null || Falsify.mc.getNetworkHandler().getPlayerListEntry(Falsify.mc.player.getUuid()) == null) ping = 0;
         else ping = Falsify.mc.getNetworkHandler().getPlayerListEntry(Falsify.mc.player.getUuid()).getLatency();

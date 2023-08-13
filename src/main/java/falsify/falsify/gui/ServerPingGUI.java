@@ -1,5 +1,6 @@
 package falsify.falsify.gui;
 
+import falsify.falsify.Falsify;
 import falsify.falsify.gui.ping.PingResponseEntry;
 import falsify.falsify.utils.FalseRunnable;
 import falsify.falsify.utils.NetworkUtils;
@@ -50,7 +51,7 @@ public class ServerPingGUI extends Screen {
             @Override
             public void run() {
                 queuedMoves++;
-                System.out.println(Runtime.getRuntime().availableProcessors());
+                Falsify.logger.info(Runtime.getRuntime().availableProcessors()+"");
                 NetworkUtils.ping(address, serverInfo1 -> {if(!serverInfo1.label.getString().equals("Cannot Connect")) {addPing(serverInfo1);completedMoves++;}});
             }
         }.runTaskAsync();

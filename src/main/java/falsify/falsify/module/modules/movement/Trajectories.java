@@ -1,6 +1,7 @@
 package falsify.falsify.module.modules.movement;
 
 import falsify.falsify.listeners.Event;
+import falsify.falsify.listeners.events.EventSettingChange;
 import falsify.falsify.listeners.events.EventUpdate;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
@@ -37,17 +38,27 @@ public class Trajectories extends Module {
 
     @Override
     public void onEvent(Event<?> event) {
-        if(event instanceof EventUpdate e && timer.hasTimeElapsed((long) (1000/mps.getValue()), true) && target != null) {
-            calculateLeftRightMovement((target != null) ? target.getLocation() : null);
-            calculateForwardBackwardMovement((target != null) ? target.getLocation() : null);
-            calculateUpDownMovements((target != null) ? target.getLocation() : null);
-        } else if (target == null) {
-            mc.options.rightKey.setPressed(false);
-            mc.options.leftKey.setPressed(false);
-            mc.options.backKey.setPressed(false);
-            mc.options.forwardKey.setPressed(false);
-            mc.options.sneakKey.setPressed(false);
-            mc.options.jumpKey.setPressed(false);
+        if(event instanceof EventUpdate e) {
+            if(timer.hasTimeElapsed((long) (1000/mps.getValue()), true) && target != null) {
+                calculateLeftRightMovement((target != null) ? target.getLocation() : null);
+                calculateForwardBackwardMovement((target != null) ? target.getLocation() : null);
+                calculateUpDownMovements((target != null) ? target.getLocation() : null);
+            } else if (target == null) {
+                mc.options.rightKey.setPressed(false);
+                mc.options.leftKey.setPressed(false);
+                mc.options.backKey.setPressed(false);
+                mc.options.forwardKey.setPressed(false);
+                mc.options.sneakKey.setPressed(false);
+                mc.options.jumpKey.setPressed(false);
+            }
+        } if(event instanceof EventSettingChange<?> e) {
+            if (e.getSetting().equals(kp)) {
+                pid.setKp(kp.getValue().floatValue());
+            } else if (e.getSetting().equals(ki)) {
+                pid.setKi(ki.getValue().floatValue());
+            } else if (e.getSetting().equals(kd)) {
+                pid.setKd(kd.getValue().floatValue());
+            }
         }
     }
 

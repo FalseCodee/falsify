@@ -24,7 +24,7 @@ class TimeRenderModule extends RenderModule<TimeModule> {
 
     @Override
     public void renderModule(DrawContext context, int mouseX, int mouseY, float delta) {
-        drawRect(module.getBackgroundColor(), context.getMatrices(), (float) 0, (float) 0, (float) (width), (float) (height));
+        module.drawBackground(context, mouseX, mouseY, delta);
         context.drawCenteredTextWithShadow(Falsify.mc.textRenderer, getTime(), (int) width/2, (int) height/2 - Falsify.mc.textRenderer.fontHeight/2, module.getTextColor().getRGB());
     }
 

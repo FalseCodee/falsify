@@ -1,5 +1,8 @@
 package falsify.falsify.module.settings;
 
+import falsify.falsify.Falsify;
+import falsify.falsify.listeners.events.EventSettingChange;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -15,6 +18,8 @@ public class ModeSetting extends Setting<List<String>> {
 
     public void cycle() {
         this.index = (this.index + 1) % this.value.size();
+        EventSettingChange<ModeSetting> event = new EventSettingChange<>(this);
+        Falsify.onEvent(event);
     }
 
     public int getIndex() {
@@ -23,6 +28,8 @@ public class ModeSetting extends Setting<List<String>> {
 
     public void setIndex(int index) {
         this.index = index;
+        EventSettingChange<ModeSetting> event = new EventSettingChange<>(this);
+        Falsify.onEvent(event);
     }
 
     public String getMode() {

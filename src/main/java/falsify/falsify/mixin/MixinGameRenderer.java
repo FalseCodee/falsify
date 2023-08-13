@@ -32,6 +32,26 @@ public class MixinGameRenderer {
         ProjectionUtils.update(tickDelta);
     }
 
+    @Inject(method = "render", at = @At("HEAD"))
+    private void renderPre(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
+        if(Falsify.shaderManager == null) return;
+        Falsify.shaderManager.clear();
+    }
+
+    @Inject(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;currentScreen:Lnet/minecraft/client/gui/screen/Screen;", shift = At.Shift.BEFORE, ordinal = 1))
+    private void renderPreScreen(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
+        if(Falsify.shaderManager == null) return;
+        Falsify.shaderManager.renderWorldShader();
+    }
+    @Inject(method = "render", at = @At("TAIL"))
+    private void renderPostScreen(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
+        if(Falsify.shaderManager == null) return;
+
+        if(Falsify.mc.currentScreen != null) {
+            Falsify.shaderManager.renderGuiShader();
+        }
+    }
+
     @Inject(method = "getFov", at = @At("RETURN"), cancellable = true)
     private void getFov(Camera camera, float tickDelta, boolean changingFov, CallbackInfoReturnable<Double> cir) {
         Zoom zoom = ModuleManager.getModule(Zoom.class);

@@ -1,7 +1,7 @@
 package falsify.falsify.gui.other;
 
 import falsify.falsify.Falsify;
-import falsify.falsify.gui.clickgui.Clickable;
+import falsify.falsify.gui.utils.Clickable;
 import falsify.falsify.utils.MathUtils;
 import falsify.falsify.utils.RenderHelper;
 import net.minecraft.client.gui.DrawContext;

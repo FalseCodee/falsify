@@ -23,12 +23,24 @@ public class ScissorStack {
             RenderSystem.disableScissor();
             return;
         }
-        scissorStack.get(0).enableScissor();
+        double xMin = Double.MIN_VALUE;
+        double xMax = Double.MAX_VALUE;
+        double yMin = Double.MIN_VALUE;
+        double yMax = Double.MAX_VALUE;
+        for(ScissorBox sb : scissorStack) {
+            xMin = Math.max(xMin, sb.x1);
+            xMax = Math.min(xMax, sb.x2);
+            yMin = Math.max(yMin, sb.y1);
+            yMax = Math.min(yMax, sb.y2);
+        }
+        enableScissor(xMin, yMin, xMax, yMax);
     }
 
-    private record ScissorBox(double x1, double y1, double x2, double y2) {
-        public void enableScissor() {
-            RenderSystem.enableScissor((int) (x1 * Falsify.mc.getWindow().getScaleFactor()), (int) ((Falsify.mc.getWindow().getScaledHeight() - y2) * Falsify.mc.getWindow().getScaleFactor()), (int) ((x2-x1) * Falsify.mc.getWindow().getScaleFactor()), (int) ((y2-y1) * Falsify.mc.getWindow().getScaleFactor()));
-        }
+    public void enableScissor(double x1, double y1, double x2, double y2) {
+        x2 = Math.max(x1, x2);
+        y2 = Math.max(y1, y2);
+        RenderSystem.enableScissor((int) (x1 * Falsify.mc.getWindow().getScaleFactor()), (int) ((Falsify.mc.getWindow().getScaledHeight() - y2) * Falsify.mc.getWindow().getScaleFactor()), (int) ((x2-x1) * Falsify.mc.getWindow().getScaleFactor()), (int) ((y2-y1) * Falsify.mc.getWindow().getScaleFactor()));
     }
+
+    private record ScissorBox(double x1, double y1, double x2, double y2) {}
 }

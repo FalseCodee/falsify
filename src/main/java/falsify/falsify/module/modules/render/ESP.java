@@ -29,10 +29,7 @@ public class ESP extends Module {
         super("ESP", "Draws a box around entities.", true, Category.RENDER, -1);
         settings.add(type);
         settings.add(renderType);
-        settings.add(colorSetting.getRed());
-        settings.add(colorSetting.getGreen());
-        settings.add(colorSetting.getBlue());
-        settings.add(colorSetting.getAlpha());
+        settings.add(colorSetting);
     }
 
 
@@ -43,10 +40,10 @@ public class ESP extends Module {
             if(mc.world == null) return;
             if(renderType.getMode().equals("Glow")) return;
 
-            List<Entity> entityList = Lists.newArrayList(mc.world.getEntities()).stream().filter(entity -> entity instanceof LivingEntity && entity != mc.player && isValid(entity)).collect(Collectors.toList());
+            List<Entity> entityList = Lists.newArrayList(mc.world.getEntities()).stream().filter(entity -> entity instanceof LivingEntity && entity != mc.player && isValid(entity)).toList();
 
             for(Entity e : entityList) {
-                RenderUtils.drawESPTracer(mc.player, e, eventRender3d, colorSetting.getColor(), renderType.getMode().equals("Box"));
+                RenderUtils.drawESPTracer(mc.player, e, eventRender3d, colorSetting.getValue(), renderType.getMode().equals("Box"));
             }
         }
     }
@@ -56,7 +53,7 @@ public class ESP extends Module {
     }
 
     public Color getColor() {
-        return colorSetting.getColor();
+        return colorSetting.getValue();
     }
 
     public boolean isValid(Entity entity) {

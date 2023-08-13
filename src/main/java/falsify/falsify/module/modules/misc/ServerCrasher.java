@@ -1,19 +1,13 @@
 package falsify.falsify.module.modules.misc;
 
-import falsify.falsify.Falsify;
 import falsify.falsify.listeners.Event;
 import falsify.falsify.listeners.events.EventRender;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
 import net.minecraft.client.gui.screen.ingame.CraftingScreen;
-import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.RecipeManager;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-
-import java.util.Optional;
 
 public class ServerCrasher extends Module {
 

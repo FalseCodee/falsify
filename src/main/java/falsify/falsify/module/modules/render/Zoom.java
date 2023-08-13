@@ -1,6 +1,6 @@
 package falsify.falsify.module.modules.render;
 
-import falsify.falsify.gui.clickgui.primatives.Animation;
+import falsify.falsify.gui.utils.Animation;
 import falsify.falsify.listeners.Event;
 import falsify.falsify.listeners.events.*;
 import falsify.falsify.module.Category;

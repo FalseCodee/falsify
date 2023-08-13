@@ -10,6 +10,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MixinGlStateManager {
     @Inject(method = "_glBindFramebuffer", at = @At("HEAD"))
     private static void bindFbo(int target, int framebuffer, CallbackInfo ci) {
-        //System.out.println("bounded fbo: " + framebuffer);
+        //Falsify.logger.info("bounded fbo: " + framebuffer);
     }
 }
