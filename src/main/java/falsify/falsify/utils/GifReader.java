@@ -28,6 +28,7 @@ public class GifReader {
         this.id = id;
         try {
             frames = getGifFrames(new URL(url).openStream());
+            loadFrameTextures(frames);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -102,8 +103,6 @@ public class GifReader {
             BufferedImage copy = new BufferedImage(master.getColorModel(), master.copyData(null), master.isAlphaPremultiplied(), null);
             LegacyIdentifier legId = new LegacyIdentifier(id + "-" + frameIndex, copy.getWidth(), copy.getHeight());
             frames.add(new ImageFrame(copy, legId, delay, disposal));
-            Falsify.textureCacheManager.loadTexture(legId, copy);
-
             if (disposal.equals("restoreToPrevious")) {
                 BufferedImage from = null;
                 for (int i = frameIndex - 1; i >= 0; i--) {
@@ -121,7 +120,6 @@ public class GifReader {
             }
         }
         reader.dispose();
-
         return frames.toArray(new ImageFrame[0]);
     }
 
@@ -130,6 +128,17 @@ public class GifReader {
         for(ImageFrame frame : frames) {
             tcm.destroyTexture(frame.id);
         }
+    }
+
+    private void loadFrameTextures(ImageFrame[] imageFrames) {
+        Falsify.mc.submit(()->{
+                for (ImageFrame frame : imageFrames) {
+                    LegacyIdentifier legId = frame.id();
+                    BufferedImage image = frame.image();
+                    Falsify.textureCacheManager.loadTexture(legId, image);
+                    Falsify.logger.info("Loaded Texture: " + legId.getPath());
+            }
+        });
     }
 
     public LegacyIdentifier getCurrentFrame() {

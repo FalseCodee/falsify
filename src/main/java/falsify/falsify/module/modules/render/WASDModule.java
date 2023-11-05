@@ -43,8 +43,8 @@ class WASDRenderModule extends RenderModule<WASDModule> {
         int size = getModule().getSize();
         int padding = getModule().getPadding();
         int sum = size + padding;
-        this.width = sum*3-padding;
-        this.height = sum*2-padding;
+        setWidth(sum*3-padding);
+        setHeight(sum*2-padding);
         //W
         if(Falsify.mc.options.forwardKey.isPressed()) wFade.rise(); else wFade.lower();
         drawRect(wFade.color(module.getBackgroundColor(), module.getBackgroundColor().brighter().brighter()), context.getMatrices(), (float) 0+sum, (float) 0, (float) (sum + size), (float) (size));

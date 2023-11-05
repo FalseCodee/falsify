@@ -16,16 +16,16 @@ import static org.lwjgl.opengl.GL13C.GL_TEXTURE1;
 
 public class ShaderManager {
     public Shader PASSTHROUGH;
-    public GlowShaderRenderer GLOW;
-    public GlowOutlineShaderRenderer GLOW_OUTLINE;
-    public BlurInsideShaderRenderer BLUR_INSIDE;
+//    public GlowShaderRenderer GLOW;
+//    public GlowOutlineShaderRenderer GLOW_OUTLINE;
+//    public BlurInsideShaderRenderer BLUR_INSIDE;
     public KawaseBlurShaderRenderer KAWASE_BLUR;
     public final MatrixStack matrices = new MatrixStack();
     public ShaderManager() {
         this.PASSTHROUGH = new Shader("passthrough.vert", "passthrough.frag");
-        this.GLOW = new GlowShaderRenderer();
-        this.GLOW_OUTLINE = new GlowOutlineShaderRenderer();
-        this.BLUR_INSIDE = new BlurInsideShaderRenderer();
+//        this.GLOW = new GlowShaderRenderer();
+//        this.GLOW_OUTLINE = new GlowOutlineShaderRenderer();
+//        this.BLUR_INSIDE = new BlurInsideShaderRenderer();
         this.KAWASE_BLUR = new KawaseBlurShaderRenderer(ModuleManager.getModule(BlurModule.class));
         Falsify.logger.info("Created: Shader Manager");
     }
@@ -71,12 +71,12 @@ public class ShaderManager {
     }
 
     public void resize() {
-        GLOW.getFramebuffer().resize();
-        GLOW.getCapture().resize();
-        GLOW_OUTLINE.getFramebuffer().resize();
-        GLOW_OUTLINE.getCapture().resize();
-        BLUR_INSIDE.getFramebuffer().resize();
-        BLUR_INSIDE.getCapture().resize();
+//        GLOW.getFramebuffer().resize();
+//        GLOW.getCapture().resize();
+//        GLOW_OUTLINE.getFramebuffer().resize();
+//        GLOW_OUTLINE.getCapture().resize();
+//        BLUR_INSIDE.getFramebuffer().resize();
+//        BLUR_INSIDE.getCapture().resize();
         KAWASE_BLUR.resize();
     }
 

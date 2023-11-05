@@ -40,6 +40,6 @@ class ArmorRenderModule extends RenderModule<ArmorModule> {
             y += 16 + padding;
         }
 
-        this.height = Math.max(y, 16 + padding);
+        setHeight(Math.max(y, 16 + padding));
     }
 }

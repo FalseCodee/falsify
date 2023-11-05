@@ -23,6 +23,7 @@
   "client": [
     "MixinCamera",
     "MixinClientPlayerEntity$MixinAccessor",
+    "MixinClientPlayNetworkHandler",
     "MixinClientWorld",
     "MixinEntityRenderDispatcher",
     "MixinGameRenderer",
@@ -33,6 +34,7 @@
     "MixinTextRenderer",
     "special.FrameBufferAccessor",
     "special.MixinAbstractClientPlayerEntity",
+    "special.MixinEntityRenderer",
     "special.MixinGlStateManager"
   ],
   "injectors": {

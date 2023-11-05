@@ -5,6 +5,7 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.StringHelper;
 import org.apache.commons.lang3.StringUtils;
+import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
 import java.util.UUID;

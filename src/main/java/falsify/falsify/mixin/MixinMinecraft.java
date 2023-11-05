@@ -8,14 +8,16 @@ import falsify.falsify.listeners.events.EventUpdate;
 import falsify.falsify.listeners.events.EventWindowResize;
 import falsify.falsify.module.ModuleManager;
 import falsify.falsify.module.modules.render.ESP;
-import falsify.falsify.utils.Cape;
+import falsify.falsify.utils.capes.Cape;
 import falsify.falsify.utils.RenderUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
-import net.minecraft.client.util.Session;
+import net.minecraft.client.realms.RealmsClient;
+import net.minecraft.client.session.Session;
 import net.minecraft.entity.Entity;
+import net.minecraft.resource.ResourceReload;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -28,8 +30,8 @@ public class MixinMinecraft {
     private
     Session session;
 
-    @Inject(method = "<init>(Lnet/minecraft/client/RunArgs;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/SplashOverlay;init(Lnet/minecraft/client/MinecraftClient;)V", shift = At.Shift.AFTER))
-    public void registerTextures(RunArgs args, CallbackInfo ci){
+    @Inject(method = "<init>(Lnet/minecraft/client/RunArgs;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;initFont(Z)V", shift = At.Shift.AFTER))
+    public void init(RunArgs args, CallbackInfo ci){
         Falsify.init(session);
         Falsify.textureCacheManager.registerTextures();
         Cape.addCapes();

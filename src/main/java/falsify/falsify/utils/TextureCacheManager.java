@@ -18,11 +18,12 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class TextureCacheManager {
-    private final ConcurrentHashMap<String, CompletableFuture<LegacyIdentifier>> textures;
-    private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private final ConcurrentHashMap<String, LegacyIdentifier> textures;
+    private final ExecutorService executor;
     public final File textureDir;
 
     public TextureCacheManager() {
+        executor = Executors.newCachedThreadPool();
         this.textures = new ConcurrentHashMap<>();
         this.textureDir = new File(Falsify.clientDir + "\\textures");
         textureDir.mkdirs();
@@ -31,17 +32,22 @@ public class TextureCacheManager {
 
     public void registerTextures() {
         cacheTextureFromUrlAsync("title", "https://cdn.discordapp.com/attachments/755141818743652444/1129797788981534740/New_Project_1.png", true);
-        cacheTextureFromUrlAsync("pizza-hut", "https://i.imgur.com/g74aFlz.png", false);
-        cacheTextureFromUrlAsync("armorup_cape", "https://cdn.discordapp.com/attachments/1069468268013834258/1129811644567015565/armorup_staff_cape.png", true);
+        cacheTextureFromUrlAsync("pizza-hut", "https://cdn.discordapp.com/attachments/1145507886852739152/1145507906041679892/image.png", false);
+        cacheTextureFromUrlAsync("armorup_cape", "https://media.discordapp.net/attachments/756973530159251581/1165306341074669578/image.png", true);
+        cacheTextureFromUrlAsync("title_background", "https://wallpaperaccess.com/full/4003568.png", false);
         cacheTextureFromUrlAsync("dev_cape", "https://raw.githubusercontent.com/FalseCodee/legacy-client-assets/main/legacy_dev_cape.png",true);
     }
 
 
 
     public LegacyIdentifier cacheTextureFromUrl(String textureName, String url, boolean saveTexture) {
-        if(saveTexture) {
-            LegacyIdentifier identifier = loadFileTexture(textureName);
-            if(identifier != null) return identifier;
+        return loadTexture(textureName, getTexture(textureName, url, saveTexture));
+    }
+
+    private NativeImage getTexture(String textureName, String url, boolean couldBeSaved) {
+        if(couldBeSaved) {
+            NativeImage image = getFileTexture(textureName);
+            if(image != null) return image;
         }
         NativeImage image = null;
         int i = 0;
@@ -52,12 +58,12 @@ public class TextureCacheManager {
                 InputStream imageStream = imageURL.openStream();
 
                 image = NativeImage.read(imageStream);
-                if(saveTexture) saveTexture(textureName, image);
+                if(couldBeSaved) saveTexture(textureName, image);
             } catch (IOException e) {e.printStackTrace();}
             i++;
         }
 
-        return loadTexture(textureName, image);
+        return image;
     }
 
     private LegacyIdentifier loadTexture(String textureName, NativeImage image) {
@@ -65,6 +71,7 @@ public class TextureCacheManager {
         NativeImageBackedTexture texture = new NativeImageBackedTexture(image);
         LegacyIdentifier identifier = new LegacyIdentifier(textureName, image.getWidth(), image.getHeight());
         textureManager.registerTexture(identifier, texture);
+        Falsify.logger.info("Loaded Texture: " + textureName);
         return identifier;
     }
 
@@ -80,9 +87,11 @@ public class TextureCacheManager {
         textureManager.registerTexture(identifier, texture);
         return identifier;
     }
-    public void cacheTextureFromUrlAsync(String textureName, String url, boolean saveTexture) {
-        CompletableFuture<LegacyIdentifier> future = CompletableFuture.supplyAsync(() -> cacheTextureFromUrl(textureName, url, saveTexture), executor);
-        textures.put(textureName, future);
+    public CompletableFuture<NativeImage> cacheTextureFromUrlAsync(String textureName, String url, boolean saveTexture) {
+        CompletableFuture<NativeImage> future = CompletableFuture.supplyAsync(() -> getTexture(textureName, url, saveTexture), executor);
+        return future.whenCompleteAsync((nativeImage, throwable) -> {
+            textures.put(textureName, loadTexture(textureName, nativeImage));
+        }, Falsify.mc);
     }
 
     public void saveTexture(String textureName, NativeImage image) throws IOException {
@@ -91,11 +100,11 @@ public class TextureCacheManager {
         ImageIO.write(bufferedImage, "png", imageFile);
     }
 
-    public LegacyIdentifier loadFileTexture(String textureName) {
+    public NativeImage getFileTexture(String textureName) {
         try {
             File imageFile = new File(textureDir.getAbsolutePath() + "\\" + textureName + ".png");
             if(!imageFile.exists()) return null;
-            return loadTexture(textureName, NativeImage.read(new FileInputStream(imageFile)));
+            return NativeImage.read(new FileInputStream(imageFile));
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -113,7 +122,7 @@ public class TextureCacheManager {
     }
 
     public void destroyTexture(String textureName) {
-        LegacyIdentifier identifier = textures.get(textureName).getNow(null);
+        LegacyIdentifier identifier = textures.get(textureName);
         if(identifier == null) return;
 
         destroyTexture(identifier);
@@ -124,11 +133,11 @@ public class TextureCacheManager {
         Falsify.mc.getTextureManager().destroyTexture(id);
     }
 
-    public CompletableFuture<LegacyIdentifier> getIdentifier(String textureName) {
+    public LegacyIdentifier getIdentifier(String textureName) {
         return textures.get(textureName);
     }
 
-    public ConcurrentHashMap<String, CompletableFuture<LegacyIdentifier>> getTextures() {
+    public ConcurrentHashMap<String, LegacyIdentifier> getTextures() {
         return textures;
     }
 

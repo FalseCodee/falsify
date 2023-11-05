@@ -4,7 +4,7 @@ import com.mojang.authlib.GameProfile;
 import falsify.falsify.Falsify;
 import falsify.falsify.module.ModuleManager;
 import falsify.falsify.module.modules.movement.SafeWalk;
-import falsify.falsify.utils.Cape;
+import falsify.falsify.utils.capes.Cape;
 import falsify.falsify.utils.LegacyIdentifier;
 import net.minecraft.client.render.entity.PlayerModelPart;
 import net.minecraft.entity.player.PlayerEntity;

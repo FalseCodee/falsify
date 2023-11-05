@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 public class FollowerGuy extends Clickable {
     private Vec3d inertia = new Vec3d(0.0, 0.0, 0.0);
+    public Color color = new Color(255, 255, 255);
     public double mass;
     public FollowerGuy(double x, double y) {
         super(x, y, 5, 5);
@@ -115,6 +116,6 @@ public class FollowerGuy extends Clickable {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        drawSmoothRect(RenderHelper.colorLerp(new Color(255,255,255,0), new Color(255,255,255,255), MathUtils.clamp((float) (inertia.length()), 0.0F, 1.0F)), context.getMatrices(), (float) x, (float) y, (float) (x+width), (float) (y+height), (float) width/2.0f, new int[] {5, 5, 5, 5});
+        drawSmoothRect(RenderHelper.colorLerp(new Color(color.getRed(),color.getGreen(),color.getBlue(),0), new Color(color.getRed(),color.getGreen(),color.getBlue(),255), MathUtils.clamp((float) (inertia.length()), 0.0F, 1.0F)), context.getMatrices(), (float) x, (float) y, (float) (x+width), (float) (y+height), (float) width/2.0f, new int[] {5, 5, 5, 5});
     }
 }

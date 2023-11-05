@@ -76,9 +76,6 @@ class GifRenderModule extends RenderModule<GifModule> {
 
         double width = frame.getWidth() * module.scale.getValue();
         double height = frame.getHeight() * module.scale.getValue();
-        Falsify.shaderManager.GLOW.startCapture(false);
         RenderUtils.drawTexture(frame, context.getMatrices(), 0,0,0,0, (int) width, (int) height, (int) width, (int) height);
-        Falsify.shaderManager.GLOW.endCapture();
-
     }
 }

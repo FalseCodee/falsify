@@ -49,9 +49,8 @@ public class FaceCover extends Module {
     }
 
     private void setIdentifier() {
-        CompletableFuture<LegacyIdentifier> futureIdentifier = Falsify.textureCacheManager.getIdentifier("pizza-hut");
-        if(futureIdentifier.isDone()) {
-            this.identifier = futureIdentifier.getNow(null);
+        if(identifier == null) {
+            this.identifier = Falsify.textureCacheManager.getIdentifier("pizza-hut");
         }
     }
 

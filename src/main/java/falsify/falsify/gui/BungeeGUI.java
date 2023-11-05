@@ -9,8 +9,10 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.util.Session;
+import net.minecraft.client.session.Session;
 import net.minecraft.text.Text;
+
+import java.util.UUID;
 
 public class BungeeGUI extends Screen {
     private TextFieldWidget fakeIPField;
@@ -27,11 +29,6 @@ public class BungeeGUI extends Screen {
         this.parent = parent;
     }
 
-    @Override
-    public void tick() {
-        this.fakeIPField.tick();
-        this.fakeUUIDField.tick();
-    }
 
     @Override
     protected void init() {
@@ -64,7 +61,7 @@ public class BungeeGUI extends Screen {
             this.toggle.setMessage(Text.of("BungeeHack: " + ((bungeeHack.toggled) ? "On" : "Off")));
         }).dimensions(this.width / 2+50+ offset, 106, 100, 20).build());
 
-        this.addDrawableChild(ButtonWidget.builder(Text.of("Set"), button -> ((MixinMinecraft)MinecraftClient.getInstance()).setSession(new Session(fakeUsername.getText(), "", "", null,null, Session.AccountType.MOJANG))).dimensions(width/2+50 + offset, 146, 50, 20).build());
+        this.addDrawableChild(ButtonWidget.builder(Text.of("Set"), button -> ((MixinMinecraft)MinecraftClient.getInstance()).setSession(new Session(fakeUsername.getText(), UUID.randomUUID(), "", null,null, Session.AccountType.MOJANG))).dimensions(width/2+50 + offset, 146, 50, 20).build());
 
         this.addDrawableChild(ButtonWidget.builder(Text.of("Reset"), button -> ((MixinMinecraft)MinecraftClient.getInstance()).setSession(Falsify.session)).dimensions(width/2+50+50+ offset, 146, 50, 20).build());
 
@@ -85,7 +82,7 @@ public class BungeeGUI extends Screen {
     }
 
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context);
+        this.renderBackground(context, mouseX, mouseY, delta);
         context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 17, 16777215);
         context.drawTextWithShadow(this.textRenderer, Text.of("Enter Fake IP"), width/2-150, 53, 10526880);
         context.drawTextWithShadow(this.textRenderer, Text.of("Enter Fake UUID"), width/2-150, 94, 10526880);

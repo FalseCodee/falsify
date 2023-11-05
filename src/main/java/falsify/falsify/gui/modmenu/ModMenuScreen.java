@@ -1,6 +1,7 @@
 package falsify.falsify.gui.modmenu;
 
 import falsify.falsify.Falsify;
+import falsify.falsify.gui.modmenu.primitives.Theme;
 import falsify.falsify.gui.utils.Clickable;
 import falsify.falsify.gui.editor.EditGUI;
 import falsify.falsify.gui.modmenu.primitives.Panel;
@@ -20,6 +21,7 @@ public class ModMenuScreen extends Screen {
 
     @Override
     protected void init() {
+//        Falsify.theme = new Theme(new Color(177, 203, 255), new Color(0, 186, 210), new Color(225, 225, 225), new Color(0, 167, 176));
         panel = new Panel(width/2f-3*width/10f,height/2f-3*height/10f, 3*width/5f,3*height/5f);
         editHud = new Clickable.ButtonBuilder()
                 .pos(width-100, 10)
@@ -51,8 +53,8 @@ public class ModMenuScreen extends Screen {
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
-        return panel.mouseScrolled(mouseX, mouseY, amount);
+    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
+        return panel.mouseScrolled(mouseX, mouseY, verticalAmount);
     }
 
     @Override

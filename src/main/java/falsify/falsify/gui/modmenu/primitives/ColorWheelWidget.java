@@ -11,7 +11,7 @@ import java.awt.*;
 public class ColorWheelWidget extends PanelWidget implements Draggable {
     private State state;
     private final float radius;
-    private final ColorSetting setting;
+    private ColorSetting setting;
 
     public ColorWheelWidget(Panel panel, ColorSetting setting, double x, double y, float radius) {
         super(panel, x-radius, y-radius, radius*2 + 40, radius*2);
@@ -118,6 +118,11 @@ public class ColorWheelWidget extends PanelWidget implements Draggable {
         float y = (float) (Math.cos(hue) * saturation) * radius;
         return new Vec2f(x, y);
     }
+
+    public void setSetting(ColorSetting setting) {
+        this.setting = setting;
+    }
+
     private enum State {
         COLOR_WHEEL,
         BRIGHTNESS,

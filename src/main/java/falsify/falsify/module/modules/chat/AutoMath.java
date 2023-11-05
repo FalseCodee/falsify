@@ -1,6 +1,8 @@
 package falsify.falsify.module.modules.chat;
 
+import falsify.falsify.listeners.Event;
 import falsify.falsify.listeners.events.EventPacketRecieve;
+import falsify.falsify.listeners.events.EventPacketSend;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.ChatModule;
 import falsify.falsify.module.settings.BooleanSetting;
@@ -8,10 +10,12 @@ import falsify.falsify.module.settings.RangeSetting;
 import falsify.falsify.utils.ChatModuleUtils;
 import falsify.falsify.utils.FalseRunnable;
 import falsify.falsify.utils.MessageExecutor;
+import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 import net.minecraft.text.Text;
 
 import java.text.DecimalFormat;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class AutoMath extends ChatModule {
@@ -34,21 +38,14 @@ public class AutoMath extends ChatModule {
     private final HashMap<String, Double> vars = new HashMap<>();
     private final HashMap<String, String> funcs = new HashMap<>();
     final DecimalFormat format = new DecimalFormat("#.################");
+
     @Override
-    public void onChat(EventPacketRecieve eventPacketRecieve, String message) {
-        if(message == null || message.split(" ").length == 0 || mc.player == null) return;
-        if(autoSolve.getValue() && message.startsWith("[MathC] New Question: ")) {
-            message = message.substring("[MathC] New Question: ".length(), message.length()-4).replace("x", "*");
-            int val = (int) eval(message, vars, funcs);
-            new FalseRunnable() {
-                @Override
-                public void run() {
-                    mc.player.sendMessage(Text.of(val + ""));
-                }
-            }.runTaskLater((long) ((val > 200) ? (Math.random()*6000L) : (Math.random()*2000L))+500);
-        } else if(chatBot.getValue()) {
+    public void onEvent(Event<?> event) {
+        if(event instanceof EventPacketSend packetSend && packetSend.getPacket() instanceof ChatMessageC2SPacket packet) {
+            String message = packet.chatMessage();
             if (message.toLowerCase().contains(mc.player.getGameProfile().getName().toLowerCase() + " solve ")) {
                 message = message.toLowerCase();
+                mc.player.sendMessage(Text.of(message));
                 final String solveThis = mc.player.getGameProfile().getName().toLowerCase() + " solve ";
                 final int beginIndex = solveThis.length() + message.indexOf(solveThis);
                 message = message.substring(beginIndex).toLowerCase();
@@ -60,7 +57,7 @@ public class AutoMath extends ChatModule {
                             if (showEquation.getValue()) ChatModuleUtils.sendMessage(finalMessage + " = " + format.format(eval(finalMessage, vars, funcs)), true);
                             else ChatModuleUtils.sendMessage("" + format.format(eval(finalMessage, vars, funcs)), true);
                         } catch (RuntimeException e) {
-                            ChatModuleUtils.sendMessage(e.getMessage(), true);
+                            ChatModuleUtils.sendMessage(e.getMessage(), false);
                         }
                     }
                 }.runTaskLater(500);
@@ -80,7 +77,7 @@ public class AutoMath extends ChatModule {
                     vars.put(var,val);
                     new MessageExecutor("loaded '" + var + "' as " + format.format(val), 500).runTaskLater();
                 } catch (Exception e) {
-                    ChatModuleUtils.sendMessage(e.getMessage(), true);
+                    ChatModuleUtils.sendMessage(e.getMessage(), false);
                 }
             }
             else if (message.toLowerCase().contains(mc.player.getGameProfile().getName().toLowerCase() + " pushfunc ")) {
@@ -99,7 +96,7 @@ public class AutoMath extends ChatModule {
                     funcs.put(var,val);
                     new MessageExecutor("loaded function '" + var + "(x)' as " + val, 500).runTaskLater();
                 } catch (Exception e) {
-                    ChatModuleUtils.sendMessage(e.getMessage(), true);
+                    ChatModuleUtils.sendMessage(e.getMessage(), false);
                 }
             }
             else if (message.toLowerCase().contains(mc.player.getGameProfile().getName().toLowerCase() + " graph ")) {
@@ -121,7 +118,101 @@ public class AutoMath extends ChatModule {
                         new MessageExecutor(graph[i], 500 + delay.getValue().longValue() * (graph.length-i)).runTaskLater();
                     }
                 } catch (Exception e) {
-                    ChatModuleUtils.sendMessage(e.getMessage(), true);
+                    ChatModuleUtils.sendMessage(e.getMessage(), false);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onChat(EventPacketRecieve eventPacketRecieve, String message) {
+        if(message == null || message.split(" ").length == 0 || mc.player == null) return;
+        if(autoSolve.getValue() && message.startsWith("[MathC] New Question: ")) {
+            message = message.substring("[MathC] New Question: ".length(), message.length()-4).replace("x", "*");
+            int val = (int) eval(message, vars, funcs);
+            new FalseRunnable() {
+                @Override
+                public void run() {
+                    mc.player.sendMessage(Text.of(val + ""));
+                }
+            }.runTaskLater((long) ((val > 200) ? (Math.random()*6000L) : (Math.random()*2000L))+500);
+        } else if(chatBot.getValue()) {
+            if (message.toLowerCase().contains(mc.player.getGameProfile().getName().toLowerCase() + " solve ")) {
+                message = message.toLowerCase();
+                mc.player.sendMessage(Text.of(message));
+                final String solveThis = mc.player.getGameProfile().getName().toLowerCase() + " solve ";
+                final int beginIndex = solveThis.length() + message.indexOf(solveThis);
+                message = message.substring(beginIndex).toLowerCase();
+                String finalMessage = message;
+                new FalseRunnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            if (showEquation.getValue()) ChatModuleUtils.sendMessage(finalMessage + " = " + format.format(eval(finalMessage, vars, funcs)), true);
+                            else ChatModuleUtils.sendMessage("" + format.format(eval(finalMessage, vars, funcs)), true);
+                        } catch (RuntimeException e) {
+                            ChatModuleUtils.sendMessage(e.getMessage(), false);
+                        }
+                    }
+                }.runTaskLater(500);
+            } else if (message.toLowerCase().contains(mc.player.getGameProfile().getName().toLowerCase() + " push ")) {
+                String[] args = message.split(" ");
+                int startIndex = 0;
+                while (!args[startIndex].toLowerCase().contains(mc.player.getGameProfile().getName().toLowerCase())) startIndex++;
+                if(args.length < startIndex + 1 + 4) {
+                    new MessageExecutor("Invalid Syntax", 500).runTaskLater();
+                    return;
+                }
+                try {
+                    String var = args[startIndex + 2].toLowerCase();
+                    if(var.equalsIgnoreCase("x")) throw new RuntimeException("The variable 'x' is reserved for function declarations.");
+                    if(funcs.containsKey(var)) throw new RuntimeException("'" + var + "' is already defined as a function.");
+                    double val = eval(ChatModuleUtils.joinString(args, startIndex + 4), vars, funcs);
+                    vars.put(var,val);
+                    new MessageExecutor("loaded '" + var + "' as " + format.format(val), 500).runTaskLater();
+                } catch (Exception e) {
+                    ChatModuleUtils.sendMessage(e.getMessage(), false);
+                }
+            }
+            else if (message.toLowerCase().contains(mc.player.getGameProfile().getName().toLowerCase() + " pushfunc ")) {
+                String[] args = message.split(" ");
+                int startIndex = 0;
+                while (!args[startIndex].toLowerCase().contains(mc.player.getGameProfile().getName().toLowerCase())) startIndex++;
+                if(args.length < startIndex + 1 + 4) {
+                    new MessageExecutor("Invalid Syntax", 500).runTaskLater();
+                    return;
+                }
+                try {
+                    String var = args[startIndex + 2].toLowerCase();
+                    if(vars.containsKey(var)) throw new RuntimeException("'" + var + "' is already defined as a variable.");
+                    String val = ChatModuleUtils.joinString(args, startIndex + 4);
+                    eval(val.replace("x", "0"), vars, funcs);
+                    funcs.put(var,val);
+                    new MessageExecutor("loaded function '" + var + "(x)' as " + val, 500).runTaskLater();
+                } catch (Exception e) {
+                    ChatModuleUtils.sendMessage(e.getMessage(), false);
+                }
+            }
+            else if (message.toLowerCase().contains(mc.player.getGameProfile().getName().toLowerCase() + " graph ")) {
+                String[] args = message.split(" ");
+                int startIndex = 0;
+                while (!args[startIndex].toLowerCase().contains(mc.player.getGameProfile().getName().toLowerCase())) startIndex++;
+                if(args.length < startIndex + 1 + 10) {
+                    new MessageExecutor("Invalid Syntax", 500).runTaskLater();
+                    return;
+                }
+                try {
+                    String var = args[startIndex + 2].toLowerCase();
+                    double from = Double.parseDouble(args[startIndex + 4].toLowerCase());
+                    double to = Double.parseDouble(args[startIndex + 6].toLowerCase());
+                    double fromY = Double.parseDouble(args[startIndex + 8].toLowerCase());
+                    double toY = Double.parseDouble(args[startIndex + 10].toLowerCase());
+                    String[] graph = graph(var, from, to, 17, fromY, toY, vars, funcs);
+                    for(int i = 0; i < graph.length; i++) {
+                        new MessageExecutor(graph[i], 500 + delay.getValue().longValue() * (graph.length-i)).runTaskLater();
+                    }
+                } catch (Exception e) {
+                    ChatModuleUtils.sendMessage(e.getMessage(), false);
                 }
             }
         }
@@ -157,9 +248,9 @@ public class AutoMath extends ChatModule {
                 String val = String.valueOf(gradient.charAt((int) Math.min(Math.abs(y1-y)/step*3 , 2)));
                     arr[j] += val;
                 } else {
-                    if (y1 == 0) arr[j] += "▂";
-                    else if(x == 0) arr[j] += "▐";
-                    else arr[j] += "▁";
+                    if (y1 == 0) arr[j] += "._";
+                    else if(x == 0) arr[j] += "._";
+                    else arr[j] += "._";
                 }
             }
         }

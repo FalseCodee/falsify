@@ -24,6 +24,7 @@ public class MixinPacket {
     public void onSend(Packet<?> packet, CallbackInfo ci){
         EventPacketSend e = new EventPacketSend(packet);
         Falsify.onEvent(e);
+
         if(e.isCancelled()){
             ci.cancel();
         }

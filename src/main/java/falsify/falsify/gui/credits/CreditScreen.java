@@ -32,11 +32,11 @@ public class CreditScreen extends Screen {
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double amountX, double amountY) {
         for(PlayerDataEntry entry : entries) {
-            entry.setX(entry.getX()+amount*25);
+            entry.setX(entry.getX()+amountY*25);
         }
-        return super.mouseScrolled(mouseX, mouseY, amount);
+        return super.mouseScrolled(mouseX, mouseY, amountX, amountY);
     }
 
     public void close() {

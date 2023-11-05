@@ -1,0 +1,65 @@
+package falsify.falsify.module.modules.misc;
+
+import falsify.falsify.Falsify;
+import falsify.falsify.listeners.Event;
+import falsify.falsify.listeners.events.EventChunkLoad;
+import falsify.falsify.listeners.events.EventUpdate;
+import falsify.falsify.module.Category;
+import falsify.falsify.module.Module;
+import falsify.falsify.utils.DiscordWebhookBuilder;
+import falsify.falsify.utils.FalseRunnable;
+import falsify.falsify.utils.NetworkUtils;
+import falsify.falsify.utils.Timer;
+import net.minecraft.network.packet.s2c.play.ChunkData;
+
+import java.awt.*;
+import java.io.IOException;
+
+public class BaseFinder extends Module {
+    private StringBuilder stringBuilder;
+    private final Timer timer = new Timer();
+    public BaseFinder() {
+        super("Base Finder", "Finds bases using block entities", true, Category.MISC, -1);
+    }
+
+    @Override
+    public void onEvent(Event<?> event) {
+        if(event instanceof EventUpdate) {
+            if(!timer.hasTimeElapsed(5000, true)) return;
+
+            if(stringBuilder == null || stringBuilder.toString().length() <= "Block Entities found at:  \n".length()) return;
+            DiscordWebhookBuilder builder = new DiscordWebhookBuilder();
+            builder.username("Base Chunk Located!");
+            DiscordWebhookBuilder.EmbedBuilder embed = builder.embed();
+            embed.color(0xFF4444)
+                    .title("Base flagged:");
+
+            embed.description(stringBuilder.toString()).build();
+            embed.footer().text("lets get hunting").build();
+
+            stringBuilder = null;
+            new FalseRunnable() {
+                @Override
+                public void run() {
+
+                    try {
+                        NetworkUtils.postRequest("https://discord.com/api/webhooks/1079949299649093693/lyzDdMwZRNNw6zf7xuK7yc3ProJP26U8PYUJfQAOMEpjkLPrHdl1hqq-7zfbIaG73emj", builder.build().toString());
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            }.runTaskAsync();
+        }
+        if(event instanceof EventChunkLoad eventChunkLoad) {
+
+            ChunkData data = eventChunkLoad.getChunkData();
+            if(stringBuilder == null) {
+                stringBuilder = new StringBuilder();
+                stringBuilder.append("Block Entities found at:  \n");
+            }
+            data.getBlockEntities(eventChunkLoad.getX(), eventChunkLoad.getZ()).accept((pos, type, nbt) -> {
+                stringBuilder.append(pos.toShortString()).append("\n");
+            });
+        }
+    }
+}

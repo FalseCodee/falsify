@@ -8,17 +8,17 @@ import falsify.falsify.listeners.events.EventPacketSend;
 import falsify.falsify.module.Module;
 import falsify.falsify.module.ModuleManager;
 import falsify.falsify.module.modules.misc.PostProcess;
-import falsify.falsify.utils.FalseRunnable;
+import falsify.falsify.utils.*;
+import falsify.falsify.utils.capes.Cape;
 import falsify.falsify.utils.netty.NettyClient;
 import falsify.falsify.utils.playerdata.PlayerDataManager;
-import falsify.falsify.utils.TextureCacheManager;
 import falsify.falsify.utils.config.ConfigManager;
 import falsify.falsify.utils.fonts.FontRenderer;
 import falsify.falsify.utils.fonts.Fonts;
 import falsify.falsify.utils.shaders.ShaderManager;
 import me.falsecode.netty.packet.packets.c2s.ClientDisconnectPacket;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.util.Session;
+import net.minecraft.client.session.Session;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +27,8 @@ import java.awt.*;
 import java.io.File;
 
 
-public class Falsify{
+public class Falsify {
+
     public static final MinecraftClient mc = MinecraftClient.getInstance();
     public static Session session;
     public static Logger logger;
@@ -71,6 +72,7 @@ public class Falsify{
                 client.run();
             }
         }.runTaskAsync();
+        logger.info("Init Finished");
     }
 
     public static void shutdown() {
@@ -80,27 +82,26 @@ public class Falsify{
         client.shutdown();
     }
 
-    public static void onEvent(Event<?> e){
-        if(e instanceof EventPacketRecieve || e instanceof EventPacketSend){
-            for(Module module : ModuleManager.enabledModules){
+    public static void onEvent(Event<?> e) {
+        if (e instanceof EventPacketRecieve || e instanceof EventPacketSend) {
+            for (Module module : ModuleManager.enabledModules) {
                 module.onEvent(e);
             }
-        } else {
-            if(mc.player == null)
-                return;
-            if(e instanceof EventKey ek){
-                if(ek.getKey() != -1) {
-                    for (Module module : ModuleManager.modules) {
-                        if (ek.getKey() == module.getKeyCode() && ek.getAction() == GLFW.GLFW_PRESS) {
-                            module.toggle();
-                        }
+            return;
+        }
+        if (mc.player == null)
+            return;
+        if (e instanceof EventKey ek) {
+            if (ek.getKey() != -1) {
+                for (Module module : ModuleManager.modules) {
+                    if (ek.getKey() == module.getKeyCode() && ek.getAction() == GLFW.GLFW_PRESS) {
+                        module.toggle();
                     }
                 }
             }
-            for(Module module : ModuleManager.enabledModules){
-                module.onEvent(e);
-            }
-
+        }
+        for (Module module : ModuleManager.enabledModules) {
+            module.onEvent(e);
         }
     }
 }

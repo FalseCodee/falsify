@@ -14,7 +14,7 @@ import java.nio.charset.StandardCharsets;
 
 public class NetworkUtils {
     public static void ping(String address, PingRunnable runnable) {
-        ServerInfo serverInfo = new ServerInfo("Minecraft Server", address, false);
+        ServerInfo serverInfo = new ServerInfo("Minecraft Server", address, ServerInfo.ServerType.OTHER);
         serverInfo.online = true;
         serverInfo.ping = -2L;
         serverInfo.label = Text.empty();

@@ -14,12 +14,7 @@ public class PlayerDataManager {
     private ArrayList<PlayerData> dataList;
 
     public PlayerDataManager() {
-        new FalseRunnable() {
-            @Override
-            public void run() {
-                init(JsonHelper.fromUrl("https://raw.githubusercontent.com/FalseCodee/legacy-client-assets/main/data.json"));
-            }
-        }.runTaskAsync();
+        init(JsonHelper.fromUrl("https://raw.githubusercontent.com/FalseCodee/legacy-client-assets/main/data.json"));
     }
 
     public void init(JsonObject data) {

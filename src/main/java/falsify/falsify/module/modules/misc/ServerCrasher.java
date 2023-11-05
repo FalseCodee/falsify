@@ -7,12 +7,13 @@ import falsify.falsify.module.Module;
 import net.minecraft.client.gui.screen.ingame.CraftingScreen;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.Recipe;
+import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.util.Identifier;
 
 public class ServerCrasher extends Module {
 
-    private Recipe<?> ironIngot;
-    private Recipe<?> goldIngot;
+    private RecipeEntry<?> ironIngot;
+    private RecipeEntry<?> goldIngot;
     private boolean shouldMakeIron = false;
     public ServerCrasher() {
         super("Server Crasher", "Crashes servers using crafting tables", true, Category.MISC, -1);

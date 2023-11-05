@@ -29,10 +29,11 @@ public class Sentry extends Module {
     }
     public ArrayList<Entity> rendered;
     private final DecimalFormat format = new DecimalFormat("#.#");
-    final int max = mc.textRenderer.getWidth("WWWWWWWWWWWWWWWW WWWWW");
+    private int max;
 
     @Override
     public void onEnable() {
+        max = mc.textRenderer.getWidth("WWWWWWWWWWWWWWWW WWWWW");
         if(mc.world == null || mc.getNetworkHandler() == null || mc.player == null) return;
         rendered = Lists.newArrayList(mc.world.getEntities()).stream().filter(entity -> entity instanceof PlayerEntity && !entity.equals(mc.player) && mc.getNetworkHandler().getPlayerList().contains(mc.getNetworkHandler().getPlayerListEntry(((PlayerEntity) entity).getGameProfile().getId())))
                 .sorted(Comparator.comparingInt(entity -> mc.textRenderer.getWidth(entity.getName()))).collect(Collectors.toCollection(Lists::newArrayList));

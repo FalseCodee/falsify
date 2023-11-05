@@ -4,25 +4,24 @@ import falsify.falsify.listeners.Event;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 
 
-public class EventEntityRender extends Event<EventEntityRender> {
+public abstract class EventEntityRender extends Event<EventEntityRender> {
     private final MatrixStack matrices;
     private final float tickDelta;
     private final Camera camera;
     private final VertexConsumerProvider vertexConsumerProvider;
     private final Entity entity;
-    private final Model model;
 
-    public EventEntityRender(MatrixStack matrices, float tickDelta, Camera camera, VertexConsumerProvider vertexConsumers, Entity entity, Model model) {
+    public EventEntityRender(MatrixStack matrices, float tickDelta, Camera camera, VertexConsumerProvider vertexConsumers, Entity entity) {
         this.tickDelta = tickDelta;
         this.matrices = matrices;
         this.camera = camera;
         this.vertexConsumerProvider = vertexConsumers;
         this.entity = entity;
-        this.model = model;
     }
 
     public MatrixStack getMatrices() {
@@ -45,7 +44,28 @@ public class EventEntityRender extends Event<EventEntityRender> {
         return entity;
     }
 
-    public Model getModel() {
-        return model;
+    public static class Model extends EventEntityRender {
+        private final EntityModel<?> model;
+
+        public Model(MatrixStack matrices, float tickDelta, Camera camera, VertexConsumerProvider vertexConsumers, Entity entity, EntityModel<?> model) {
+            super(matrices, tickDelta, camera, vertexConsumers, entity);
+            this.model = model;
+        }
+
+        public EntityModel<?> getModel() {
+            return model;
+        }
+    }
+
+    public static class Label extends EventEntityRender {
+        private final String text;
+        public Label(MatrixStack matrices, float tickDelta, Camera camera, VertexConsumerProvider vertexConsumers, Entity entity, String text) {
+            super(matrices, tickDelta, camera, vertexConsumers, entity);
+            this.text = text;
+        }
+
+        public String getText() {
+            return text;
+        }
     }
 }

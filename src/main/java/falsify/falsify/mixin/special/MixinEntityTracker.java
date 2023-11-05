@@ -13,8 +13,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ClientWorld.class)
 public class MixinEntityTracker {
 
-    @Inject(method = "addEntityPrivate", at = @At(value = "HEAD"))
-    public void startTracking(int id, Entity entity, CallbackInfo ci){
+    @Inject(method = "addEntity", at = @At(value = "HEAD"))
+    public void startTracking(Entity entity, CallbackInfo ci){
         if(entity instanceof PlayerEntity){
             EventTrack track = new EventTrack((PlayerEntity) entity, true);
             Falsify.onEvent(track);

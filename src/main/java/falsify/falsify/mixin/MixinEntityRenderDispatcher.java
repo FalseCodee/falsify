@@ -20,13 +20,13 @@ public class MixinEntityRenderDispatcher <T extends LivingEntity, M extends Enti
 
     @Inject(method = "render(Lnet/minecraft/entity/LivingEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/model/EntityModel;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;IIFFFF)V", shift = At.Shift.BEFORE))
     private void onEntityRenderPre(T livingEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo ci) {
-        EventEntityRender e = new EventEntityRender(matrixStack, Falsify.mc.getTickDelta(), Falsify.mc.gameRenderer.getCamera(), vertexConsumerProvider, livingEntity, model);
+        EventEntityRender.Model e = new EventEntityRender.Model(matrixStack, Falsify.mc.getTickDelta(), Falsify.mc.gameRenderer.getCamera(), vertexConsumerProvider, livingEntity, model);
         e.setEventType(EventType.PRE);
         Falsify.onEvent(e);
     }
     @Inject(method = "render(Lnet/minecraft/entity/LivingEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/model/EntityModel;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;IIFFFF)V", shift = At.Shift.AFTER))
     private void onEntityRenderPost(T livingEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo ci) {
-        EventEntityRender e = new EventEntityRender(matrixStack, Falsify.mc.getTickDelta(), Falsify.mc.gameRenderer.getCamera(), vertexConsumerProvider, livingEntity, model);
+        EventEntityRender.Model e = new EventEntityRender.Model(matrixStack, Falsify.mc.getTickDelta(), Falsify.mc.gameRenderer.getCamera(), vertexConsumerProvider, livingEntity, model);
         e.setEventType(EventType.POST);
         Falsify.onEvent(e);
     }

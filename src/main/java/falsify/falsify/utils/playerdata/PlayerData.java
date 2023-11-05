@@ -10,7 +10,7 @@ import java.util.UUID;
 public class PlayerData {
     private final String userName;
     private final UUID uuid;
-    private final LegacyIdentifier bodyRender;
+    private LegacyIdentifier bodyRender;
 
     private PlayerData(String userName, UUID uuid, LegacyIdentifier bodyRender) {
         this.userName = userName;
@@ -34,7 +34,10 @@ public class PlayerData {
         JsonObject json = JsonHelper.fromUrl("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid.toString());
         if(json == null || !json.has("name")) throw new RuntimeException("Failed to load playerdata: " + uuid);
         String name = json.getAsJsonPrimitive("name").getAsString();
-        LegacyIdentifier id = Falsify.textureCacheManager.cacheTextureFromUrl(uuid.toString(), "https://crafatar.com/renders/body/"+uuid+"?overlay=true", false);
-        return new PlayerData(name, uuid, id);
+        PlayerData playerData = new PlayerData(name, uuid, null);
+        Falsify.textureCacheManager.cacheTextureFromUrlAsync(uuid.toString(), "https://crafatar.com/renders/body/"+uuid+"?overlay=true", false).whenCompleteAsync((nativeImage, exception) -> {
+            playerData.bodyRender = Falsify.textureCacheManager.getIdentifier(uuid.toString());
+        });
+        return playerData;
     }
 }

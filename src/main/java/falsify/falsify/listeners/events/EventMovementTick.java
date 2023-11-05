@@ -2,5 +2,5 @@ package falsify.falsify.listeners.events;
 
 import falsify.falsify.listeners.Event;
 
-public class EventFrame extends Event<EventFrame> {
+public class EventMovementTick extends Event<EventMovementTick> {
 }

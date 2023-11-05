@@ -1,6 +1,7 @@
-package falsify.falsify.utils;
+package falsify.falsify.utils.capes;
 
 import falsify.falsify.Falsify;
+import falsify.falsify.utils.LegacyIdentifier;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -13,10 +14,9 @@ public class Cape {
         this.capeName = capeName;
     }
 
-    private void setCape() {
-        CompletableFuture<LegacyIdentifier> cape = Falsify.textureCacheManager.getIdentifier(capeName);
-        if(cape.isDone()) {
-            capeId = cape.getNow(null);
+    protected void setCape() {
+        if(capeId == null) {
+            capeId = Falsify.textureCacheManager.getIdentifier(capeName);
         }
     }
 
@@ -39,5 +39,6 @@ public class Cape {
     public static void addCapes() {
         capes.add(new Cape("dev_cape"));
         capes.add(new Cape("armorup_cape"));
+        capes.add(new GifCape("sus_cape", "https://cdn.discordapp.com/attachments/755141818743652444/1140435807157616691/image.gif"));
     }
 }

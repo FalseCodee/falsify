@@ -5,6 +5,18 @@ import falsify.falsify.listeners.Event;
 public class EventKey extends Event<EventKey> {
     final long window;
     final int key;
+    final int scancode;
+    final int action;
+    final int modifiers;
+
+
+    public EventKey(long window, int key, int scancode, int action, int modifiers) {
+        this.window = window;
+        this.key = key;
+        this.scancode = scancode;
+        this.action = action;
+        this.modifiers = modifiers;
+    }
 
     public long getWindow() {
         return window;
@@ -19,27 +31,12 @@ public class EventKey extends Event<EventKey> {
     }
 
     public int getAction() {
-        return i;
+        return action;
     }
 
     public int getModifiers() {
         return modifiers;
     }
-
-    final int scancode;
-    final int i;
-    final int modifiers;
-
-
-    public EventKey(long window, int key, int scancode, int i, int modifiers) {
-        this.window = window;
-        this.key = key;
-        this.scancode = scancode;
-        this.i = i;
-        this.modifiers = modifiers;
-    }
-
-
 
 
 }

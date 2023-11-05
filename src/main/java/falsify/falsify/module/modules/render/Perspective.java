@@ -46,7 +46,10 @@ public class Perspective extends Module {
 
     @Override
     public void onEnable() {
-        if(mc.player == null) this.toggle();
+        if(mc.player == null) {
+            this.toggle();
+            return;
+        }
         pitch = mc.player.getPitch();
         yaw = mc.player.getYaw();
         this.perspective = mc.options.getPerspective();

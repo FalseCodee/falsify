@@ -106,9 +106,8 @@ public class EntityInfo extends Module {
         matrices.scale((float) (5/dist), (float) (5/dist), 1);
         String name = entity.getName().getString();
         float xRange = (Math.max(fr.getStringWidth("WWWWWWWWWWWW"), fr.getStringWidth(name)) + 46)/2;
-        Falsify.shaderManager.BLUR_INSIDE.startCapture(false);
-        RenderHelper.drawSmoothRect(new Color(25, 255, 229, 181), matrices, -xRange-1,  -26,  xRange+1, 26, 4f, new int[] {5,5,5,5});
-        RenderHelper.drawSmoothRect(new Color(202, 255, 242, 182), matrices, -xRange,  -25,  xRange, 25, 3, new int[] {5,5,5,5});
+        RenderHelper.drawSmoothRect(new Color(82, 0, 0, 181), matrices, -xRange-1,  -26,  xRange+1, 26, 4f, new int[] {5,5,5,5});
+        RenderHelper.drawSmoothRect(new Color(136, 0, 0, 182), matrices, -xRange,  -25,  xRange, 25, 3, new int[] {5,5,5,5});
 //        matrices.translate(0,0,-0.03);
         LegacyIdentifier id = getHead(entity.getUuid());
         if(id == null) {
@@ -133,7 +132,6 @@ public class EntityInfo extends Module {
         float percentage = MathUtils.clamp(entity.getHealth()/ entity.getMaxHealth(), 0.0f, 1.0f);
         RenderUtils.fill(matrices, (int) -xRange,  20, (int) (2*xRange*percentage-xRange), 22, new Color((1-percentage), percentage, 56/255f, 219/255f).getRGB());
         matrices.pop();
-        Falsify.shaderManager.BLUR_INSIDE.endCapture();
     }
 
     public LegacyIdentifier getHead(UUID uuid) {
@@ -141,9 +139,8 @@ public class EntityInfo extends Module {
             Falsify.textureCacheManager.cacheTextureFromUrlAsync("avatar-" + uuid, "https://crafatar.com/avatars/"+uuid+"?overlay&default=MHF_Steve&size=16", false);
             return null;
         }
-        CompletableFuture<LegacyIdentifier> id = Falsify.textureCacheManager.getIdentifier("avatar-" + uuid);
-        if(id.isDone()) return id.getNow(null);
-        return null;
+
+        return Falsify.textureCacheManager.getIdentifier("avatar-" + uuid);
     }
 
     public static void clearAvatarCache() {

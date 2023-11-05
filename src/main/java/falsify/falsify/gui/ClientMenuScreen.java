@@ -32,9 +32,10 @@ public class ClientMenuScreen extends Screen {
     private Color color4 = new Color(0, 0, 0);
 
     private LegacyIdentifier title;
+    private LegacyIdentifier titleBackground;
     private final ArrayList<FollowerGuy> guys;
 
-    private final ServerInfo warSpree = new ServerInfo("achieved", "achieved.minehut.gg", false);
+    private final ServerInfo warSpree = new ServerInfo("achieved", "achieved.minehut.gg", ServerInfo.ServerType.OTHER);
     public ClientMenuScreen() {
         super(Text.of("Menu Screen"));
         addButton("Singleplayer", new SelectWorldScreen(this));
@@ -77,7 +78,7 @@ public class ClientMenuScreen extends Screen {
                     return false;
                 }))
                 .onRender((clickable, context, mouseX, mouseY, delta) -> {
-                    Color hover = (clickable.isHovering(mouseX+clickable.getWidth()/2, mouseY+clickable.getHeight()/2)) ? new Color(144, 144, 144, 75) : new Color(60, 60, 60,75);
+                    Color hover = (clickable.isHovering(mouseX+clickable.getWidth()/2, mouseY+clickable.getHeight()/2)) ? new Color(144, 144, 144, 128) : new Color(60, 60, 60, 128);
                     MatrixStack matrices = context.getMatrices();
                     matrices.push();
                     matrices.translate(clickable.getX(), clickable.getY(), 0);
@@ -109,9 +110,14 @@ public class ClientMenuScreen extends Screen {
     }
 
     private void setTitle() {
-        CompletableFuture<LegacyIdentifier> futureTitle = Falsify.textureCacheManager.getIdentifier("title");
-        if(futureTitle.isDone()) {
-            this.title = futureTitle.getNow(null);
+        if(this.title == null) {
+            this.title = Falsify.textureCacheManager.getIdentifier("title");
+        }
+    }
+
+    private void setTitleBackground() {
+        if(this.titleBackground == null) {
+            this.titleBackground = Falsify.textureCacheManager.getIdentifier("title_background");
         }
     }
 
@@ -120,17 +126,20 @@ public class ClientMenuScreen extends Screen {
         color2 = RenderHelper.colorLerp(color2, new Color(Color.HSBtoRGB((mouseX/(float)width*0.5f  + 0.86f), 1.00f, 0.25f)), MathUtils.clamp(0.1f*Falsify.mc.getLastFrameDuration(), 0.0f, 1.0f));
         color3 = RenderHelper.colorLerp(color3, new Color(Color.HSBtoRGB((mouseY/(float)height*0.8f + 0.45f), 1.00f, 0.25f)), MathUtils.clamp(0.1f*Falsify.mc.getLastFrameDuration(), 0.0f, 1.0f));
         color4 = RenderHelper.colorLerp(color4, new Color(Color.HSBtoRGB((mouseX/(float)width*0.9f  + 0.33f), 1.00f, 0.25f)), MathUtils.clamp(0.1f*Falsify.mc.getLastFrameDuration(), 0.0f, 1.0f));
-        RenderUtils.fillCornerGradient(context,0, 0, width, height, color1.getRGB(), color2.getRGB(),color3.getRGB(), color4.getRGB());
+//        RenderUtils.fillCornerGradient(context,0, 0, width, height, color1.getRGB(), color2.getRGB(),color3.getRGB(), color4.getRGB());
 
         int size = guys.size();
         for(int i = guys.size()-1; i >=0 ;i--) {
             if(i >= guys.size()) i -= 1 + i-guys.size();
             FollowerGuy guy = guys.get(i);
+            guy.color = new Color(Color.HSBtoRGB((float) ((float) (guy.getX()/(float)width*0.5f + 0.23f) / 2f + (guy.getY()/(float)height*0.5f + 0.23f) / 2f), 0.5f, 1.0f));
             boolean flag = guys.size() == size;
             guy.update(mouseX, mouseY, delta, guys, flag);
             guy.render(context, mouseX, mouseY, delta);
         }
     }
+
+    private float sum = 0;
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
@@ -140,15 +149,21 @@ public class ClientMenuScreen extends Screen {
             return;
         }
 
+        if(titleBackground == null) {
+            setTitleBackground();
+            return;
+        }
+
+        context.drawTexture(titleBackground, 0, 0, ((float) mouseX / width) * 160, ((float) mouseY / height) * 90, titleBackground.getWidth(), titleBackground.getHeight(), width+160, height+90);
         renderBackground(context, mouseX, mouseY, delta);
         for(Clickable button : buttons)  {
             button.render(context, mouseX, mouseY, delta);
         }
 
         context.getMatrices().push();
-        float scale = width/800f/2f;
+        float scale = width/800f/2f/1.25f;
         context.getMatrices().scale(scale, scale, 1);
-        context.getMatrices().translate(width/2f/scale, height/3f/scale, 0);
+        context.getMatrices().translate(width/2f/scale, (height/3f)/scale, 0);
         context.drawTexture(title, -title.getWidth()/2, -title.getHeight()/2, 0,0, title.getWidth(), title.getHeight(), title.getWidth(), title.getHeight());
         context.getMatrices().pop();
     }

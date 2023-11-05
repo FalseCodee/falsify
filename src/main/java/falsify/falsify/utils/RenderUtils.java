@@ -104,7 +104,7 @@ public class RenderUtils {
     }
 
     public static void drawCenteredText(DrawContext context, TextRenderer textRenderer, String text, int centerX, int y, int color) {
-        context.drawTextWithShadow(textRenderer, text, centerX - textRenderer.getWidth(text) / 2, y, color);
+        context.drawText(textRenderer, text, centerX - textRenderer.getWidth(text) / 2, y, color, false);
     }
     public static void drawBoundingBox(Box bb, EventRender3d eventRender3d, Color color) {
         box(eventRender3d, new Vec3d[] {new Vec3d(bb.minX, bb.minY, bb.minZ),

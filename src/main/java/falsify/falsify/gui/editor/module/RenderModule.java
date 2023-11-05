@@ -6,6 +6,7 @@ import falsify.falsify.gui.utils.Draggable;
 import falsify.falsify.gui.editor.EditGUI;
 import falsify.falsify.module.DisplayModule;
 import falsify.falsify.utils.MathUtils;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import org.joml.Vector2d;
 
@@ -13,8 +14,6 @@ import java.awt.*;
 
 public abstract class RenderModule<T extends DisplayModule<?>> extends Clickable implements Draggable {
     protected T module;
-    public static final int gridSize = 500;
-
     private Anchor anchor;
     protected boolean dragging = false;
     protected double scale = 1;
@@ -114,6 +113,9 @@ public abstract class RenderModule<T extends DisplayModule<?>> extends Clickable
             context.drawVerticalLine((int) width, 0, (int) height, Color.WHITE.getRGB());
             context.drawHorizontalLine(0, (int) width, 0, Color.WHITE.getRGB());
             context.drawHorizontalLine(0, (int) width, (int) (height), Color.WHITE.getRGB());
+            TextRenderer tr = Falsify.mc.textRenderer;
+            Vector2d center = getMiddle();
+            context.drawText(tr, module.name, (center.x*2 <= WINDOW.getScaledWidth()) ? 2 : (int) (width - tr.getWidth(module.name)-2), (center.y*2 > WINDOW.getScaledHeight()) ? -tr.fontHeight : (int) height+4, -1, true);
         }
         scaleModule.setX(this.x + (this.width-5+2.5)*scale);
         scaleModule.setY(this.y + (this.height-5+2.5)*scale);
@@ -228,5 +230,19 @@ public abstract class RenderModule<T extends DisplayModule<?>> extends Clickable
     public double[] snapToGrid(double x, double y) {
         return new double[] {x, y};
 
+    }
+
+    @Override
+    public void setWidth(double width) {
+        if(anchor == Anchor.TOP_RIGHT || anchor == Anchor.CENTER_RIGHT || anchor == Anchor.BOTTOM_RIGHT) relativeX += (this.width-width)*scale;
+        else if(anchor == Anchor.TOP_CENTER || anchor == Anchor.CENTER_CENTER || anchor == Anchor.BOTTOM_CENTER) relativeX += (this.width-width)*scale/2.0;
+        super.setWidth(width);
+    }
+
+    @Override
+    public void setHeight(double height) {
+        if(anchor == Anchor.BOTTOM_LEFT || anchor == Anchor.BOTTOM_CENTER || anchor == Anchor.BOTTOM_RIGHT) relativeY += (this.height-height)*scale;
+        else if(anchor == Anchor.CENTER_LEFT || anchor == Anchor.CENTER_CENTER || anchor == Anchor.CENTER_RIGHT) relativeY += (this.height-height)*scale/2.0;
+        super.setHeight(height);
     }
 }

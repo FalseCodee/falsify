@@ -3,6 +3,8 @@ package falsify.falsify.utils;
 import java.awt.*;
 
 public class ColorUtils {
+
+    public static char CC_PREFIX = '§';
     public static float getHue(Color color) {
         int red = color.getRed();
         int green = color.getGreen();

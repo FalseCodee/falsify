@@ -1,11 +1,12 @@
 package falsify.falsify.mixin;
 
 import falsify.falsify.Falsify;
-import falsify.falsify.listeners.events.EventFrame;
+import falsify.falsify.listeners.events.EventMovementTick;
 import falsify.falsify.listeners.events.EventRender;
 import falsify.falsify.utils.shaders.Framebuffer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
+import net.minecraft.scoreboard.ScoreboardObjective;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -20,15 +21,16 @@ public class MixinRender {
     public void render(DrawContext context, float tickDelta, CallbackInfo ci){
         EventRender e = new EventRender(tickDelta, Falsify.mc.inGameHud, context);
         Falsify.onEvent(e);
-
-//        RenderUtils.renderShaderBegin();
-//        Falsify.shaderManager.pass(framebuffer);
-//        RenderUtils.renderShaderEnd();
     }
 
     @Inject(method = "render", at = @At("HEAD"))
     public void frame(DrawContext context, float tickDelta, CallbackInfo ci){
-        EventFrame e = new EventFrame();
+        EventMovementTick e = new EventMovementTick();
         Falsify.onEvent(e);
+    }
+
+    @Inject(method = "renderScoreboardSidebar", at = @At("HEAD"), cancellable = true)
+    public void renderSidebar(DrawContext context, ScoreboardObjective objective, CallbackInfo ci) {
+        ci.cancel();
     }
 }

@@ -24,7 +24,6 @@ public class GuiArrayList extends Module {
         if(event instanceof EventRender e){
             ModuleManager.enabledModules.sort(Comparator.comparingDouble(m -> Falsify.fontRenderer.getStringWidth(((Module)m).name)).reversed());
             List<Module> filteredModules = ModuleManager.enabledModules.stream().filter(module -> !(module instanceof GuiArrayList)).toList();
-            Falsify.shaderManager.BLUR_INSIDE.startCapture(false);
             for(int i = 0; i < filteredModules.size(); i++){
                 Module module = filteredModules.get(i);
                 int width = (int) Falsify.fontRenderer.getStringWidth(module.name);
@@ -35,7 +34,6 @@ public class GuiArrayList extends Module {
 
                 RenderUtils.AlignText(e.getDrawContext(), module.name,5, (height+6)*i+3, Color.WHITE, Alignment.RIGHT);
             }
-            Falsify.shaderManager.BLUR_INSIDE.endCapture();
             RenderUtils.AlignCenteredText(e.getDrawContext(), Math.round(mc.player.getX())+", "+Math.round(mc.player.getY())+", "+Math.round(mc.player.getZ()),0,mc.textRenderer.fontHeight+10, new Color(255, 96, 84), Alignment.XCENTER);
             RenderUtils.AlignCenteredText(e.getDrawContext(), mc.player.getHorizontalFacing().getName(),0,2*mc.textRenderer.fontHeight+10, new Color(255, 96, 84), Alignment.XCENTER);
         }

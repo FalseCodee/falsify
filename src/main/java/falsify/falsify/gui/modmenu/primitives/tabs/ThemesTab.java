@@ -1,25 +1,47 @@
 package falsify.falsify.gui.modmenu.primitives.tabs;
 
 import falsify.falsify.Falsify;
+import falsify.falsify.gui.modmenu.primitives.ColorWheelWidget;
 import falsify.falsify.gui.modmenu.primitives.Panel;
 import falsify.falsify.gui.modmenu.primitives.PanelTab;
+import falsify.falsify.gui.modmenu.primitives.PanelWidget;
+import falsify.falsify.gui.utils.Clickable;
+import falsify.falsify.module.settings.ColorSetting;
 import falsify.falsify.utils.fonts.FontRenderer;
 import net.minecraft.client.gui.DrawContext;
 
+import java.awt.*;
+
 public class ThemesTab extends PanelTab {
+    private final Clickable editTheme;
     public ThemesTab(Panel panel) {
         super(panel);
+        editTheme = new Clickable.ButtonBuilder()
+                .pos(panel.getX() + panel.getWidth() - 65, panel.getY() + panel.getWidth() - 5)
+                .dimensions(60, 20)
+                .onClick((instance, x1, y1, button) -> {
+                    if(instance.isHovering(x1, y1)) {
+                        Falsify.logger.info("wow button!");
+                        return true;
+                    }
+                    return false;
+                })
+                .onRender((instance, context, mouseX, mouseY, delta) -> {
+                    instance.pushStackToPosition(context.getMatrices());
+                    context.fill(0, 0, (int) instance.getWidth(), (int) instance.getHeight(), panel.getTheme().secondaryColor().getRGB());
+                    context.getMatrices().pop();
+                }).build();
     }
-
     @Override
     public boolean handleClick(double x, double y, int button) {
-        return false;
+        return editTheme.handleClick(x, y, button);
     }
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         FontRenderer fr = Falsify.fontRenderer;
         panel.drawBackground(context, mouseX, mouseY, delta);
+        editTheme.render(context, mouseX, mouseY, delta);
         pushStackToPosition(context.getMatrices());
 
         context.getMatrices().push();

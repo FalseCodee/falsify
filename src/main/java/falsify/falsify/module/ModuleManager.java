@@ -6,8 +6,7 @@ import falsify.falsify.module.modules.combat.Aimbot;
 import falsify.falsify.module.modules.combat.AutoClick;
 import falsify.falsify.module.modules.misc.*;
 import falsify.falsify.module.modules.movement.*;
-import falsify.falsify.module.modules.player.AutoFish;
-import falsify.falsify.module.modules.player.FastPlace;
+import falsify.falsify.module.modules.player.*;
 import falsify.falsify.module.modules.render.*;
 
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -59,6 +58,17 @@ public class ModuleManager {
         modules.add(new Notifications());
         modules.add(new PrivateChat());
         modules.add(new Icons());
+        modules.add(new AutoHeal());
+        modules.add(new AutoMine());
+        modules.add(new AutoPlace());
+        modules.add(new Freecam());
+        modules.add(new BaseFinder());
+        modules.add(new AutoTool());
+        modules.add(new AutoEat());
+        modules.add(new PluginFinder());
+        modules.add(new FindUnicode());
+        modules.add(new AutoSell());
+        modules.add(new Nametags());
 
         modules.add(new FPSModule());
         modules.add(new TimeModule());
@@ -74,9 +84,11 @@ public class ModuleManager {
         modules.add(new VelocityModule());
         modules.add(new PositionModule());
         modules.add(new GifModule());
+        modules.add(new PotionEffectModule());
+        modules.add(new ScoreboardModule());
 
-        Falsify.postProcess = new PostProcess();
-        modules.add(Falsify.postProcess);
+//        Falsify.postProcess = new PostProcess();
+//        modules.add(Falsify.postProcess);
     }
 
     public static <T extends Module> T getModule(Class<T> module){

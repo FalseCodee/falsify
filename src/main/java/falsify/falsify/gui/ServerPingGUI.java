@@ -27,10 +27,6 @@ public class ServerPingGUI extends Screen {
     int queuedMoves = 0;
     int completedMoves = 0;
 
-    @Override
-    public void tick() {
-        this.serverAddressField.tick();
-    }
 
     @Override
     protected void init() {
@@ -78,7 +74,7 @@ public class ServerPingGUI extends Screen {
     }
 
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context);
+        this.renderBackground(context, mouseX, mouseY, delta);
         context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 17, 16777215);
         //drawTextWithShadow(matrices, this.textRenderer, Text.of("Enter Name of Recipient"), width/2-100, this.height / 4 + 120 - 34, 10526880);
         this.serverAddressField.render(context, mouseX, mouseY, delta);
@@ -109,16 +105,16 @@ public class ServerPingGUI extends Screen {
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
-        amount *= 10;
-        double top = responses.get(0).getY() + amount;
-        double bottom = responses.get(responses.size()-1).getY() + responses.get(responses.size()-1).getHeight() + amount;
+    public boolean mouseScrolled(double mouseX, double mouseY, double amountX, double amountY) {
+        amountY *= 10;
+        double top = responses.get(0).getY() + amountY;
+        double bottom = responses.get(responses.size()-1).getY() + responses.get(responses.size()-1).getHeight() + amountY;
         if(bottom > height-20 && top < 70+10) {
             for (PingResponseEntry settingItem : responses) {
-                settingItem.setY(settingItem.getY() + amount);
+                settingItem.setY(settingItem.getY() + amountY);
             }
         }
-        return super.mouseScrolled(mouseX, mouseY, amount);
+        return super.mouseScrolled(mouseX, mouseY, amountX, amountY);
     }
 
     private void addPing(ServerInfo info) {

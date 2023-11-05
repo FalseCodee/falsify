@@ -25,7 +25,7 @@ public class MessageExecutor {
         new FalseRunnable() {
             @Override
             public void run() {
-                ChatModuleUtils.sendMessage(message, true);
+                ChatModuleUtils.sendMessage(message, false);
             }
         }.runTaskLater(delay);
     }

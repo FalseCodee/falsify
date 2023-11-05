@@ -35,6 +35,10 @@ public class DisplayModule<T extends RenderModule<?>> extends Module {
     public DisplayModule(String name, String description, T renderModule, Category category, int keyCode, boolean enabled, boolean isCheat){
         super(name, description, category, keyCode, enabled, isCheat);
         this.renderModule = renderModule;
+        settings.add(borderType);
+        settings.add(outline);
+        settings.add(backgroundColor);
+        settings.add(textColor);
     }
 
     public void onEvent(Event<?> event){
@@ -67,7 +71,7 @@ public class DisplayModule<T extends RenderModule<?>> extends Module {
     public void drawBackgroundInternal(DrawContext context, Color color, int mouseX, int mouseY, float tickDelta, float x, float y, float width, float height) {
         switch (borderType.getMode()) {
             case "Rectangle" -> RenderHelper.drawRect(color, context.getMatrices(), x, y, (int) width, (int) height);
-            case "Smooth" -> RenderHelper.drawSmoothRect(color, context.getMatrices(), x, y, width, height, 5, new int[] {10, 10, 10, 10});
+            case "Smooth" -> RenderHelper.drawSmoothRect(color, context.getMatrices(), x, y, width, height, 3, new int[] {10, 10, 10, 10});
         }
     }
 

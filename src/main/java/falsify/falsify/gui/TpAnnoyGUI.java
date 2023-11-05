@@ -19,11 +19,6 @@ public class TpAnnoyGUI extends Screen {
     }
 
     @Override
-    public void tick() {
-        this.TpAnnoyField.tick();
-    }
-
-    @Override
     protected void init() {
         assert this.client != null;
 
@@ -49,7 +44,7 @@ public class TpAnnoyGUI extends Screen {
     }
 
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context);
+        this.renderBackground(context, mouseX, mouseY, delta);
         context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 17, 16777215);
         context.drawTextWithShadow(this.textRenderer, Text.of("Enter Name of Recipient"), width/2-100, this.height / 4 + 120 - 34, 10526880);
         this.TpAnnoyField.render(context, mouseX, mouseY, delta);
