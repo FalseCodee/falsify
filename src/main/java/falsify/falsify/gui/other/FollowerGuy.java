@@ -5,6 +5,7 @@ import falsify.falsify.gui.utils.Clickable;
 import falsify.falsify.utils.MathUtils;
 import falsify.falsify.utils.RenderHelper;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
 
 import java.awt.*;
@@ -14,12 +15,30 @@ public class FollowerGuy extends Clickable {
     private Vec3d inertia = new Vec3d(0.0, 0.0, 0.0);
     public Color color = new Color(255, 255, 255);
     public double mass;
+
+    private final String message;
+
+    private static final String[] positives = {
+            "Legacy rocks!",
+            "Legacy is the best!",
+            "Legacy on top!",
+            "Wow this client is great!",
+            "Legacy > Others",
+            "Wow this client is great!",
+            "#Legacy2024",
+            "Give FalseCode a raise!",
+            "Incredible client!",
+            "Wowzers this is good!",
+            "Incredible experience!",
+
+    };
     public FollowerGuy(double x, double y) {
         super(x, y, 5, 5);
         setInertia(new Vec3d(Math.random(), Math.random(), 0));
         this.mass = Math.random() * 800;
         this.width = Math.sqrt(this.mass/Math.PI);
         this.height = Math.sqrt(this.mass/Math.PI);
+        this.message = positives[(int) (Math.random() * positives.length)];
     }
 
     @Override
@@ -116,6 +135,12 @@ public class FollowerGuy extends Clickable {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        drawSmoothRect(RenderHelper.colorLerp(new Color(color.getRed(),color.getGreen(),color.getBlue(),0), new Color(color.getRed(),color.getGreen(),color.getBlue(),255), MathUtils.clamp((float) (inertia.length()), 0.0F, 1.0F)), context.getMatrices(), (float) x, (float) y, (float) (x+width), (float) (y+height), (float) width/2.0f, new int[] {5, 5, 5, 5});
+//        drawSmoothRect(RenderHelper.colorLerp(new Color(color.getRed(),color.getGreen(),color.getBlue(),0), new Color(color.getRed(),color.getGreen(),color.getBlue(),255), MathUtils.clamp((float) (inertia.length()), 0.0F, 1.0F)), context.getMatrices(), (float) x, (float) y, (float) (x+width), (float) (y+height), (float) width/2.0f, new int[] {5, 5, 5, 5});
+        context.getMatrices().push();
+        context.getMatrices().translate(x, y, 0);
+        context.getMatrices().scale((float) (mass / 400), (float) (mass / 400), 1);
+        Falsify.fontRenderer.drawCenteredString(context, message, 0, 0, RenderHelper.colorLerp(new Color(color.getRed(),color.getGreen(),color.getBlue(),0), new Color(color.getRed(),color.getGreen(),color.getBlue(),255), MathUtils.clamp((float) (inertia.length()), 0.0F, 1.0F)), true);
+        context.getMatrices().pop();
+
     }
 }

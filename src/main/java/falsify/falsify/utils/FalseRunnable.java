@@ -32,4 +32,13 @@ public abstract class FalseRunnable implements Runnable{
             e.printStackTrace();
         }
     }
+
+    public static FalseRunnable of(Runnable runnable) {
+        return new FalseRunnable() {
+            @Override
+            public void run() {
+                runnable.run();
+            }
+        };
+    }
 }

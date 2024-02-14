@@ -32,7 +32,7 @@ public class TextureCacheManager {
 
     public void registerTextures() {
         cacheTextureFromUrlAsync("title", "https://cdn.discordapp.com/attachments/755141818743652444/1129797788981534740/New_Project_1.png", true);
-        cacheTextureFromUrlAsync("pizza-hut", "https://cdn.discordapp.com/attachments/1145507886852739152/1145507906041679892/image.png", false);
+        cacheTextureFromUrlAsync("pizza-hut", "https://i.imgur.com/UYqHcAx.png", false);
         cacheTextureFromUrlAsync("armorup_cape", "https://media.discordapp.net/attachments/756973530159251581/1165306341074669578/image.png", true);
         cacheTextureFromUrlAsync("title_background", "https://wallpaperaccess.com/full/4003568.png", false);
         cacheTextureFromUrlAsync("dev_cape", "https://raw.githubusercontent.com/FalseCodee/legacy-client-assets/main/legacy_dev_cape.png",true);
@@ -59,7 +59,9 @@ public class TextureCacheManager {
 
                 image = NativeImage.read(imageStream);
                 if(couldBeSaved) saveTexture(textureName, image);
-            } catch (IOException e) {e.printStackTrace();}
+            } catch (IOException e) {
+                Falsify.logger.warn("Texture [" + textureName + "] failed to load: " + e.getLocalizedMessage());
+            }
             i++;
         }
 

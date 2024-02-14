@@ -69,6 +69,7 @@ public class ModuleManager {
         modules.add(new FindUnicode());
         modules.add(new AutoSell());
         modules.add(new Nametags());
+        modules.add(new TazCrafterDefamation());
 
         modules.add(new FPSModule());
         modules.add(new TimeModule());

@@ -35,13 +35,13 @@ public class ClientMenuScreen extends Screen {
     private LegacyIdentifier titleBackground;
     private final ArrayList<FollowerGuy> guys;
 
-    private final ServerInfo warSpree = new ServerInfo("achieved", "achieved.minehut.gg", ServerInfo.ServerType.OTHER);
+    private final ServerInfo warSpree = new ServerInfo("tazpvp", "tazpvp.minehut.gg", ServerInfo.ServerType.OTHER);
     public ClientMenuScreen() {
         super(Text.of("Menu Screen"));
         addButton("Singleplayer", new SelectWorldScreen(this));
         addButton("Multiplayer", new MultiplayerScreen(this));
         addButton("Settings", new OptionsScreen(this, Falsify.mc.options));
-        addButton("Join Achieved", () -> ConnectScreen.connect(this, Falsify.mc, ServerAddress.parse(warSpree.address), warSpree, false));
+        addButton("Join TazPvP", () -> ConnectScreen.connect(this, Falsify.mc, ServerAddress.parse(warSpree.address), warSpree, false));
         addButton("Credits", new CreditScreen(this));
         guys = new ArrayList<>();
     }
@@ -50,7 +50,7 @@ public class ClientMenuScreen extends Screen {
     public void init() {
         super.init();
         guys.clear();
-        for(int i = 0; i < (int) (0.00082*width*height); i++) {
+        for(int i = 0; i < (int) (0.00042*width*height); i++) {
             guys.add(new FollowerGuy(MathUtils.random(10, width-10), MathUtils.random(10, height-10)));
         }
 

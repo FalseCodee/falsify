@@ -28,6 +28,8 @@ class TitleRenderModule extends RenderModule<TitleModule> {
     private void setTitle() {
         if(title == null) {
             this.title = Falsify.textureCacheManager.getIdentifier("pizza-hut");
+            this.width = title.getWidth();
+            this.height = title.getHeight();
         }
     }
 

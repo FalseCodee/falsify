@@ -4,6 +4,7 @@ import falsify.falsify.Falsify;
 import net.minecraft.text.Text;
 
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class MessageExecutor {
     private final String message;
@@ -33,7 +34,7 @@ public class MessageExecutor {
         return new FalseRunnable() {
             @Override
             public void run() {
-                Falsify.mc.player.sendMessage(Text.of(message));
+                ChatModuleUtils.sendMessage(message, false);
             }
         }.runTaskTimer(delay, period);
     }

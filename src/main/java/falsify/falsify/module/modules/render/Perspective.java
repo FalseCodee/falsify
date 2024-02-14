@@ -53,6 +53,7 @@ public class Perspective extends Module {
         pitch = mc.player.getPitch();
         yaw = mc.player.getYaw();
         this.perspective = mc.options.getPerspective();
+        if(this.perspective == null) this.perspective = net.minecraft.client.option.Perspective.FIRST_PERSON;
         mc.options.setPerspective(net.minecraft.client.option.Perspective.THIRD_PERSON_BACK);
     }
 
