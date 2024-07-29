@@ -33,9 +33,10 @@ public class TextureCacheManager {
     public void registerTextures() {
         cacheTextureFromUrlAsync("title", "https://cdn.discordapp.com/attachments/755141818743652444/1129797788981534740/New_Project_1.png", true);
         cacheTextureFromUrlAsync("pizza-hut", "https://i.imgur.com/UYqHcAx.png", false);
-        cacheTextureFromUrlAsync("armorup_cape", "https://media.discordapp.net/attachments/756973530159251581/1165306341074669578/image.png", true);
         cacheTextureFromUrlAsync("title_background", "https://wallpaperaccess.com/full/4003568.png", false);
         cacheTextureFromUrlAsync("dev_cape", "https://raw.githubusercontent.com/FalseCodee/legacy-client-assets/main/legacy_dev_cape.png",true);
+        cacheTextureFromUrlAsync("noise", "https://i.imgur.com/GBg0lFe.png", true);
+        cacheTextureFromUrlAsync("mask", "https://i.imgur.com/BpumHyJ.png", true);
     }
 
 
@@ -72,7 +73,7 @@ public class TextureCacheManager {
         TextureManager textureManager = MinecraftClient.getInstance().getTextureManager();
         NativeImageBackedTexture texture = new NativeImageBackedTexture(image);
         LegacyIdentifier identifier = new LegacyIdentifier(textureName, image.getWidth(), image.getHeight());
-        textureManager.registerTexture(identifier, texture);
+        textureManager.registerTexture(identifier.getId(), texture);
         Falsify.logger.info("Loaded Texture: " + textureName);
         return identifier;
     }
@@ -127,7 +128,7 @@ public class TextureCacheManager {
         LegacyIdentifier identifier = textures.get(textureName);
         if(identifier == null) return;
 
-        destroyTexture(identifier);
+        destroyTexture(identifier.getId());
         textures.remove(textureName);
     }
 
@@ -155,6 +156,6 @@ public class TextureCacheManager {
 
     @Contract(value = "-> new", pure = true)
     public static Identifier randomIdentifier() {
-        return new Identifier("legacy", "temp/" + randomString());
+        return Identifier.of("legacy", "temp/" + randomString());
     }
 }

@@ -30,6 +30,7 @@
     "MixinGameRenderer",
     "MixinGameRenderer$Accessor",
     "MixinLightmapTextureManager",
+    "MixinLivingEntityRenderer",
     "MixinMouse",
     "MixinPlayerListHud",
     "MixinTextRenderer",

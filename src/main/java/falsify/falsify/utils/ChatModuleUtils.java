@@ -1,11 +1,15 @@
 package falsify.falsify.utils;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import falsify.falsify.Falsify;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.StringHelper;
 import org.apache.commons.lang3.StringUtils;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
 import java.util.UUID;
@@ -149,5 +153,11 @@ public class ChatModuleUtils {
 
     public static String capitalizeFirst(String string) {
         return string.substring(0,1).toUpperCase() + string.substring(1);
+    }
+
+    public static String beautifyNbt(NbtCompound nbt) {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        JsonElement je = JsonParser.parseString(nbt.asString());
+        return gson.toJson(je);
     }
 }

@@ -16,8 +16,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MixinEntityRenderer<T extends Entity> {
 
     @Inject(method = "renderLabelIfPresent", at = @At("HEAD"), cancellable = true)
-    private void renderLabel(T entity, Text text, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
-        EventEntityRender.Label event = new EventEntityRender.Label(matrices, Falsify.mc.getTickDelta(), Falsify.mc.gameRenderer.getCamera(), vertexConsumers, entity, text.getString());
+    private void renderLabel(T entity, Text text, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, float tickDelta, CallbackInfo ci) {
+        EventEntityRender.Label event = new EventEntityRender.Label(matrices, Falsify.mc.getRenderTickCounter().getTickDelta(true), Falsify.mc.gameRenderer.getCamera(), vertexConsumers, entity, text.getString());
         Falsify.onEvent(event);
         if(event.isCancelled()) ci.cancel();
     }

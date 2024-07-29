@@ -1,4 +1,4 @@
-package falsify.falsify.gui.modmenu.primitives.modlist;
+package falsify.falsify.gui.modmenu.tabs.modlist;
 
 import falsify.falsify.Falsify;
 import falsify.falsify.gui.utils.Clickable;
@@ -13,9 +13,9 @@ import net.minecraft.client.util.math.MatrixStack;
 import java.awt.*;
 
 public class ModuleEntry extends Clickable {
-    private final Color backgroundColor = new Color(31, 31, 31);
-    private final Color toggledOffColor = new Color(255, 94, 94);
-    private final Color toggledOnColor = new Color(83, 255, 75);
+    private static final Color backgroundColor = new Color(31, 31, 31);
+    private static final Color toggledOffColor = new Color(255, 94, 94);
+    private static final Color toggledOnColor = new Color(83, 255, 75);
     private final Module module;
     private final ScissorStack scissorStack;
     private final Clickable toggleButton;

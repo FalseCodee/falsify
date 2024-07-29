@@ -1,29 +1,26 @@
 package falsify.falsify.utils.shaders.renderers;
 
-import falsify.falsify.Falsify;
+import falsify.falsify.module.modules.misc.PostProcess;
 import falsify.falsify.utils.shaders.Shader;
 import falsify.falsify.utils.shaders.ShaderRenderer;
 
 import static falsify.falsify.Falsify.mc;
 
-public class GlowShaderRenderer extends ShaderRenderer {
-    public GlowShaderRenderer() {
-        super(new Shader("blur.vert", "glow.frag"));
-    }
-
-    protected GlowShaderRenderer(Shader shader) {
-        super(shader);
+public class DerivativeShaderRenderer extends ShaderRenderer {
+    private final PostProcess postProcess;
+    public DerivativeShaderRenderer(PostProcess postProcess) {
+        super(new Shader("blur.vert", "derivativefilter.frag"));
+        this.postProcess = postProcess;
     }
 
     @Override
     public void loadVariables() {
         shader.set("u_Size", mc.getWindow().getFramebufferWidth(), mc.getWindow().getFramebufferHeight());
         shader.set("u_Texture", 0);
-        shader.set("u_Radius", (Falsify.postProcess != null) ? Falsify.postProcess.getRadius() : 15);
     }
 
     @Override
     protected boolean shouldRender() {
-        return Falsify.postProcess.shouldGlow();
+        return postProcess.shouldRenderDerivativeFilter();
     }
 }

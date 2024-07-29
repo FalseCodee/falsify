@@ -5,7 +5,6 @@ import falsify.falsify.gui.utils.Clickable;
 import falsify.falsify.utils.MathUtils;
 import falsify.falsify.utils.RenderHelper;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
 
 import java.awt.*;
@@ -135,7 +134,7 @@ public class FollowerGuy extends Clickable {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-//        drawSmoothRect(RenderHelper.colorLerp(new Color(color.getRed(),color.getGreen(),color.getBlue(),0), new Color(color.getRed(),color.getGreen(),color.getBlue(),255), MathUtils.clamp((float) (inertia.length()), 0.0F, 1.0F)), context.getMatrices(), (float) x, (float) y, (float) (x+width), (float) (y+height), (float) width/2.0f, new int[] {5, 5, 5, 5});
+//        drawSmoothRect(color, context.getMatrices(), (float) x, (float) y, (float) (x+width), (float) (y+height), (float) width/2.0f, new int[] {5, 5, 5, 5});
         context.getMatrices().push();
         context.getMatrices().translate(x, y, 0);
         context.getMatrices().scale((float) (mass / 400), (float) (mass / 400), 1);

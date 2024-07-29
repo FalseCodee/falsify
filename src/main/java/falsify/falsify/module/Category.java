@@ -7,7 +7,8 @@ public enum Category {
     COMBAT("Combat", new Color(0, 52, 38)),
     MISC("Misc", new Color(0, 54, 59)),
     PLAYER("Player", new Color(0, 41, 44)),
-    RENDER("Render", new Color(0, 26, 54));
+    RENDER("Render", new Color(0, 26, 54)),
+    AUTOMATION("Automation", new Color(0, 26, 54));
 
     private final String name;
     private final Color color;

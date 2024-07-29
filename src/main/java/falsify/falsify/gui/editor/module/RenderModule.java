@@ -30,7 +30,7 @@ public abstract class RenderModule<T extends DisplayModule<?>> extends Clickable
         super(x, y, width, height);
         scaleModule = new ScaleModule(this, x + width-5+2.5*scale, y + height-2.5,5, 5);
         anchor = getClosestAnchor();
-        Vector2d rel = anchor.getRelativePos(this.x, this.y);
+        Vector2d rel = getRelativePos();
         relativeX = rel.x;
         relativeY = rel.y;
         snapper = new Snapper(this);
@@ -67,7 +67,7 @@ public abstract class RenderModule<T extends DisplayModule<?>> extends Clickable
         else if(y+height*scale > Falsify.mc.getWindow().getScaledHeight()) y = Falsify.mc.getWindow().getScaledHeight()-height*scale;
         else return;
         anchor = getClosestAnchor();
-        Vector2d rel = anchor.getRelativePos(this.x, this.y);
+        Vector2d rel = getRelativePos();
         relativeX = rel.x;
         relativeY = rel.y;
     }
@@ -95,13 +95,14 @@ public abstract class RenderModule<T extends DisplayModule<?>> extends Clickable
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        Vector2d abs = anchor.getAbsolutePos(relativeX, relativeY);
+        Vector2d abs = getAbsolutePos();
         this.x = abs.x;
         this.y = abs.y;
         fixLocation();
         if(isDragging()) {
             if(snapper.isSnappingX()) horizontalLine(context.getMatrices(), (float) Snapper.currentSnapX, 0.5f, Color.WHITE);
             if(snapper.isSnappingY()) verticalLine(context.getMatrices(), (float) Snapper.currentSnapY, 0.5f, Color.WHITE);
+            if(Falsify.mc.currentScreen == null  || Falsify.mc.currentScreen.getClass() != EditGUI.class) setDragging(false);
         }
         context.getMatrices().push();
         context.getMatrices().translate(x,y,0);
@@ -190,7 +191,7 @@ public abstract class RenderModule<T extends DisplayModule<?>> extends Clickable
             this.dx = dx;
             this.dy = dy;
             anchor = getClosestAnchor();
-            Vector2d rel = anchor.getRelativePos(this.x, this.y);
+            Vector2d rel = getRelativePos();
             relativeX = rel.x;
             relativeY = rel.y;
             snapper.update();
@@ -232,17 +233,39 @@ public abstract class RenderModule<T extends DisplayModule<?>> extends Clickable
 
     }
 
+    public Vector2d getRelativePos() {
+        double x = this.x;
+        double y = this.y;
+
+        if(anchor == Anchor.TOP_RIGHT || anchor == Anchor.CENTER_RIGHT || anchor == Anchor.BOTTOM_RIGHT) x += this.width*scale;
+        else if(anchor == Anchor.TOP_CENTER || anchor == Anchor.CENTER_CENTER || anchor == Anchor.BOTTOM_CENTER) x += this.width*scale / 2.0;
+
+        if(anchor == Anchor.BOTTOM_LEFT || anchor == Anchor.BOTTOM_CENTER || anchor == Anchor.BOTTOM_RIGHT) y += this.height*scale;
+        else if(anchor == Anchor.CENTER_LEFT || anchor == Anchor.CENTER_CENTER || anchor == Anchor.CENTER_RIGHT) y += this.height*scale / 2.0;
+
+        return anchor.getRelativePos(x, y);
+    }
+
+    public Vector2d getAbsolutePos() {
+        double x = this.relativeX;
+        double y = this.relativeY;
+
+        if(anchor == Anchor.TOP_RIGHT || anchor == Anchor.CENTER_RIGHT || anchor == Anchor.BOTTOM_RIGHT) x -= this.width*scale;
+        else if(anchor == Anchor.TOP_CENTER || anchor == Anchor.CENTER_CENTER || anchor == Anchor.BOTTOM_CENTER) x -= this.width*scale / 2.0;
+
+        if(anchor == Anchor.BOTTOM_LEFT || anchor == Anchor.BOTTOM_CENTER || anchor == Anchor.BOTTOM_RIGHT) y -= this.height*scale;
+        else if(anchor == Anchor.CENTER_LEFT || anchor == Anchor.CENTER_CENTER || anchor == Anchor.CENTER_RIGHT) y -= this.height*scale / 2.0;
+
+        return anchor.getAbsolutePos(x, y);
+    }
+
     @Override
     public void setWidth(double width) {
-        if(anchor == Anchor.TOP_RIGHT || anchor == Anchor.CENTER_RIGHT || anchor == Anchor.BOTTOM_RIGHT) relativeX += (this.width-width)*scale;
-        else if(anchor == Anchor.TOP_CENTER || anchor == Anchor.CENTER_CENTER || anchor == Anchor.BOTTOM_CENTER) relativeX += (this.width-width)*scale/2.0;
         super.setWidth(width);
     }
 
     @Override
     public void setHeight(double height) {
-        if(anchor == Anchor.BOTTOM_LEFT || anchor == Anchor.BOTTOM_CENTER || anchor == Anchor.BOTTOM_RIGHT) relativeY += (this.height-height)*scale;
-        else if(anchor == Anchor.CENTER_LEFT || anchor == Anchor.CENTER_CENTER || anchor == Anchor.CENTER_RIGHT) relativeY += (this.height-height)*scale/2.0;
         super.setHeight(height);
     }
 }

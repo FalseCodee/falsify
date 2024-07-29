@@ -1,7 +1,6 @@
 package falsify.falsify.listeners.events;
 
 import falsify.falsify.listeners.Event;
-import net.minecraft.client.model.Model;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.model.EntityModel;

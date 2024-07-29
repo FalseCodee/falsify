@@ -1,6 +1,7 @@
 package falsify.falsify.module;
 
-import falsify.falsify.Falsify;
+import falsify.falsify.automation.types.GameMessageReceivedAutomation;
+import falsify.falsify.automation.types.KeyPressAutomation;
 import falsify.falsify.module.modules.chat.*;
 import falsify.falsify.module.modules.combat.Aimbot;
 import falsify.falsify.module.modules.combat.AutoClick;
@@ -14,6 +15,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class ModuleManager {
     public static CopyOnWriteArrayList<Module> modules = new CopyOnWriteArrayList<>();
     public static CopyOnWriteArrayList<Module> enabledModules = new CopyOnWriteArrayList<>();
+    private static boolean hasLoadedConfig = false;
 
     public static void init(){
         modules.add(new GuiArrayList());
@@ -54,7 +56,7 @@ public class ModuleManager {
         modules.add(new Perspective());
         modules.add(new FastJump());
         modules.add(new Breadcrumbs());
-        modules.add(new ServerCrasher());
+        modules.add(new MelonCrafter());
         modules.add(new Notifications());
         modules.add(new PrivateChat());
         modules.add(new Icons());
@@ -70,6 +72,8 @@ public class ModuleManager {
         modules.add(new AutoSell());
         modules.add(new Nametags());
         modules.add(new TazCrafterDefamation());
+        modules.add(new NbtViewer());
+        modules.add(new UnicodeTranslate());
 
         modules.add(new FPSModule());
         modules.add(new TimeModule());
@@ -87,9 +91,12 @@ public class ModuleManager {
         modules.add(new GifModule());
         modules.add(new PotionEffectModule());
         modules.add(new ScoreboardModule());
+        modules.add(new TPSModule());
 
-//        Falsify.postProcess = new PostProcess();
-//        modules.add(Falsify.postProcess);
+        modules.add(new PostProcess());
+
+        modules.add(keyPressTest);
+        modules.add(chatListener);
     }
 
     public static <T extends Module> T getModule(Class<T> module){
@@ -108,5 +115,15 @@ public class ModuleManager {
     public static void disableCheats() {
         modules = new CopyOnWriteArrayList<>(modules.stream().filter(module -> !module.isCheat).toList());
         enabledModules = new CopyOnWriteArrayList<>(enabledModules.stream().filter(module -> !module.isCheat).toList());
+    }
+    public static KeyPressAutomation keyPressTest = new KeyPressAutomation("Say hi twice", -1);
+    public static GameMessageReceivedAutomation chatListener = new GameMessageReceivedAutomation("listen for lmfao", -1);
+
+    public static void setLoadedConfigState(boolean hasLoadedConfig) {
+        ModuleManager.hasLoadedConfig = hasLoadedConfig;
+    }
+
+    public static boolean hasLoadedConfig() {
+        return hasLoadedConfig;
     }
 }

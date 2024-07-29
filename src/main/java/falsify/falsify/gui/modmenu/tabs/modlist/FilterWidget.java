@@ -1,4 +1,4 @@
-package falsify.falsify.gui.modmenu.primitives.modlist;
+package falsify.falsify.gui.modmenu.tabs.modlist;
 
 import falsify.falsify.Falsify;
 import falsify.falsify.gui.modmenu.primitives.TextBoxWidget;
@@ -19,8 +19,8 @@ public class FilterWidget extends PanelWidget implements Scrollable, Typable {
 
     private final ArrayList<Clickable> filterButtons = new ArrayList<>();
     private final TextBoxWidget textBoxWidget;
-    private final ModPanel parent;
-    public FilterWidget(Panel panel, double x, double y, double width, double height, ModPanel parent) {
+    private final ModTab parent;
+    public FilterWidget(Panel panel, double x, double y, double width, double height, ModTab parent) {
         super(panel, x, y, width, height);
         this.parent = parent;
         this.textBoxWidget = new TextBoxWidget(panel, x + 5, y + 20, width-10, 12, ((instance, context, mouseX, mouseY, delta) -> {

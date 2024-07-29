@@ -3,10 +3,10 @@ package falsify.falsify.gui.modmenu.primitives;
 import falsify.falsify.Falsify;
 import falsify.falsify.gui.utils.Typable;
 import falsify.falsify.utils.fonts.FontRenderer;
-import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.util.StringHelper;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
 
@@ -73,7 +73,7 @@ public class TextBoxWidget extends PanelWidget implements Typable {
 
     public boolean charTyped(char chr, int modifiers) {
         if(!isActive) return false;
-        if (SharedConstants.isValidChar(chr)) {
+        if (StringHelper.isValidChar(chr)) {
             this.write(Character.toString(chr));
             return true;
         }
@@ -177,7 +177,7 @@ public class TextBoxWidget extends PanelWidget implements Typable {
         int i = Math.min(this.selectionStart, this.selectionEnd);
         int j = Math.max(this.selectionStart, this.selectionEnd);
         int k = this.maxLength - this.text.length() - (i - j);
-        if (k < (l = (string = SharedConstants.stripInvalidChars(text)).length())) {
+        if (k < (l = (string = StringHelper.stripInvalidChars(text)).length())) {
             string = string.substring(0, k);
             l = k;
         }

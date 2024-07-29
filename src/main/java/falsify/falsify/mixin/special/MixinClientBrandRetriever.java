@@ -19,7 +19,7 @@ public abstract class MixinClientBrandRetriever {
     public static String getClientModName() {
         ClientBrand brand = ModuleManager.getModule(ClientBrand.class);
         if(brand != null && brand.toggled){
-            return brand.brand;
+            return brand.brand.getValue();
         }
         return "vanilla";
     }

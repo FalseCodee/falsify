@@ -1,16 +1,14 @@
 package falsify.falsify.gui;
 
 import falsify.falsify.Falsify;
+import falsify.falsify.gui.utils.Animation;
 import falsify.falsify.gui.utils.Clickable;
 import falsify.falsify.gui.credits.CreditScreen;
 import falsify.falsify.gui.other.FollowerGuy;
-import falsify.falsify.utils.LegacyIdentifier;
-import falsify.falsify.utils.MathUtils;
-import falsify.falsify.utils.RenderHelper;
-import falsify.falsify.utils.RenderUtils;
+import falsify.falsify.utils.*;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ConnectScreen;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.multiplayer.ConnectScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.screen.option.OptionsScreen;
 import net.minecraft.client.gui.screen.world.SelectWorldScreen;
@@ -21,7 +19,6 @@ import net.minecraft.text.Text;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.concurrent.CompletableFuture;
 
 public class ClientMenuScreen extends Screen {
 
@@ -41,7 +38,7 @@ public class ClientMenuScreen extends Screen {
         addButton("Singleplayer", new SelectWorldScreen(this));
         addButton("Multiplayer", new MultiplayerScreen(this));
         addButton("Settings", new OptionsScreen(this, Falsify.mc.options));
-        addButton("Join TazPvP", () -> ConnectScreen.connect(this, Falsify.mc, ServerAddress.parse(warSpree.address), warSpree, false));
+        addButton("Join TazPvP", () -> ConnectScreen.connect(this, Falsify.mc, ServerAddress.parse(warSpree.address), warSpree, false, null));
         addButton("Credits", new CreditScreen(this));
         guys = new ArrayList<>();
     }
@@ -69,6 +66,7 @@ public class ClientMenuScreen extends Screen {
     }
 
     private void addButton(String name, Runnable runnable) {
+        Animation animation = new Animation(100, Animation.Type.EASE_IN_OUT);
         buttons.add(new Clickable.ButtonBuilder().pos(0, height-30).dimensions(200, 25)
                 .onClick(((clickable, x, y, button) -> {
                     if(clickable.isHovering(x+clickable.getWidth()/2, y+clickable.getHeight()/2)) {
@@ -78,14 +76,21 @@ public class ClientMenuScreen extends Screen {
                     return false;
                 }))
                 .onRender((clickable, context, mouseX, mouseY, delta) -> {
-                    Color hover = (clickable.isHovering(mouseX+clickable.getWidth()/2, mouseY+clickable.getHeight()/2)) ? new Color(144, 144, 144, 128) : new Color(60, 60, 60, 128);
+                    Color hover = new Color(60, 60, 60, 80);
                     MatrixStack matrices = context.getMatrices();
                     matrices.push();
                     matrices.translate(clickable.getX(), clickable.getY(), 0);
-                    RenderHelper.drawSmoothRect(hover.darker().darker(),context.getMatrices(), (int)(-clickable.getWidth()/2f), (int)(-clickable.getHeight()/2f), (int)(clickable.getWidth()/2f), (int)(clickable.getHeight()/2f), 7, new int[] {5, 5, 5, 5});
-                    RenderHelper.drawSmoothRect(hover,context.getMatrices(),  (int)(-clickable.getWidth()/2f)+1, (int)(-clickable.getHeight()/2f)+1, (int)(clickable.getWidth()/2f)-1, (int)(clickable.getHeight()/2f)-1, 7, new int[] {5, 5, 5, 5});
-                    int scale = 1;
+                    if(clickable.isHovering(mouseX+clickable.getWidth()/2, mouseY+clickable.getHeight()/2)) {
+                        animation.rise();
+                    } else {
+                        animation.lower();
+                    }
+                    animation.tick();
+                    float scale = (float) animation.interpolate(1.0, 1.1);
                     matrices.scale(scale, scale, 1);
+                    RenderHelper.drawSmoothRectGradient(animation.color(hover, ColorUtils.setAlpha(color3, 0.65f)), animation.color(hover.brighter(), ColorUtils.setAlpha(color4, 0.65f)), context.getMatrices(), (int)(-clickable.getWidth()/2f), (int)(-clickable.getHeight()/2f), (int)(clickable.getWidth()/2f), (int)(clickable.getHeight()/2f), 7, new int[] {5, 5, 5, 5});
+//                    RenderHelper.drawSmoothRect(hover.darker().darker(),context.getMatrices(), (int)(-clickable.getWidth()/2f), (int)(-clickable.getHeight()/2f), (int)(clickable.getWidth()/2f), (int)(clickable.getHeight()/2f), 7, new int[] {5, 5, 5, 5});
+                    RenderHelper.drawSmoothRect(hover,context.getMatrices(),  (int)(-clickable.getWidth()/2f)+1, (int)(-clickable.getHeight()/2f)+1, (int)(clickable.getWidth()/2f)-1, (int)(clickable.getHeight()/2f)-1, 7, new int[] {5, 5, 5, 5});
                     Falsify.fontRenderer.drawCenteredString(context, name, 0, -Falsify.fontRenderer.getStringHeight(name)/2, Color.WHITE, true);
                     matrices.pop();
                 }).build());
@@ -122,11 +127,12 @@ public class ClientMenuScreen extends Screen {
     }
 
     public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
-        color1 = RenderHelper.colorLerp(color1, new Color(Color.HSBtoRGB((mouseY/(float)height*1.5f + 0.23f), 1.00f, 0.25f)), MathUtils.clamp(0.1f*Falsify.mc.getLastFrameDuration(), 0.0f, 1.0f));
-        color2 = RenderHelper.colorLerp(color2, new Color(Color.HSBtoRGB((mouseX/(float)width*0.5f  + 0.86f), 1.00f, 0.25f)), MathUtils.clamp(0.1f*Falsify.mc.getLastFrameDuration(), 0.0f, 1.0f));
-        color3 = RenderHelper.colorLerp(color3, new Color(Color.HSBtoRGB((mouseY/(float)height*0.8f + 0.45f), 1.00f, 0.25f)), MathUtils.clamp(0.1f*Falsify.mc.getLastFrameDuration(), 0.0f, 1.0f));
-        color4 = RenderHelper.colorLerp(color4, new Color(Color.HSBtoRGB((mouseX/(float)width*0.9f  + 0.33f), 1.00f, 0.25f)), MathUtils.clamp(0.1f*Falsify.mc.getLastFrameDuration(), 0.0f, 1.0f));
-//        RenderUtils.fillCornerGradient(context,0, 0, width, height, color1.getRGB(), color2.getRGB(),color3.getRGB(), color4.getRGB());
+        color1 = RenderHelper.colorLerp(color1, new Color(Color.HSBtoRGB((mouseY/(float)height*1.5f + 0.23f), 1.00f, 0.75f)), MathUtils.clamp(0.1f*Falsify.mc.getRenderTickCounter().getLastFrameDuration(), 0.0f, 1.0f));
+        color2 = RenderHelper.colorLerp(color2, new Color(Color.HSBtoRGB((mouseX/(float)width*0.5f  + 0.86f), 1.00f, 0.75f)), MathUtils.clamp(0.1f*Falsify.mc.getRenderTickCounter().getLastFrameDuration(), 0.0f, 1.0f));
+        color3 = RenderHelper.colorLerp(color3, new Color(Color.HSBtoRGB((mouseY/(float)height*1.8f + 0.0f), 1.00f, 0.75f)), MathUtils.clamp(0.1f*Falsify.mc.getRenderTickCounter().getLastFrameDuration(), 0.0f, 1.0f));
+        color4 = RenderHelper.colorLerp(color4, new Color(Color.HSBtoRGB((mouseX/(float)width*1.5f  + 0.75f), 1.00f, 0.75f)), MathUtils.clamp(0.1f*Falsify.mc.getRenderTickCounter().getLastFrameDuration(), 0.0f, 1.0f));
+        context.getMatrices().translate(0, 0, 0.1);
+//        RenderUtils.fillCornerGradient(context,0, 0, width, height, ColorUtils.setAlpha(color1, 0.925f).getRGB(), ColorUtils.setAlpha(color2, 0.925f).getRGB(), ColorUtils.setAlpha(color3, 0.925f).getRGB(), ColorUtils.setAlpha(color4, 0.925f).getRGB());
 
         int size = guys.size();
         for(int i = guys.size()-1; i >=0 ;i--) {
@@ -139,7 +145,7 @@ public class ClientMenuScreen extends Screen {
         }
     }
 
-    private float sum = 0;
+    private final float sum = 0;
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
@@ -154,7 +160,7 @@ public class ClientMenuScreen extends Screen {
             return;
         }
 
-        context.drawTexture(titleBackground, 0, 0, ((float) mouseX / width) * 160, ((float) mouseY / height) * 90, titleBackground.getWidth(), titleBackground.getHeight(), width+160, height+90);
+        context.drawTexture(titleBackground.getId(), 0, 0, ((float) mouseX / width) * 160, ((float) mouseY / height) * 90, titleBackground.getWidth(), titleBackground.getHeight(), width+160, height+90);
         renderBackground(context, mouseX, mouseY, delta);
         for(Clickable button : buttons)  {
             button.render(context, mouseX, mouseY, delta);
@@ -164,7 +170,7 @@ public class ClientMenuScreen extends Screen {
         float scale = width/800f/2f/1.25f;
         context.getMatrices().scale(scale, scale, 1);
         context.getMatrices().translate(width/2f/scale, (height/3f)/scale, 0);
-        context.drawTexture(title, -title.getWidth()/2, -title.getHeight()/2, 0,0, title.getWidth(), title.getHeight(), title.getWidth(), title.getHeight());
+        context.drawTexture(title.getId(), -title.getWidth()/2, -title.getHeight()/2, 0,0, title.getWidth(), title.getHeight(), title.getWidth(), title.getHeight());
         context.getMatrices().pop();
     }
 }

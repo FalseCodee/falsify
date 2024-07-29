@@ -1,8 +1,9 @@
-package falsify.falsify.gui.modmenu.primitives.modlist;
+package falsify.falsify.gui.modmenu.tabs.modlist;
 
 import falsify.falsify.gui.modmenu.primitives.Panel;
 import falsify.falsify.gui.modmenu.primitives.PanelTab;
 import falsify.falsify.gui.modmenu.primitives.ScrollbarWidget;
+import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
 import falsify.falsify.module.ModuleManager;
 import falsify.falsify.utils.MathUtils;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class ModPanel extends PanelTab {
+public class ModTab extends PanelTab {
 
     private final ArrayList<ModuleEntry> moduleEntries = new ArrayList<ModuleEntry>();
     private List<ModuleEntry> filteredModuleEntries;
@@ -21,12 +22,11 @@ public class ModPanel extends PanelTab {
     private int columns = 0;
     private double entryWidth;
     private final double entryHeight = 50;
-    private final ScissorStack scissorStack = new ScissorStack();
     private final FilterWidget filterWidget;
     private final ScrollbarWidget scrollbarWidget;
 
 
-    public ModPanel(Panel panel) {
+    public ModTab(Panel panel) {
         super(panel);
         this.filterWidget = new FilterWidget(panel,x-100, y, 100, height, this);
         do {
@@ -63,6 +63,8 @@ public class ModPanel extends PanelTab {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        ScissorStack scissorStack = panel.getScissorStack();
+
         filterWidget.render(context, mouseX, mouseY, delta);
         pushStackToPosition(context.getMatrices());
         drawSmoothRect(panel.getTheme().primaryColor(), context.getMatrices(), 0, 0, (float) width, (float) height, 7, new int[] {10, 0, 0, 0});
@@ -75,8 +77,8 @@ public class ModPanel extends PanelTab {
     }
 
     public void loadModuleEntries() {
-        for(Module module : ModuleManager.modules) {
-            moduleEntries.add(new ModuleEntry(panel, module, scissorStack, entryWidth, entryHeight));
+        for(Module module : ModuleManager.modules.stream().filter(module -> module.category != Category.AUTOMATION).toList()) {
+            moduleEntries.add(new ModuleEntry(panel, module, panel.getScissorStack(), entryWidth, entryHeight));
         }
         setFilter((moduleEntry -> true));
     }

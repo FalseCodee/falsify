@@ -158,7 +158,6 @@ public class FontRenderer implements Closeable {
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
 
         RenderSystem.setShader(GameRenderer::getPositionTexColorProgram);
-        BufferBuilder bb = Tessellator.getInstance().getBuffer();
         Matrix4f mat = stack.peek().getPositionMatrix();
         char[] chars = s.toCharArray();
         float xOffset = 0;
@@ -187,7 +186,7 @@ public class FontRenderer implements Closeable {
                 inSel = true;
                 continue;
             } else if (c == '\n') {
-                yOffset += getStringHeight(s.substring(lineStart, i)) * scaleMul;
+                yOffset += getStringHeight(s.substring(lineStart, i)) * scaleMul * downScaleFactor;
                 xOffset = 0;
                 lineStart = i + 1;
                 continue;
@@ -205,7 +204,7 @@ public class FontRenderer implements Closeable {
             RenderSystem.setShaderTexture(0, identifier);
             List<DrawEntry> objects = GLYPH_PAGE_CACHE.get(identifier);
 
-            bb.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
+            BufferBuilder bb = Tessellator.getInstance().begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
 
             for (DrawEntry object : objects) {
                 float xo = object.atX;
@@ -222,15 +221,15 @@ public class FontRenderer implements Closeable {
                 float u2 = (float) (glyph.u() + glyph.width()) / owner.width;
                 float v2 = (float) (glyph.v() + glyph.height()) / owner.height;
                 if(shadow) {
-                    bb.vertex(mat, xo + 0 + 2, yo + h + 2, 0).texture(u1, v2).color(0, 0, 0, a).next();
-                    bb.vertex(mat, xo + w + 2, yo + h + 2, 0).texture(u2, v2).color(0, 0, 0, a).next();
-                    bb.vertex(mat, xo + w + 2, yo + 0 + 2, 0).texture(u2, v1).color(0, 0, 0, a).next();
-                    bb.vertex(mat, xo + 0 + 2, yo + 0 + 2, 0).texture(u1, v1).color(0, 0, 0, a).next();
+                    bb.vertex(mat, xo + 0 + 4, yo + h + 4, 0).texture(u1, v2).color(0, 0, 0, a);
+                    bb.vertex(mat, xo + w + 4, yo + h + 4, 0).texture(u2, v2).color(0, 0, 0, a);
+                    bb.vertex(mat, xo + w + 4, yo + 0 + 4, 0).texture(u2, v1).color(0, 0, 0, a);
+                    bb.vertex(mat, xo + 0 + 4, yo + 0 + 4, 0).texture(u1, v1).color(0, 0, 0, a);
                 }
-                bb.vertex(mat, xo + 0, yo + h, 0f).texture(u1, v2).color(cr, cg, cb, a).next();
-                bb.vertex(mat, xo + w, yo + h, 0f).texture(u2, v2).color(cr, cg, cb, a).next();
-                bb.vertex(mat, xo + w, yo + 0, 0f).texture(u2, v1).color(cr, cg, cb, a).next();
-                bb.vertex(mat, xo + 0, yo + 0, 0f).texture(u1, v1).color(cr, cg, cb, a).next();
+                bb.vertex(mat, xo + 0, yo + h, 0f).texture(u1, v2).color(cr, cg, cb, a);
+                bb.vertex(mat, xo + w, yo + h, 0f).texture(u2, v2).color(cr, cg, cb, a);
+                bb.vertex(mat, xo + w, yo + 0, 0f).texture(u2, v1).color(cr, cg, cb, a);
+                bb.vertex(mat, xo + 0, yo + 0, 0f).texture(u1, v1).color(cr, cg, cb, a);
             }
             BufferRenderer.drawWithGlobalProgram(bb.end());
         }
@@ -307,7 +306,7 @@ public class FontRenderer implements Closeable {
             if (c1 == '\n') {
                 if (currentLine == 0) {
                     // empty line, assume space
-                    currentLine = locateGlyph1(' ').height() / (float) this.scaleMul / downScaleFactor;
+                    currentLine = locateGlyph1(' ').height() / (float) this.scaleMul * downScaleFactor;
                 }
                 previous += currentLine;
                 currentLine = 0;

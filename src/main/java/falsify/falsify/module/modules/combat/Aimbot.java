@@ -121,9 +121,9 @@ public class Aimbot extends Module {
                     if (t > this.speed.getValue())
                         t = this.speed.getValue();
                     t = t * t * t * (t * (6.0F * t - 15.0F) + 10.0F);
-                    mc.player.setYaw((float) MathUtils.lerp(mc.player.getYaw(), MathUtils.getRotationsNeeded(target.getEntity())[0], t * ((frameSync.getValue()) ? mc.getLastFrameDuration() : 1)));
+                    mc.player.setYaw((float) MathUtils.lerp(mc.player.getYaw(), MathUtils.getRotationsNeeded(target.getEntity())[0], t * ((frameSync.getValue()) ? mc.getRenderTickCounter().getLastFrameDuration() : 1)));
                     if (mc.crosshairTarget.getType() != HitResult.Type.ENTITY || ((EntityHitResult) mc.crosshairTarget).getEntity() != target.getEntity())
-                        mc.player.setPitch((float) MathUtils.lerp(mc.player.getPitch(), MathUtils.getRotationsNeeded(target.getEntity())[1], (t / 2.0F * ((frameSync.getValue()) ? mc.getLastFrameDuration() : 1))));
+                        mc.player.setPitch((float) MathUtils.lerp(mc.player.getPitch(), MathUtils.getRotationsNeeded(target.getEntity())[1], (t / 2.0F * ((frameSync.getValue()) ? mc.getRenderTickCounter().getLastFrameDuration() : 1))));
                 } else if(this.type.getMode().equals("Manual")) {
                     if (this.oldTarget == null || this.oldTarget.getLocation().equals(target.getLocation()))
                         this.timing = 0.0F;
@@ -135,8 +135,8 @@ public class Aimbot extends Module {
                         t = this.speed.getValue();
                     t = t * t * t * (t * (6.0F * t - 15.0F) + 10.0F);
 
-                    mc.player.setYaw((float) MathUtils.lerp(mc.player.getYaw(), manYaw.getValue(), t * ((frameSync.getValue()) ? mc.getLastFrameDuration() : 1)));
-                    mc.player.setPitch((float) MathUtils.lerp(mc.player.getPitch(), manPitch.getValue(), (t / 2.0F * ((frameSync.getValue()) ? mc.getLastFrameDuration() : 1))));
+                    mc.player.setYaw((float) MathUtils.lerp(mc.player.getYaw(), manYaw.getValue(), t * ((frameSync.getValue()) ? mc.getRenderTickCounter().getLastFrameDuration() : 1)));
+                    mc.player.setPitch((float) MathUtils.lerp(mc.player.getPitch(), manPitch.getValue(), (t / 2.0F * ((frameSync.getValue()) ? mc.getRenderTickCounter().getLastFrameDuration() : 1))));
                 }
                 this.oldTarget = target;
             }

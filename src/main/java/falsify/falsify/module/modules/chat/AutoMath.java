@@ -15,7 +15,6 @@ import net.minecraft.text.Text;
 
 import java.text.DecimalFormat;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 
 public class AutoMath extends ChatModule {
@@ -41,6 +40,7 @@ public class AutoMath extends ChatModule {
 
     @Override
     public void onEvent(Event<?> event) {
+        super.onEvent(event);
         if(event instanceof EventPacketSend packetSend && packetSend.getPacket() instanceof ChatMessageC2SPacket packet) {
             String message = packet.chatMessage();
             if (message.toLowerCase().contains(mc.player.getGameProfile().getName().toLowerCase() + " solve ")) {
@@ -55,7 +55,7 @@ public class AutoMath extends ChatModule {
                     public void run() {
                         try {
                             if (showEquation.getValue()) ChatModuleUtils.sendMessage(finalMessage + " = " + format.format(eval(finalMessage, vars, funcs)), true);
-                            else ChatModuleUtils.sendMessage("" + format.format(eval(finalMessage, vars, funcs)), true);
+                            else ChatModuleUtils.sendMessage(format.format(eval(finalMessage, vars, funcs)), true);
                         } catch (RuntimeException e) {
                             ChatModuleUtils.sendMessage(e.getMessage(), false);
                         }
@@ -149,7 +149,7 @@ public class AutoMath extends ChatModule {
                     public void run() {
                         try {
                             if (showEquation.getValue()) ChatModuleUtils.sendMessage(finalMessage + " = " + format.format(eval(finalMessage, vars, funcs)), true);
-                            else ChatModuleUtils.sendMessage("" + format.format(eval(finalMessage, vars, funcs)), true);
+                            else ChatModuleUtils.sendMessage(format.format(eval(finalMessage, vars, funcs)), true);
                         } catch (RuntimeException e) {
                             ChatModuleUtils.sendMessage(e.getMessage(), false);
                         }

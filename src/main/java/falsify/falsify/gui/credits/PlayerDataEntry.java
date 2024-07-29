@@ -34,7 +34,7 @@ public class PlayerDataEntry extends Clickable {
         LegacyIdentifier id = playerData.getBodyRender();
         matrices.translate(width/2, height/2, 0);
         matrices.scale(0.75f, 0.75f, 1);
-        context.drawTexture(id,  -id.getWidth()/2, -id.getHeight()/2, 0,0, id.getWidth(), id.getHeight(), id.getWidth(), id.getHeight());
+        context.drawTexture(id.getId(),  -id.getWidth()/2, -id.getHeight()/2, 0,0, id.getWidth(), id.getHeight(), id.getWidth(), id.getHeight());
         matrices.pop();
     }
 }

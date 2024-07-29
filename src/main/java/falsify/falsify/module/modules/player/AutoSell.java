@@ -4,15 +4,11 @@ import falsify.falsify.listeners.Event;
 import falsify.falsify.listeners.events.EventUpdate;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
-import falsify.falsify.utils.FalseRunnable;
 import falsify.falsify.utils.Timer;
 import net.minecraft.client.gui.screen.ingame.GenericContainerScreen;
-import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.text.Text;
-
-import java.util.concurrent.Executors;
 
 public class AutoSell extends Module {
     Timer timer = new Timer();

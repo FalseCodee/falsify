@@ -28,7 +28,6 @@ import net.minecraft.util.math.Vec2f;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 public class FaceCover extends Module {
@@ -111,7 +110,7 @@ public class FaceCover extends Module {
         matrices.translate(pos.x, pos.y, 0);
         matrices.scale(scale, scale, 1);
         matrices.translate(-identifier.getWidth()/2f, -identifier.getWidth()/2f, 0);
-        context.drawTexture(identifier, 0,0,0,0,identifier.getWidth(), identifier.getHeight(), identifier.getWidth(), identifier.getHeight());
+        context.drawTexture(identifier.getId(), 0,0,0,0,identifier.getWidth(), identifier.getHeight(), identifier.getWidth(), identifier.getHeight());
         matrices.pop();
     }
 }

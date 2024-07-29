@@ -12,13 +12,13 @@ import net.minecraft.client.texture.StatusEffectSpriteManager;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffectUtil;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
 public class PotionEffectModule extends DisplayModule<PotionEffectRenderModule> {
     private final RangeSetting padding = new RangeSetting("Padding", 10, 0, 50, 0.1);
@@ -62,23 +62,12 @@ class PotionEffectRenderModule extends RenderModule<PotionEffectModule> {
         this.drawStatusEffectDescriptions(context, i, k, iterable);
     }
 
-//    private void drawStatusEffectBackgrounds(DrawContext context, int x, int height, Iterable<StatusEffectInstance> statusEffects, boolean wide) {
-//        int i = this.y;
-//        for (StatusEffectInstance statusEffectInstance : statusEffects) {
-//            if (wide) {
-//                context.drawTexture(BACKGROUND_TEXTURE, x, i, 0, 166, 120, 32);
-//            } else {
-//                context.drawTexture(BACKGROUND_TEXTURE, x, i, 0, 198, 32, 32);
-//            }
-//            i += height;
-//        }
-//    }
 
     private void drawStatusEffectSprites(DrawContext context, int x, int height, Iterable<StatusEffectInstance> statusEffects, boolean wide) {
         StatusEffectSpriteManager statusEffectSpriteManager = Falsify.mc.getStatusEffectSpriteManager();
         int i = -2;
         for (StatusEffectInstance statusEffectInstance : statusEffects) {
-            StatusEffect statusEffect = statusEffectInstance.getEffectType();
+            RegistryEntry<StatusEffect> statusEffect = statusEffectInstance.getEffectType();
             Sprite sprite = statusEffectSpriteManager.getSprite(statusEffect);
             context.drawSprite(x + (wide ? 6 : 7), i + 7, 0, 18, 18, sprite);
             i += height;
@@ -91,7 +80,7 @@ class PotionEffectRenderModule extends RenderModule<PotionEffectModule> {
         for (StatusEffectInstance statusEffectInstance : statusEffects) {
             Text text = this.getStatusEffectDescription(statusEffectInstance);
             context.drawTextWithShadow(Falsify.mc.textRenderer, text, x + 10 + 18, i + 6, module.getTextColor().getRGB());
-            Text text2 = StatusEffectUtil.getDurationText(statusEffectInstance, 1.0f);
+            Text text2 = StatusEffectUtil.getDurationText(statusEffectInstance, 1.0f, Falsify.mc.world.getTickManager().getTickRate());
             max = Math.max(max, Falsify.mc.textRenderer.getWidth(text));
             context.drawTextWithShadow(Falsify.mc.textRenderer, text2, x + 10 + 18, i + 6 + 10, module.getTextColor().darker().getRGB());
             i += height;
@@ -101,7 +90,7 @@ class PotionEffectRenderModule extends RenderModule<PotionEffectModule> {
     }
 
     private Text getStatusEffectDescription(StatusEffectInstance statusEffect) {
-        MutableText mutableText = statusEffect.getEffectType().getName().copy();
+        MutableText mutableText = statusEffect.getEffectType().value().getName().copy();
         if (statusEffect.getAmplifier() >= 1 && statusEffect.getAmplifier() <= 9) {
             mutableText.append(ScreenTexts.SPACE).append(Text.translatable("enchantment.level." + (statusEffect.getAmplifier() + 1)));
         }

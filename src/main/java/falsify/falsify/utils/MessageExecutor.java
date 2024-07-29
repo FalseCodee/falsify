@@ -1,10 +1,6 @@
 package falsify.falsify.utils;
 
-import falsify.falsify.Falsify;
-import net.minecraft.text.Text;
-
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class MessageExecutor {
     private final String message;

@@ -41,10 +41,9 @@ public class BlurModule extends Module {
             Falsify.shaderManager.KAWASE_BLUR.renderShader(Falsify.mc.getFramebuffer().getColorAttachment());
 
         } else if(event instanceof EventPacketSend e && e.getPacket() instanceof ChatMessageC2SPacket packet && packet.chatMessage().toLowerCase().startsWith(".reload")) {
-//            Falsify.shaderManager.GLOW.setShader(new Shader("blur.vert", "glow.frag"));
-//            Falsify.shaderManager.GLOW_OUTLINE.setShader(new Shader("blur.vert", "glowoutline.frag"));
-//            Falsify.shaderManager.BLUR_INSIDE.setShader(new Shader("blur.vert", "blurinside.frag"));
             Falsify.shaderManager.KAWASE_BLUR.setShader(new Shader("blur.vert", "kawase_down.frag"));
+            Falsify.shaderManager.DISTORTION.setShader(new Shader("blur.vert", "distortion.frag"));
+            Falsify.shaderManager.DERIVATIVE_FILTER.setShader(new Shader("blur.vert", "derivativefilter.frag"));
             event.setCancelled(true);
         } else if(event instanceof EventWindowResize) {
             Falsify.shaderManager.KAWASE_BLUR.loadFramebuffers();

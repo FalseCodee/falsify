@@ -1,10 +1,15 @@
 package falsify.falsify.utils.config.translators;
 
 import com.google.gson.JsonObject;
+import falsify.falsify.automation.block.AutomationBlock;
+import falsify.falsify.automation.block.IfBlock;
+import falsify.falsify.automation.block.SendChatMessageBlock;
+import falsify.falsify.automation.block.WaitBlock;
 import falsify.falsify.module.DisplayModule;
 import falsify.falsify.module.Module;
 import falsify.falsify.module.settings.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ModuleTranslator {
@@ -33,8 +38,33 @@ public class ModuleTranslator {
                 colorObj.addProperty("rainbowSpeed", s.getRpm());
                 json.add(s.getName(), colorObj);
             }
+            else if(setting instanceof AutomationBlockSetting s) {
+                json.add(s.getName(), translateBlocks(s.getValue()));
+            }
+            else if (setting instanceof TextSetting s) json.addProperty(s.getName(), s.getValue());
+            else if (setting instanceof FreeNumberSetting s) json.addProperty(s.getName(), s.getValue());
+
         }
         return json;
+    }
+
+    private static JsonObject translateBlocks(ArrayList<AutomationBlock> blocks) {
+        JsonObject blockList = new JsonObject();
+        for(int i = 0; i < blocks.size(); i++) {
+            AutomationBlock block = blocks.get(i);
+            blockList.add("b" + i, translateBlock(block));
+        }
+        return blockList;
+    }
+    private static JsonObject translateBlock(AutomationBlock block) {
+        JsonObject blockObj = new JsonObject();
+        blockObj.addProperty("type", block.getName());
+        switch (block.getName()) {
+            case "Wait" -> blockObj.addProperty("delay", ((WaitBlock) block).getDelay());
+            case "Send Message" -> blockObj.addProperty("message", ((SendChatMessageBlock) block).getMessage());
+        }
+        if(block instanceof IfBlock ifBlock) blockObj.add("blocks", translateBlocks(ifBlock.getBlocks()));
+        return blockObj;
     }
 
     public static void loadModule(Module module, JsonObject moduleJson) {
@@ -63,7 +93,33 @@ public class ModuleTranslator {
                 s.setAlpha(colorObj.getAsJsonPrimitive("alpha").getAsFloat());
                 s.setRainbow(colorObj.getAsJsonPrimitive("rainbow").getAsBoolean());
                 s.setRpm(colorObj.getAsJsonPrimitive("rainbowSpeed").getAsFloat());
+            } else if (setting instanceof AutomationBlockSetting s) {
+                loadBlocks(settingsJson.getAsJsonObject(s.getName())).forEach(s::addBlock);
+            } else if (setting instanceof TextSetting s) {
+                s.setValue(settingsJson.getAsJsonPrimitive(s.getName()).getAsString());
+            } else if (setting instanceof FreeNumberSetting s) {
+                s.setValue(settingsJson.getAsJsonPrimitive(s.getName()).getAsDouble());
             }
         }
+    }
+
+    private static ArrayList<AutomationBlock> loadBlocks(JsonObject blockList) {
+        ArrayList<AutomationBlock> blocks = new ArrayList<>();
+        for(String obj : blockList.keySet()) {
+            JsonObject blockObj = blockList.getAsJsonObject(obj);
+            AutomationBlock block = null;
+
+            switch (blockObj.getAsJsonPrimitive("type").getAsString()) {
+                case "If" -> block = new IfBlock(obj1 -> true);
+                case "Wait" -> block = new WaitBlock(blockObj.getAsJsonPrimitive("delay").getAsInt());
+                case "Send Message" -> block = new SendChatMessageBlock(blockObj.getAsJsonPrimitive("message").getAsString());
+            }
+            if (block == null) continue;
+
+            if(block instanceof IfBlock ifBlock) loadBlocks(blockObj.getAsJsonObject("blocks")).forEach(ifBlock::addBlock);
+
+            blocks.add(block);
+        }
+        return blocks;
     }
 }

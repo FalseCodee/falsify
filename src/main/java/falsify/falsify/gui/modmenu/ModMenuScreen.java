@@ -1,7 +1,6 @@
 package falsify.falsify.gui.modmenu;
 
 import falsify.falsify.Falsify;
-import falsify.falsify.gui.modmenu.primitives.Theme;
 import falsify.falsify.gui.utils.Clickable;
 import falsify.falsify.gui.editor.EditGUI;
 import falsify.falsify.gui.modmenu.primitives.Panel;
@@ -42,6 +41,7 @@ public class ModMenuScreen extends Screen {
                     RenderHelper.drawSmoothRect(color, context.getMatrices(), 2, 2, (float) instance.getWidth()-2, (float) instance.getHeight()-2, 4, new int[] {10, 10, 10, 10});
 
                     Falsify.fontRenderer.drawCenteredString(context, "Edit Hud", (float) (instance.getWidth()/2f), (float) (instance.getHeight()/2f - Falsify.fontRenderer.getStringHeight("Edit Hud")/2f), panel.getTheme().primaryTextColor(), true);
+                    context.getMatrices().pop();
                 })
                 .build();
     }
@@ -81,6 +81,11 @@ public class ModMenuScreen extends Screen {
     @Override
     public boolean charTyped(char chr, int modifiers) {
         return panel.charTyped(chr, modifiers);
+    }
+
+    @Override
+    public void close() {
+        if(panel.close()) super.close();
     }
 
     @Override

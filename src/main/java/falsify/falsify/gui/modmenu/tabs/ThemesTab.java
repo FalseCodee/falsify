@@ -1,16 +1,11 @@
-package falsify.falsify.gui.modmenu.primitives.tabs;
+package falsify.falsify.gui.modmenu.tabs;
 
 import falsify.falsify.Falsify;
-import falsify.falsify.gui.modmenu.primitives.ColorWheelWidget;
 import falsify.falsify.gui.modmenu.primitives.Panel;
 import falsify.falsify.gui.modmenu.primitives.PanelTab;
-import falsify.falsify.gui.modmenu.primitives.PanelWidget;
 import falsify.falsify.gui.utils.Clickable;
-import falsify.falsify.module.settings.ColorSetting;
 import falsify.falsify.utils.fonts.FontRenderer;
 import net.minecraft.client.gui.DrawContext;
-
-import java.awt.*;
 
 public class ThemesTab extends PanelTab {
     private final Clickable editTheme;

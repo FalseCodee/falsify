@@ -1,13 +1,12 @@
 package falsify.falsify.gui.modmenu.primitives;
 
 import falsify.falsify.Falsify;
-import falsify.falsify.gui.utils.Clickable;
-import falsify.falsify.gui.utils.Draggable;
-import falsify.falsify.gui.utils.Scrollable;
-import falsify.falsify.gui.utils.Typable;
-import falsify.falsify.gui.modmenu.primitives.modlist.ModPanel;
-import falsify.falsify.gui.modmenu.primitives.tabs.CosmeticsTab;
-import falsify.falsify.gui.modmenu.primitives.tabs.ThemesTab;
+import falsify.falsify.gui.modmenu.tabs.waypoint.WaypointTab;
+import falsify.falsify.gui.utils.*;
+import falsify.falsify.gui.modmenu.tabs.modlist.ModTab;
+import falsify.falsify.gui.modmenu.tabs.automation.AutomationTab;
+import falsify.falsify.gui.modmenu.tabs.ThemesTab;
+import falsify.falsify.utils.ScissorStack;
 import net.minecraft.client.gui.DrawContext;
 
 import java.util.ArrayList;
@@ -17,15 +16,19 @@ public class Panel extends Clickable implements Scrollable, Typable, Draggable {
     private final ArrayList<PanelTab> tabs;
     private final TabWidget tabWidget;
     private final Theme theme;
+    private final ScissorStack scissorStack = new ScissorStack();
     private PanelTab activeTab;
+    private final Animation animation = new Animation(500, Animation.Type.EASE_IN_OUT);
     private int activeIndex;
     public Panel(double x, double y, double width, double height) {
         super(x, y, width, height);
         this.tabs = new ArrayList<>();
         this.theme = Falsify.theme;
-        tabs.add(new ModPanel(this));
+        tabs.add(new ModTab(this));
         tabs.add(new ThemesTab(this));
-        tabs.add(new CosmeticsTab(this));
+        tabs.add(new AutomationTab(this));
+        tabs.add(new WaypointTab(this));
+        animation.rise();
         activeIndex = 0;
         activeTab = tabs.get(activeIndex);
         this.tabWidget = new TabWidget(this, tabs,x, y, width, 30);
@@ -39,8 +42,13 @@ public class Panel extends Clickable implements Scrollable, Typable, Draggable {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        animation.tick();
+        context.getMatrices().push();
+        context.getMatrices().translate(0, animation.interpolate(Falsify.mc.getWindow().getScaledHeight()-this.y, 0), 0);
+        if(animation.getState() == Animation.State.LOWERING && animation.getProgress() == 0.0) Falsify.mc.setScreen(null);
         activeTab.render(context, mouseX, mouseY, delta);
         tabWidget.render(context, mouseX, mouseY, delta);
+        context.getMatrices().pop();
     }
 
     @Override
@@ -73,6 +81,11 @@ public class Panel extends Clickable implements Scrollable, Typable, Draggable {
         context.getMatrices().pop();
     }
 
+    public boolean close() {
+        animation.lower();
+        return false;
+    }
+
     public PanelTab getActiveTab() {
         return activeTab;
     }
@@ -96,5 +109,9 @@ public class Panel extends Clickable implements Scrollable, Typable, Draggable {
 
     public ArrayList<PanelTab> getTabs() {
         return tabs;
+    }
+
+    public ScissorStack getScissorStack() {
+        return scissorStack;
     }
 }

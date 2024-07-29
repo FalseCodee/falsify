@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(TextRenderer.class)
 public class MixinTextRenderer {
 
-    @Inject(method = "getFontStorage", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "getFontStorage", at = @At("HEAD"))
     private void fontStorage(Identifier id, CallbackInfoReturnable<FontStorage> cir){
         //if(Falsify.fonts != null) cir.setReturnValue(Falsify.fonts.getFontStorage());
     }

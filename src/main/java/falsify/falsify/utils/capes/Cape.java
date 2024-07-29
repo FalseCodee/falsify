@@ -5,7 +5,6 @@ import falsify.falsify.utils.LegacyIdentifier;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.concurrent.CompletableFuture;
 
 public class Cape {
     private LegacyIdentifier capeId;
@@ -38,7 +37,6 @@ public class Cape {
 
     public static void addCapes() {
         capes.add(new Cape("dev_cape"));
-        capes.add(new Cape("armorup_cape"));
-        capes.add(new GifCape("sus_cape", "https://cdn.discordapp.com/attachments/755141818743652444/1140435807157616691/image.gif"));
+        capes.add(new GifCape("sus_cape", "https://cdn.discordapp.com/attachments/755141818743652444/1140435807157616691/image.gif?ex=6668e61c&is=6667949c&hm=39af9eaeda3ad4f50dcca761585d0bbbd100c639e0567e0e7b4dd31c11ec46bf&"));
     }
 }

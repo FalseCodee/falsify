@@ -35,7 +35,7 @@ public class NettyClient {
                     .handler(new NettyClientInitializer());
 
             channel = bootstrap.connect(host, port).sync().channel();
-            send(new HandshakePacket(Falsify.mc.player.getGameProfile().getId(), Falsify.mc.getSession().getUsername()));
+            send(new HandshakePacket(Falsify.mc.getSession().getUuidOrNull(), Falsify.mc.getSession().getUsername()));
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

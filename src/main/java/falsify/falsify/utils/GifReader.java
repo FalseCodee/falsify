@@ -126,7 +126,7 @@ public class GifReader {
     public void destroy() {
         TextureCacheManager tcm = Falsify.textureCacheManager;
         for(ImageFrame frame : frames) {
-            tcm.destroyTexture(frame.id);
+            tcm.destroyTexture(frame.id.getId());
         }
     }
 
@@ -135,8 +135,8 @@ public class GifReader {
                 for (ImageFrame frame : imageFrames) {
                     LegacyIdentifier legId = frame.id();
                     BufferedImage image = frame.image();
-                    Falsify.textureCacheManager.loadTexture(legId, image);
-                    Falsify.logger.info("Loaded Texture: " + legId.getPath());
+                    Falsify.textureCacheManager.loadTexture(legId.getId(), image);
+                    Falsify.logger.info("Loaded Texture: " + legId.getId().getPath());
             }
         });
     }

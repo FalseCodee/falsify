@@ -5,7 +5,7 @@ import falsify.falsify.listeners.events.EventPacketRecieve;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
 import falsify.falsify.utils.ChatModuleUtils;
-import net.minecraft.network.packet.s2c.play.ChatMessageS2CPacket;
+import net.minecraft.network.packet.s2c.play.GameMessageS2CPacket;
 
 public class ChatBot extends Module {
     public ChatBot() {
@@ -15,13 +15,13 @@ public class ChatBot extends Module {
     @Override
     public void onEvent(Event<?> event) {
         if(event instanceof EventPacketRecieve eventPacketRecieve) {
-            if(eventPacketRecieve.getPacket() instanceof ChatMessageS2CPacket packet) {
-                String message = packet.unsignedContent().getString().toLowerCase();
-                if(!message.startsWith(mc.player.getGameProfile().getName().toLowerCase())) return;
+            if(eventPacketRecieve.getPacket() instanceof GameMessageS2CPacket packet) {
+                String message = ChatModuleUtils.concatArray(packet.content().withoutStyle(), "");
+                if(!message.contains("CHAT GAME") || !message.contains("First to type word")) return;
 
-                message = message.substring(mc.player.getGameProfile().getName().length() + 1);
+                message = message.substring("\nCHAT GAME   First to type word \"".length(), message.length()-3);
 
-
+                ChatModuleUtils.sendMessage(message, false);
             }
         }
     }

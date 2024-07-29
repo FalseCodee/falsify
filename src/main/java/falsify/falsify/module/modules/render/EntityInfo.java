@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 public class EntityInfo extends Module {
@@ -106,8 +105,8 @@ public class EntityInfo extends Module {
         matrices.scale((float) (5/dist), (float) (5/dist), 1);
         String name = entity.getName().getString();
         float xRange = (Math.max(fr.getStringWidth("WWWWWWWWWWWW"), fr.getStringWidth(name)) + 46)/2;
-        RenderHelper.drawSmoothRect(new Color(82, 0, 0, 181), matrices, -xRange-1,  -26,  xRange+1, 26, 4f, new int[] {5,5,5,5});
-        RenderHelper.drawSmoothRect(new Color(136, 0, 0, 182), matrices, -xRange,  -25,  xRange, 25, 3, new int[] {5,5,5,5});
+        RenderHelper.drawSmoothRect(new Color(40, 40, 40, 181), matrices, -xRange-1,  -26,  xRange+1, 26, 4f, new int[] {5,5,5,5});
+        RenderHelper.drawSmoothRect(new Color(80, 80, 80, 182), matrices, -xRange,  -25,  xRange, 25, 3, new int[] {5,5,5,5});
 //        matrices.translate(0,0,-0.03);
         LegacyIdentifier id = getHead(entity.getUuid());
         if(id == null) {
@@ -123,10 +122,13 @@ public class EntityInfo extends Module {
             float width = 2.3f*id.getWidth();
             float height = 2.3f*id.getHeight();
 
-            context.drawTexture(id, (int)-xRange+5,-id.getHeight()-5,0,0, (int) width, (int) height, (int) width, (int) height);
-
-            fr.drawString(context, name, -xRange+44, -22, normalColor, true);
-            fr.drawString(context, "Hittable: §f" + ((entity.isInvulnerable()) ? "No" : "Yes"), -xRange+44, -2, subColor, true);
+            context.drawTexture(id.getId(), (int)-xRange+5,-id.getHeight()-5,0,0, (int) width, (int) height, (int) width, (int) height);
+            matrices.push();
+            matrices.translate(-xRange+44, -24, 0);
+            matrices.scale(1.2f, 1.2f, 1.0f);
+            fr.drawString(context, name, 0, 0, normalColor, true);
+            matrices.pop();
+            fr.drawString(context, "Armor: §f" + entity.getArmor() + " / 20", -xRange+44, -2, subColor, true);
             fr.drawString(context, format.format(entity.getHealth()) + " / " + format.format(entity.getMaxHealth()), -xRange+44, 9, normalColor, true);
         }
         float percentage = MathUtils.clamp(entity.getHealth()/ entity.getMaxHealth(), 0.0f, 1.0f);

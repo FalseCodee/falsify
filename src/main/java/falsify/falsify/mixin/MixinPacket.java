@@ -8,6 +8,7 @@ import net.minecraft.network.listener.PacketListener;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(net.minecraft.network.ClientConnection.class)
@@ -20,14 +21,19 @@ public class MixinPacket {
             ci.cancel();
         }
     }
-    @Inject(method = "send(Lnet/minecraft/network/packet/Packet;)V", at = @At(value = "HEAD"), cancellable = true)
-    public void onSend(Packet<?> packet, CallbackInfo ci){
+    @ModifyVariable(method = "send(Lnet/minecraft/network/packet/Packet;)V", at = @At(value = "HEAD"), argsOnly = true)
+    public Packet<?> onSend_ModifyVariable(Packet<?> packet){
         EventPacketSend e = new EventPacketSend(packet);
         Falsify.onEvent(e);
 
         if(e.isCancelled()){
-            ci.cancel();
+            return null;
         }
+        return e.getPacket();
     }
 
+    @Inject(method = "send(Lnet/minecraft/network/packet/Packet;)V", at = @At("HEAD"), cancellable = true)
+    public void onSend_Inject(Packet<?> packet, CallbackInfo ci) {
+        if(packet == null) ci.cancel();
+    }
 }

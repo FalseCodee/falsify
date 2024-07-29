@@ -9,13 +9,14 @@ import falsify.falsify.module.Module;
 import falsify.falsify.module.ModuleManager;
 import falsify.falsify.module.modules.misc.PostProcess;
 import falsify.falsify.utils.*;
-import falsify.falsify.utils.capes.Cape;
 import falsify.falsify.utils.netty.NettyClient;
 import falsify.falsify.utils.playerdata.PlayerDataManager;
 import falsify.falsify.utils.config.ConfigManager;
 import falsify.falsify.utils.fonts.FontRenderer;
 import falsify.falsify.utils.fonts.Fonts;
 import falsify.falsify.utils.shaders.ShaderManager;
+import falsify.falsify.waypoints.Waypoint;
+import falsify.falsify.waypoints.WaypointManager;
 import me.falsecode.netty.packet.packets.c2s.ClientDisconnectPacket;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.session.Session;
@@ -36,6 +37,7 @@ public class Falsify {
     public static NettyClient client;
     public static ConfigManager configManager;
     public static PlayerDataManager playerDataManager;
+    public static WaypointManager waypointManager;
     public static ShaderManager shaderManager;
     public static PostProcess postProcess;
     public static Theme theme = new Theme(new Color(52, 52, 52), new Color(79, 0, 0), new Color(255, 255, 255), new Color(185, 185, 185));
@@ -48,7 +50,6 @@ public class Falsify {
         Falsify.session = session;
         Falsify.logger = LoggerFactory.getLogger("Legacy Client");
         String clientDirPath = mc.runDirectory.getAbsolutePath()+"\\legacy_client";
-
         new FalseRunnable() {
             @Override
             public void run() {
@@ -59,12 +60,13 @@ public class Falsify {
                 Falsify.textureCacheManager = new TextureCacheManager();
                 Falsify.configManager = new ConfigManager();
                 Falsify.playerDataManager = new PlayerDataManager();
-                fonts = new Fonts();
-                fontRenderer = new FontRenderer(fonts.getFonts(), 9, 2);
             }
         }.runTaskAsync();
+        fonts = new Fonts();
+        fontRenderer = new FontRenderer(fonts.getFonts(), 9, 3);
         ModuleManager.init();
         shaderManager = new ShaderManager();
+        waypointManager = new WaypointManager();
         client = new NettyClient("localhost", 8000);
         new FalseRunnable() {
             @Override
@@ -77,6 +79,7 @@ public class Falsify {
 
     public static void shutdown() {
         Falsify.configManager.saveModules();
+        Falsify.configManager.saveWaypoints();
         Falsify.configManager.saveConfigFile();
         client.send(new ClientDisconnectPacket());
         client.shutdown();
@@ -102,6 +105,9 @@ public class Falsify {
         }
         for (Module module : ModuleManager.enabledModules) {
             module.onEvent(e);
+        }
+        for(Waypoint waypoint : waypointManager.enabledWaypoints) {
+            waypoint.onEvent(e);
         }
     }
 }

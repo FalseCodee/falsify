@@ -1,6 +1,7 @@
 package falsify.falsify.utils;
 
 import falsify.falsify.Falsify;
+import falsify.falsify.waypoints.Dimension;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 
@@ -32,5 +33,15 @@ public class PlayerUtils {
                 (item == Items.BEETROOT_SEEDS) ||
                 (item == Items.PUMPKIN_SEEDS) ||
                 (item == Items.MELON_SEEDS);
+    }
+
+    public static Dimension getDimension() {
+        if(Falsify.mc.world == null) return Dimension.OVERWORLD;
+
+        return switch (Falsify.mc.world.getRegistryKey().getValue().getPath()) {
+            case "the_nether" -> Dimension.NETHER;
+            case "the_end" -> Dimension.END;
+            default -> Dimension.OVERWORLD;
+        };
     }
 }

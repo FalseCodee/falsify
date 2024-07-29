@@ -1,6 +1,7 @@
 package falsify.falsify.mixin;
 
 import falsify.falsify.Falsify;
+import falsify.falsify.module.ModuleManager;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.world.ClientWorld;
@@ -18,6 +19,10 @@ public class MixinClientWorld {
 
     @Inject(method = "<init>", at=@At("TAIL"))
     public void init(ClientPlayNetworkHandler networkHandler, ClientWorld.Properties properties, RegistryKey<?> registryRef, RegistryEntry<?> dimensionTypeEntry, int loadDistance, int simulationDistance, Supplier<?> profiler, WorldRenderer worldRenderer, boolean debugWorld, long seed, CallbackInfo ci) {
-        Falsify.configManager.loadModules();
+        if(!ModuleManager.hasLoadedConfig()) {
+            Falsify.configManager.loadModules();
+            Falsify.configManager.loadWaypoints();
+            ModuleManager.setLoadedConfigState(true);
+        }
     }
 }

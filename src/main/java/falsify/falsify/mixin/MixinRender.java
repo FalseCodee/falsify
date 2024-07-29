@@ -6,7 +6,7 @@ import falsify.falsify.listeners.events.EventRender;
 import falsify.falsify.utils.shaders.Framebuffer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
-import net.minecraft.scoreboard.ScoreboardObjective;
+import net.minecraft.client.render.RenderTickCounter;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,20 +17,20 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MixinRender {
     @Unique
     private Framebuffer framebuffer;
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderAutosaveIndicator(Lnet/minecraft/client/gui/DrawContext;)V", ordinal = 0, shift = At.Shift.AFTER))
-    public void render(DrawContext context, float tickDelta, CallbackInfo ci){
-        EventRender e = new EventRender(tickDelta, Falsify.mc.inGameHud, context);
+    @Inject(method = "renderAutosaveIndicator", at = @At(value = "HEAD"))
+    public void render(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci){
+        EventRender e = new EventRender(tickCounter.getTickDelta(true), Falsify.mc.inGameHud, context);
         Falsify.onEvent(e);
     }
 
     @Inject(method = "render", at = @At("HEAD"))
-    public void frame(DrawContext context, float tickDelta, CallbackInfo ci){
+    public void frame(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci){
         EventMovementTick e = new EventMovementTick();
         Falsify.onEvent(e);
     }
 
-    @Inject(method = "renderScoreboardSidebar", at = @At("HEAD"), cancellable = true)
-    public void renderSidebar(DrawContext context, ScoreboardObjective objective, CallbackInfo ci) {
+    @Inject(method = "renderScoreboardSidebar(Lnet/minecraft/client/gui/DrawContext;Lnet/minecraft/client/render/RenderTickCounter;)V", at = @At("HEAD"), cancellable = true)
+    public void renderSidebar(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
         ci.cancel();
     }
 }

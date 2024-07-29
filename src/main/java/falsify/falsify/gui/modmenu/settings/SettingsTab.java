@@ -92,6 +92,9 @@ public class SettingsTab extends PanelTab {
             else if(setting instanceof KeybindSetting) widget = new KeybindSettingWidget((KeybindSetting) setting, panel, x, y, width);
             else if(setting instanceof ModeSetting) widget = new ModeSettingWidget((ModeSetting) setting, panel, x, y, width);
             else if(setting instanceof ColorSetting) widget = new ColorSettingWidget((ColorSetting) setting, panel, x, y, width);
+            else if(setting instanceof AutomationBlockSetting) widget = new AutomationBlockSettingWidget((AutomationBlockSetting) setting, panel, x, y, width);
+            else if(setting instanceof TextSetting) widget = new TextSettingWidget((TextSetting) setting, panel, x, y, width, s -> true);
+            else if(setting instanceof FreeNumberSetting) widget = new FreeNumberSettingWidget((FreeNumberSetting) setting, panel, x, y, width);
 
             if(widget != null) {
                 settingWidgets.add(widget);
@@ -129,11 +132,11 @@ public class SettingsTab extends PanelTab {
     public boolean handleClick(double x, double y, int button) {
         backButton.handleClick(x, y, button);
         toggleButton.handleClick(x, y, button);
-
+        boolean flag = false;
         for(SettingWidget<?> settingWidget : settingWidgets) {
-            if(settingWidget.handleClick(x, y, button)) return true;
+            if(settingWidget.handleClick(x, y, button)) flag = true;
         }
-        return false;
+        return flag;
     }
 
     @Override

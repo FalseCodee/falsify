@@ -30,7 +30,7 @@ public class ColorSetting extends Setting<Color> {
     }
 
     public void tick() {
-        if(rainbow) hue += rpm / 1000 * Falsify.mc.getLastFrameDuration();
+        if(rainbow) hue += rpm / 1000 * Falsify.mc.getRenderTickCounter().getLastFrameDuration();
     }
 
     public float getHue() {

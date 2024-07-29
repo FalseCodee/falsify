@@ -2,7 +2,6 @@ package falsify.falsify.utils.playerdata;
 
 import com.google.gson.JsonObject;
 import falsify.falsify.Falsify;
-import falsify.falsify.utils.FalseRunnable;
 import falsify.falsify.utils.JsonHelper;
 import falsify.falsify.utils.playerdata.PlayerData;
 

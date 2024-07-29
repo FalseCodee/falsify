@@ -5,6 +5,7 @@ import falsify.falsify.listeners.events.EventUpdate;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
 import net.minecraft.block.BlockState;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.MiningToolItem;
 import net.minecraft.text.Text;
@@ -31,7 +32,7 @@ public class AutoTool extends Module {
 
     private void getBestEquipment(BlockState bs) {
         ItemStack itemStack = mc.player.getInventory().main.stream()
-                .filter(is -> is.getItem() instanceof MiningToolItem toolItem && toolItem.isSuitableFor(bs)).max(Comparator.comparingDouble(is -> is.getItem().getMiningSpeedMultiplier(is, bs))).orElse(null);
+                .filter(is -> is.getItem() instanceof MiningToolItem toolItem && toolItem.isCorrectForDrops(is, bs)).max(Comparator.comparingDouble(is -> is.getComponents().get(DataComponentTypes.TOOL).getSpeed(bs))).orElse(null);
         if(itemStack == null) return;
 
         int index = mc.player.getInventory().getSlotWithStack(itemStack);

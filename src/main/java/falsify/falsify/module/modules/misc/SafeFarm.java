@@ -4,6 +4,7 @@ import falsify.falsify.listeners.Event;
 import falsify.falsify.listeners.events.EventUpdate;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
+import falsify.falsify.module.modules.chat.TazCrafterDefamation;
 import falsify.falsify.module.modules.movement.Trajectories;
 import falsify.falsify.module.settings.RangeSetting;
 import falsify.falsify.utils.AimbotTarget;
@@ -39,6 +40,8 @@ public class SafeFarm extends Module {
     }
 
     private void findNextTarget() {
+//        mc.player.sendMessage(Text.of("Finding Target..."));
+        if(mc.player == null || mc. world == null) return;
         int x = (int) mc.player.getX(); // current position; x
         int z = (int) mc.player.getZ(); // current position; y
         int d = 0; // current direction; 0=RIGHT, 1=DOWN, 2=LEFT, 3=UP
@@ -51,10 +54,12 @@ public class SafeFarm extends Module {
             {
                 for (int i=0; i<s; i++)
                 {
-                    BlockState block = mc.world.getBlockState(new BlockPos(x, (int) (mc.player.getY()+0.2), z));
+                    BlockState block = mc.world.getBlockState(new BlockPos(x, (int) (mc.player.getY()), z));
 
                     if(block.getBlock() instanceof CropBlock cropBlock && cropBlock.isMature(block)){
-                        Trajectories.target = new AimbotTarget(new Vec3d(x+0.5, mc.player.getY()+0.2, z+0.5));
+                        Trajectories.target = new AimbotTarget(new Vec3d(x+0.5, mc.player.getY(), z+0.5));
+//                        mc.player.sendMessage(Text.of("Target Block Type: " + block.getBlock().getName().getString()));
+//                        mc.player.sendMessage(Text.of("Target: " + Trajectories.target.getLocation().toString()));
                         plant = false;
                         return;
                     } else if (block.getBlock() instanceof AirBlock && mc.player.getInventory().main.stream().anyMatch(is -> PlayerUtils.isFarmable(is.getItem()))){
@@ -66,9 +71,12 @@ public class SafeFarm extends Module {
                                 }
                             }
                         }
-                        BlockState underBlock = mc.world.getBlockState(new BlockPos(x, (int) (mc.player.getY()-0.2), z));
+                        BlockState underBlock = mc.world.getBlockState(new BlockPos(x, (int) (mc.player.getY()-1.2), z));
+//                        mc.player.sendMessage(Text.of("Under Block Type: " + underBlock.getBlock().getName().getString()));
                         if(underBlock.getBlock() instanceof FarmlandBlock) {
                             Trajectories.target = new AimbotTarget(new Vec3d(x+0.5, mc.player.getY()-0.2, z+0.5));
+//                            mc.player.sendMessage(Text.of("Target Block Type: " + block.getBlock().getName().getString()));
+//                            mc.player.sendMessage(Text.of("Target: " + Trajectories.target.getLocation().toString()));
                             plant = true;
                             return;
                         }
@@ -90,13 +98,14 @@ public class SafeFarm extends Module {
     public void onEvent(Event<?> event) {
        if(event instanceof EventUpdate) {
            if(Trajectories.target != null) {
-               if (mc.crosshairTarget.getType() != HitResult.Type.BLOCK) return;
+               if (mc.crosshairTarget != null && mc.crosshairTarget.getType() != HitResult.Type.BLOCK) return;
 
                BlockPos block = ((BlockHitResult) mc.crosshairTarget).getBlockPos();
-               if (block.equals(new BlockPos(new Vec3i((int) Trajectories.target.getLocation().x, (int) Trajectories.target.getLocation().y, (int) Trajectories.target.getLocation().z)))) {
+               if (block.equals(new BlockPos(new Vec3i((int) Trajectories.target.getLocation().x, (int) Trajectories.target.getLocation().y, (int) Trajectories.target.getLocation().z)))
+                       || block.equals(new BlockPos(new Vec3i((int) Trajectories.target.getLocation().x, (int) Trajectories.target.getLocation().y-1, (int) Trajectories.target.getLocation().z)))) {
 //                   ((MixinMinecraft) mc).doAttack();
-                   if(plant) PlayerUtils.rightClick(dur.getValue().intValue());
-                   else PlayerUtils.leftClick(dur.getValue().intValue());
+                   if(plant) TazCrafterDefamation.rightClick();
+                   else TazCrafterDefamation.leftClick();
 
                    new FalseRunnable() {
                        @Override

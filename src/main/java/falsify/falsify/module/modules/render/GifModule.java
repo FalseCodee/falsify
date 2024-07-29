@@ -1,6 +1,5 @@
 package falsify.falsify.module.modules.render;
 
-import falsify.falsify.Falsify;
 import falsify.falsify.gui.editor.module.RenderModule;
 import falsify.falsify.listeners.Event;
 import falsify.falsify.listeners.events.EventPacketSend;
@@ -76,6 +75,6 @@ class GifRenderModule extends RenderModule<GifModule> {
 
         double width = frame.getWidth() * module.scale.getValue();
         double height = frame.getHeight() * module.scale.getValue();
-        RenderUtils.drawTexture(frame, context.getMatrices(), 0,0,0,0, (int) width, (int) height, (int) width, (int) height);
+        RenderUtils.drawTexture(frame.getId(), context.getMatrices(), 0,0,0,0, (int) width, (int) height, (int) width, (int) height);
     }
 }

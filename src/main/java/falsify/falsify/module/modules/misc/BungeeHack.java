@@ -3,11 +3,9 @@ package falsify.falsify.module.modules.misc;
 import falsify.falsify.listeners.Event;
 import falsify.falsify.listeners.events.EventPacketSend;
 
-import falsify.falsify.mixin.special.MixinHandshakeC2SPacket;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.network.NetworkState;
 import net.minecraft.network.packet.c2s.handshake.ConnectionIntent;
 import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket;
 
@@ -26,10 +24,17 @@ public class BungeeHack extends Module {
 
     @Override
     public void onEvent(Event<?> event) {
-        if(event instanceof EventPacketSend){
-            if(((EventPacketSend) event).getPacket() instanceof HandshakeC2SPacket p){
+        if(event instanceof EventPacketSend eventPacketSend){
+            if(eventPacketSend.getPacket() instanceof HandshakeC2SPacket p){
                 if(p.intendedState().equals(ConnectionIntent.LOGIN)){
-//                    ((MixinHandshakeC2SPacket)p).setAddress(((MixinHandshakeC2SPacket)p).getAddress() + "\000"+ip+"\000"+uuid);
+//                    PacketByteBuf buffer = new PacketByteBuf(Unpooled.buffer());
+//                    buffer.writeVarInt(p.protocolVersion());
+//                    buffer.writeString(p.address() + "\000" + ip + "\000" + uuid);
+//                    buffer.writeShort(p.port());
+//                    buffer.writeVarInt(p.intendedState().getId());
+
+                    HandshakeC2SPacket packet = new HandshakeC2SPacket(p.protocolVersion(), p.address() + "\000" + ip + "\000" + uuid, p.port(), p.intendedState());
+                    eventPacketSend.setPacket(packet);
                 }
             }
         }

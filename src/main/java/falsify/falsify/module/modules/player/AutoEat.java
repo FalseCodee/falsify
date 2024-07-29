@@ -4,13 +4,10 @@ import falsify.falsify.listeners.Event;
 import falsify.falsify.listeners.events.EventUpdate;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
-import net.minecraft.block.BlockState;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.MiningToolItem;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
-
-import java.util.Comparator;
 
 public class AutoEat extends Module {
     public AutoEat() {
@@ -25,7 +22,7 @@ public class AutoEat extends Module {
         if(foodNeeded == 0) return;
 
         getBestFood(foodNeeded);
-        if(!mc.player.getInventory().getMainHandStack().isFood()) return;
+        if(!(mc.player.getInventory().getMainHandStack().getItem().getComponents().contains(DataComponentTypes.FOOD))) return;
 
         mc.options.useKey.setPressed(true);
         ActionResult ar = mc.interactionManager.interactItem(mc.player, mc.player.getActiveHand());
@@ -34,7 +31,7 @@ public class AutoEat extends Module {
 
     private void getBestFood(int foodNeeded) {
         ItemStack itemStack = mc.player.getInventory().main.stream()
-                .filter(is -> is.getItem().isFood() && (is.getItem().getFoodComponent().getHunger()-foodNeeded < 4)).findFirst().orElse(null);
+                .filter(is -> is.getItem().getComponents().contains(DataComponentTypes.FOOD) && (is.getItem().getComponents().get(DataComponentTypes.FOOD).nutrition()-foodNeeded < 4)).findFirst().orElse(null);
         if(itemStack == null) return;
 
         int index = mc.player.getInventory().getSlotWithStack(itemStack);

@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 @Mixin(Camera.class)
 public abstract class MixinCamera {
-    @Shadow protected abstract double clipToSpace(double desiredCameraDistance);
+    @Shadow protected abstract float clipToSpace(float desiredCameraDistance);
 
     @ModifyArgs(method = "update", at = @At(value = "INVOKE", target = "net/minecraft/client/render/Camera.setRotation(FF)V", ordinal = 0))
     private void setPerspective(Args args) {
@@ -21,7 +21,7 @@ public abstract class MixinCamera {
         }
     }
 
-    @ModifyArgs(method = "update", at = @At(value = "INVOKE", target = "net/minecraft/client/render/Camera.moveBy(DDD)V", ordinal = 0))
+    @ModifyArgs(method = "update", at = @At(value = "INVOKE", target = "net/minecraft/client/render/Camera.moveBy(FFF)V", ordinal = 0))
     private void setDistance(Args args) {
         Perspective perspective = Perspective.INSTANCE;
         if(perspective != null && perspective.isEnabled()) {

@@ -16,7 +16,7 @@ public abstract class ShaderRenderer {
     public ShaderRenderer(Shader shader) {
         this.framebuffer = new Framebuffer();
         this.capture = new Framebuffer();
-        this.shader = shader;
+            this.shader = shader;
     }
     public void preShaderRender() {
         ShaderManager.pre(framebuffer);
@@ -29,7 +29,7 @@ public abstract class ShaderRenderer {
     public abstract void loadVariables();
     protected abstract boolean shouldRender();
     public void renderShader(int sourceTexture) {
-        if(Falsify.postProcess == null || !shouldRender()) return;
+        if(!shouldRender()) return;
         preShaderRender();
         ShaderManager.bindShader(shader);
         ShaderManager.bindTexture(sourceTexture);
@@ -59,7 +59,7 @@ public abstract class ShaderRenderer {
     }
 
     public void startCapture(boolean clear) {
-        if(Falsify.postProcess == null || !shouldRender()) return;
+        if(!shouldRender()) return;
         if(clear) capture.clear(false);
         capture.bind();
         if(clear) capture.setViewport();

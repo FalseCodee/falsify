@@ -1,25 +1,21 @@
 package falsify.falsify.module.modules.render;
 
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.mojang.datafixers.util.Pair;
 import falsify.falsify.gui.editor.module.RenderModule;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.DisplayModule;
 import falsify.falsify.module.settings.BooleanSetting;
 import falsify.falsify.module.settings.RangeSetting;
-import falsify.falsify.utils.RenderUtils;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.scoreboard.*;
-import net.minecraft.text.MutableText;
+import net.minecraft.scoreboard.number.NumberFormat;
+import net.minecraft.scoreboard.number.StyledNumberFormat;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.util.Colors;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.*;
 
 import static falsify.falsify.module.Module.mc;
 
@@ -53,14 +49,17 @@ class ScoreboardRenderModule extends RenderModule<ScoreboardModule> {
     public void renderModule(DrawContext context, int mouseX, int mouseY, float delta) {
         Scoreboard scoreboard = mc.world.getScoreboard();
         ScoreboardObjective scoreboardObjective = null;
-        Team team = scoreboard.getPlayerTeam(mc.player.getEntityName());
-        ScoreboardDisplaySlot m;
-        if (team != null && (m = ScoreboardDisplaySlot.fromFormatting(team.getColor())) != null) {
-            scoreboardObjective = scoreboard.getObjectiveForSlot(m);
+        Team team = scoreboard.getScoreHolderTeam(mc.player.getNameForScoreboard());
+        if (team != null) {
+            ScoreboardDisplaySlot scoreboardDisplaySlot = ScoreboardDisplaySlot.fromFormatting(team.getColor());
+            if (scoreboardDisplaySlot != null) {
+                scoreboardObjective = scoreboard.getObjectiveForSlot(scoreboardDisplaySlot);
+            }
         }
-        ScoreboardObjective scoreboardObjective3 = scoreboardObjective != null ? scoreboardObjective : scoreboard.getObjectiveForSlot(ScoreboardDisplaySlot.SIDEBAR);
-        if (scoreboardObjective3 != null) {
-            this.renderScoreboardSidebar(context, scoreboardObjective3);
+
+        ScoreboardObjective scoreboardObjective2 = scoreboardObjective != null ? scoreboardObjective : scoreboard.getObjectiveForSlot(ScoreboardDisplaySlot.SIDEBAR);
+        if (scoreboardObjective2 != null) {
+            this.renderScoreboardSidebar(context, scoreboardObjective2);
         }
     }
 
@@ -70,42 +69,59 @@ class ScoreboardRenderModule extends RenderModule<ScoreboardModule> {
         boolean numbers = module.usesNumber();
 
         Scoreboard scoreboard = objective.getScoreboard();
-        Collection<ScoreboardPlayerScore> collection = scoreboard.getAllPlayerScores(objective);
-        List list = collection.stream().filter(score -> score.getPlayerName() != null && !score.getPlayerName().startsWith("#")).collect(Collectors.toList());
-        collection = list.size() > 15 ? Lists.newArrayList(Iterables.skip(list, collection.size() - 15)) : list;
+        NumberFormat numberFormat = objective.getNumberFormatOr(StyledNumberFormat.RED);
 
-        ArrayList<Pair<ScoreboardPlayerScore, MutableText>> list2 = Lists.newArrayListWithCapacity(collection.size());
+        @Environment(EnvType.CLIENT)
+        record SidebarEntry(Text name, Text score, int scoreWidth) {
+        }
+
+        SidebarEntry[] sidebarEntrys = scoreboard.getScoreboardEntries(objective)
+                .stream()
+                .filter(score -> !score.hidden())
+                .sorted(Comparator.comparing(ScoreboardEntry::value)
+                        .reversed()
+                        .thenComparing(ScoreboardEntry::owner, String.CASE_INSENSITIVE_ORDER))
+                .limit(15L)
+                .map(scoreboardEntry -> {
+                    Team team = scoreboard.getScoreHolderTeam(scoreboardEntry.owner());
+                    Text textx = scoreboardEntry.name();
+                    Text text2 = Team.decorateName(team, textx);
+                    Text text3 = scoreboardEntry.formatted(numberFormat);
+                    int ix = tr.getWidth(text3);
+                    return new SidebarEntry(text2, text3, ix);
+                })
+                .toArray(SidebarEntry[]::new);
         Text text = objective.getDisplayName();
-        int maxWidth = tr.getWidth(text);
+        int i = tr.getWidth(text);
+        int maxWidth = i;
         int k = tr.getWidth(": ");
 
-        for (ScoreboardPlayerScore scoreboardPlayerScore : collection) {
-            Team team = scoreboard.getPlayerTeam(scoreboardPlayerScore.getPlayerName());
-            MutableText text2 = Team.decorateName(team, Text.literal(scoreboardPlayerScore.getPlayerName()));
-            list2.add(Pair.of(scoreboardPlayerScore, text2));
-            maxWidth = Math.max(maxWidth, tr.getWidth(text2) + k + tr.getWidth(Integer.toString(scoreboardPlayerScore.getScore())));
+        for (SidebarEntry sidebarEntry : sidebarEntrys) {
+            maxWidth = Math.max(maxWidth, tr.getWidth(sidebarEntry.name) + (sidebarEntry.scoreWidth > 0 && numbers ? k + sidebarEntry.scoreWidth : 2));
         }
 
-        maxWidth += (numbers) ? 4 : -2;
-        setWidth(maxWidth);
-        float height = (collection.size()+1) * (tr.fontHeight+padding) + 1;
-        setHeight(height);
+        int maxWidthFinal = maxWidth;
+        int entryLength = sidebarEntrys.length;
+        int textHeight = (int) (entryLength * (9 + padding));
+        int bottom = textHeight + 9 + 3;
+        int leftBound = 0;
+        int rightBound = maxWidthFinal + 2;
+        int q = module.getBackgroundColor().getRGB();
+        int r = module.getBackgroundColor().darker().getRGB();
+        int top = 0;
+        module.drawBackground(context, 0, 0, mc.getRenderTickCounter().getTickDelta(true));
+        context.drawHorizontalLine(0, maxWidthFinal, 10, module.getBackgroundColor().darker().darker().getRGB());
+        context.drawText(tr, text, leftBound + maxWidthFinal / 2 - i / 2, top+1, module.getTextColor().getRGB(), false);
 
-        module.drawBackground(context, 0, 0, 0);
-
-        for (int i = 0; i < list2.size(); i++) {
-            Pair pair = list2.get(i);
-            float currentHeight = height-(tr.fontHeight+padding) * (i+1);
-            ScoreboardPlayerScore scoreboardPlayerScore2 = (ScoreboardPlayerScore)pair.getFirst();
-            Text text3 = (Text)pair.getSecond();
-            String string = "" + Formatting.RED + scoreboardPlayerScore2.getScore();
-
-            context.drawText(tr, text3, 2, (int) currentHeight, module.getTextColor().getRGB(), false);
-            if(numbers) context.drawText(tr, string, (int) (width - tr.getWidth(string)), (int) currentHeight, module.getTextColor().getRGB(), false);
-
-            if (i != collection.size()-1) continue;
-            module.drawBackgroundInternal(context, module.getBackgroundColor().brighter().brighter(), 0, 0, 0, 0, 0, maxWidth, currentHeight-1);
-            context.drawText(tr, text, maxWidth / 2 - tr.getWidth(text) / 2, (int) currentHeight-(tr.fontHeight), module.getTextColor().getRGB(), false);
+        for (int t = 0; t < entryLength; t++) {
+            SidebarEntry sidebarEntryx = sidebarEntrys[t];
+            int u = (int) (bottom + (t - entryLength) * (9 + padding) + padding);
+            context.drawText(tr, sidebarEntryx.name, leftBound + 2, u, module.getTextColor().getRGB(), false);
+            if(numbers)
+                context.drawText(tr, sidebarEntryx.score, rightBound - sidebarEntryx.scoreWidth, u, Colors.WHITE, false);
         }
+        setWidth(rightBound);
+        setHeight(bottom);
+
     }
 }

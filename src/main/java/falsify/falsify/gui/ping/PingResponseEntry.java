@@ -104,7 +104,6 @@ public class PingResponseEntry extends Clickable {
         checkPlayers.render(context,mouseX, mouseY, delta);
         copyAddress.render(context, mouseX, mouseY, delta);
         context.drawTextWithShadow(Falsify.mc.textRenderer, serverInfo.address, 10, 10, Color.WHITE.getRGB());
-        context.drawTextWithShadow(Falsify.mc.textRenderer, "Online Mode: " + serverInfo.online, 10, 10 + 18, Color.WHITE.getRGB());
         context.drawTextWithShadow(Falsify.mc.textRenderer, "Players: " + serverInfo.playerCountLabel.getString(), (int) (width - 10 - Falsify.mc.textRenderer.getWidth("Players: " + serverInfo.playerCountLabel.getString())), 10, Color.WHITE.getRGB());
         context.drawTextWithShadow(Falsify.mc.textRenderer, "Version: " + serverInfo.version.getString(), (int) (width - 10 - Falsify.mc.textRenderer.getWidth("Version: " + serverInfo.version.getString())), 10 + 18, Color.WHITE.getRGB());
 

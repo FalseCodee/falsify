@@ -22,7 +22,7 @@ public class MathUtils {
     }
     public static float[] getRotationsNeeded(double x, double y, double z) {
         if(Falsify.mc.player == null) return null;
-        Vec3d pos = interpolateEntity(Falsify.mc.player, Falsify.mc.getTickDelta()).add(0, Falsify.mc.player.getEyeHeight(Falsify.mc.player.getPose()), 0);
+        Vec3d pos = interpolateEntity(Falsify.mc.player, Falsify.mc.getRenderTickCounter().getTickDelta(true)).add(0, Falsify.mc.player.getEyeHeight(Falsify.mc.player.getPose()), 0);
         double diffX = x - pos.getX();
         double diffY;
 
@@ -73,7 +73,7 @@ public class MathUtils {
     public static double[] directionSpeed(double speed) {
         float forward = Falsify.mc.player.input.movementForward;
         float side = Falsify.mc.player.input.movementSideways;
-        float yaw = Falsify.mc.player.prevYaw + (Falsify.mc.player.getYaw() - Falsify.mc.player.prevYaw) * Falsify.mc.getTickDelta();
+        float yaw = Falsify.mc.player.prevYaw + (Falsify.mc.player.getYaw() - Falsify.mc.player.prevYaw) * Falsify.mc.getRenderTickCounter().getTickDelta(true);
         if (forward != 0.0F) {
             if (side > 0.0F) {
                 yaw += ((forward > 0.0F) ? -45 : 45);

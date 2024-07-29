@@ -3,11 +3,12 @@ package falsify.falsify.utils.shaders;
 import com.mojang.blaze3d.platform.GlStateManager;
 import falsify.falsify.Falsify;
 import falsify.falsify.module.ModuleManager;
+import falsify.falsify.module.modules.misc.PostProcess;
 import falsify.falsify.module.modules.render.BlurModule;
+import falsify.falsify.module.modules.render.Perspective;
 import falsify.falsify.utils.RenderUtils;
-import falsify.falsify.utils.shaders.renderers.BlurInsideShaderRenderer;
-import falsify.falsify.utils.shaders.renderers.GlowOutlineShaderRenderer;
-import falsify.falsify.utils.shaders.renderers.GlowShaderRenderer;
+import falsify.falsify.utils.shaders.renderers.DerivativeShaderRenderer;
+import falsify.falsify.utils.shaders.renderers.DistortionShaderRenderer;
 import falsify.falsify.utils.shaders.renderers.KawaseBlurShaderRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 
@@ -16,16 +17,14 @@ import static org.lwjgl.opengl.GL13C.GL_TEXTURE1;
 
 public class ShaderManager {
     public Shader PASSTHROUGH;
-//    public GlowShaderRenderer GLOW;
-//    public GlowOutlineShaderRenderer GLOW_OUTLINE;
-//    public BlurInsideShaderRenderer BLUR_INSIDE;
+    public DistortionShaderRenderer DISTORTION;
+    public DerivativeShaderRenderer DERIVATIVE_FILTER;
     public KawaseBlurShaderRenderer KAWASE_BLUR;
     public final MatrixStack matrices = new MatrixStack();
     public ShaderManager() {
         this.PASSTHROUGH = new Shader("passthrough.vert", "passthrough.frag");
-//        this.GLOW = new GlowShaderRenderer();
-//        this.GLOW_OUTLINE = new GlowOutlineShaderRenderer();
-//        this.BLUR_INSIDE = new BlurInsideShaderRenderer();
+        this.DISTORTION = new DistortionShaderRenderer(ModuleManager.getModule(Perspective.class));
+        this.DERIVATIVE_FILTER = new DerivativeShaderRenderer(ModuleManager.getModule(PostProcess.class));
         this.KAWASE_BLUR = new KawaseBlurShaderRenderer(ModuleManager.getModule(BlurModule.class));
         Falsify.logger.info("Created: Shader Manager");
     }
@@ -71,28 +70,19 @@ public class ShaderManager {
     }
 
     public void resize() {
-//        GLOW.getFramebuffer().resize();
-//        GLOW.getCapture().resize();
-//        GLOW_OUTLINE.getFramebuffer().resize();
-//        GLOW_OUTLINE.getCapture().resize();
-//        BLUR_INSIDE.getFramebuffer().resize();
-//        BLUR_INSIDE.getCapture().resize();
+        DISTORTION.getFramebuffer().resize();
+        DERIVATIVE_FILTER.getFramebuffer().resize();
         KAWASE_BLUR.resize();
     }
 
     public void clear() {
-//        GLOW.clearCapture();
-//        GLOW_OUTLINE.clearCapture();
-//        BLUR_INSIDE.clearCapture();
     }
 
     public void renderWorldShader() {
-//        GLOW.renderShader();
-//        GLOW_OUTLINE.renderShader();
+        DERIVATIVE_FILTER.renderShader();
     }
 
     public void renderGuiShader() {
 
-//        BLUR_INSIDE.renderShader();
     }
 }

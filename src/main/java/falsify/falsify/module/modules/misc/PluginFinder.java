@@ -7,7 +7,6 @@ import com.mojang.brigadier.suggestion.Suggestion;
 import com.mojang.brigadier.suggestion.Suggestions;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
-import falsify.falsify.utils.ChatModuleUtils;
 import falsify.falsify.utils.ColorUtils;
 import net.minecraft.command.CommandSource;
 import net.minecraft.text.Text;

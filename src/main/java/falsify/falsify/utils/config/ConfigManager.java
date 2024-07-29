@@ -8,6 +8,7 @@ import falsify.falsify.gui.modmenu.primitives.Panel;
 import falsify.falsify.module.Category;
 import falsify.falsify.utils.config.translators.CategoryTranslator;
 import falsify.falsify.utils.config.translators.ModMenuTranslator;
+import falsify.falsify.utils.config.translators.WaypointTranslator;
 
 import java.io.*;
 
@@ -33,7 +34,9 @@ public class ConfigManager {
         if(config.has("modules")) {
             JsonObject modules = config.getAsJsonObject("modules");
             for(Category category : Category.values()) {
-                CategoryTranslator.loadCategory(category, modules.getAsJsonObject(category.getName()));
+                if(modules.has(category.getName()))
+                    CategoryTranslator.loadCategory(category, modules.getAsJsonObject(category.getName()));
+
             }
         }
     }
@@ -44,6 +47,16 @@ public class ConfigManager {
             modules.add(category.getName(), CategoryTranslator.translateCategory(category));
         }
         config.add("modules", modules);
+    }
+
+    public void saveWaypoints() {
+        config.add("waypoints", WaypointTranslator.translateWaypoints(Falsify.waypointManager.getWaypoints()));
+    }
+
+    public void loadWaypoints() {
+        if(config.has("waypoints")) {
+            WaypointTranslator.loadWaypoints(config.getAsJsonArray("waypoints"));
+        }
     }
 
     public void loadPanel(Panel panel) {
