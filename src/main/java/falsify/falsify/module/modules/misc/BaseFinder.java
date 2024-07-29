@@ -1,5 +1,6 @@
 package falsify.falsify.module.modules.misc;
 
+import falsify.falsify.Falsify;
 import falsify.falsify.listeners.Event;
 import falsify.falsify.listeners.events.EventChunkLoad;
 import falsify.falsify.listeners.events.EventUpdate;
@@ -47,7 +48,7 @@ public class BaseFinder extends Module {
                 public void run() {
 
                     try {
-                        NetworkUtils.postRequest("https://discord.com/api/webhooks/1079949299649093693/lyzDdMwZRNNw6zf7xuK7yc3ProJP26U8PYUJfQAOMEpjkLPrHdl1hqq-7zfbIaG73emj", builder.build().toString());
+                        NetworkUtils.postRequest(Falsify.DISCORD_WEBHOOK_URL, builder.build().toString());
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }

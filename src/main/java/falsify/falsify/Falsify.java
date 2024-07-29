@@ -42,6 +42,7 @@ public class Falsify {
     public static PostProcess postProcess;
     public static Theme theme = new Theme(new Color(52, 52, 52), new Color(79, 0, 0), new Color(255, 255, 255), new Color(185, 185, 185));
     public static Fonts fonts;
+    public static String DISCORD_WEBHOOK_URL = System.getenv("leg_discord_webhook");
 
     public static FontRenderer fontRenderer;
     public static File clientDir;

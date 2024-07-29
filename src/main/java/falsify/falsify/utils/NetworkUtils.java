@@ -4,6 +4,7 @@ import falsify.falsify.Falsify;
 import net.minecraft.client.network.MultiplayerServerListPinger;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.text.Text;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -29,6 +30,19 @@ public class NetworkUtils {
     }
 
     public static String postRequest(String urlString, String jsonInput) throws IOException {
+        HttpURLConnection connection = getHttpURLConnection(urlString, jsonInput);
+
+        try(BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
+            StringBuilder response = new StringBuilder();
+            String responseLine;
+            while ((responseLine = br.readLine()) != null) {
+                response.append(responseLine.trim());
+            }
+            return response.toString();
+        }
+    }
+
+    private static @NotNull HttpURLConnection getHttpURLConnection(String urlString, String jsonInput) throws IOException {
         URL url = new URL(urlString);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
@@ -41,15 +55,7 @@ public class NetworkUtils {
             byte[] input = jsonInput.getBytes(StandardCharsets.UTF_8);
             os.write(input, 0, input.length);
         }
-
-        try(BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
-            StringBuilder response = new StringBuilder();
-            String responseLine;
-            while ((responseLine = br.readLine()) != null) {
-                response.append(responseLine.trim());
-            }
-            return response.toString();
-        }
+        return connection;
     }
 
     @FunctionalInterface

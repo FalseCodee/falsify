@@ -1,6 +1,7 @@
 package falsify.falsify.module.modules.misc;
 
 import com.google.common.collect.Lists;
+import falsify.falsify.Falsify;
 import falsify.falsify.listeners.Event;
 import falsify.falsify.listeners.events.EventPacketSend;
 import falsify.falsify.listeners.events.EventRender;
@@ -51,7 +52,7 @@ public class Sentry extends Module {
                     public void run() {
 
                         try {
-                            NetworkUtils.postRequest("https://discord.com/api/webhooks/1079949299649093693/lyzDdMwZRNNw6zf7xuK7yc3ProJP26U8PYUJfQAOMEpjkLPrHdl1hqq-7zfbIaG73emj", new DiscordWebhookBuilder().username("Player Spotted")
+                            NetworkUtils.postRequest(Falsify.DISCORD_WEBHOOK_URL, new DiscordWebhookBuilder().username("Player Spotted")
                                     .content(e.getPlayer().getGameProfile().getName() + " was spotted at: (" + e.getPlayer().getBlockPos().getX() + ", " + e.getPlayer().getBlockPos().getY() + ", " + e.getPlayer().getBlockPos().getZ() + ")").build().toString());
                         } catch (IOException ex) {
                             throw new RuntimeException(ex);

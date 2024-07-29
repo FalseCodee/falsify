@@ -7,7 +7,7 @@ import falsify.falsify.module.Module;
 import falsify.falsify.module.settings.BooleanSetting;
 
 public class PostProcess extends Module {
-    private final BooleanSetting derivativeFilter = new BooleanSetting("Derivative Filter", true);
+    private final BooleanSetting derivativeFilter = new BooleanSetting("Derivative Filter", false);
 
     public PostProcess() {
         super("Post Process", "Adds Post Process Effects", false, Category.MISC, -1);
