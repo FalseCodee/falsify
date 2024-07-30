@@ -55,7 +55,7 @@ public class MixinGameRenderer {
         if(Falsify.shaderManager == null) return;
         Falsify.shaderManager.renderWorldShader();
     }
-    @Inject(method = "render", at = @At("TAIL"))
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderAutosaveIndicator(Lnet/minecraft/client/gui/DrawContext;Lnet/minecraft/client/render/RenderTickCounter;)V", shift = At.Shift.AFTER))
     private void renderPostScreen(RenderTickCounter tickCounter, boolean tick, CallbackInfo ci) {
         if(Falsify.shaderManager == null) return;
 

@@ -10,5 +10,7 @@ uniform sampler2D u_Texture;
 void main()
 {
     vec4 originalColor = texture2D(u_Texture, v_TexCoord);
-    color = vec4(originalColor.xyz, 1.0);
+    vec4 originalColorAbove = texture2D(u_Texture, vec2(v_TexCoord.x, v_TexCoord.y - v_OneTexel.y));
+
+    color = vec4((originalColor.xyz - originalColorAbove.xyz) / 2 + 0.5, 1.0);
 }

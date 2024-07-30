@@ -89,7 +89,7 @@ public class Waypoint extends Module {
 
             MatrixStack mat = render.getDrawContext().getMatrices();
             mat.push();
-            mat.translate(projected.x, projected.y, 0);
+            mat.translate(projected.x, projected.y, -0.1);
             mat.scale(scale.getValue().floatValue(), scale.getValue().floatValue(), 1);
             String text = getTitle();
             if(showRange.getValue())

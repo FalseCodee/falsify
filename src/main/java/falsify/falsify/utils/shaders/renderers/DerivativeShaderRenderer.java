@@ -15,8 +15,8 @@ public class DerivativeShaderRenderer extends ShaderRenderer {
 
     @Override
     public void loadVariables() {
-        shader.set("u_Size", mc.getWindow().getFramebufferWidth(), mc.getWindow().getFramebufferHeight());
         shader.set("u_Texture", 0);
+        shader.set("u_Size", mc.getWindow().getFramebufferWidth(), mc.getWindow().getFramebufferHeight());
     }
 
     @Override

@@ -77,7 +77,10 @@ public class Panel extends Clickable implements Scrollable, Typable, Draggable {
 
     public void drawBackground(DrawContext context, int mouseX, int mouseY, float delta) {
         pushStackToPosition(context.getMatrices());
+        Falsify.shaderManager.GLOW_OUTLINE.startCapture(true);
         drawSmoothRect(theme.primaryColor(), context.getMatrices(), 0, 0, (float) width, (float) height, 7, new int[] {10, 0, 0, 10});
+        Falsify.shaderManager.GLOW_OUTLINE.endCapture();
+        Falsify.shaderManager.GLOW_OUTLINE.renderShader();
         context.getMatrices().pop();
     }
 

@@ -1,5 +1,6 @@
 package falsify.falsify.gui.modmenu.tabs.modlist;
 
+import falsify.falsify.Falsify;
 import falsify.falsify.gui.modmenu.primitives.Panel;
 import falsify.falsify.gui.modmenu.primitives.PanelTab;
 import falsify.falsify.gui.modmenu.primitives.ScrollbarWidget;
@@ -65,14 +66,18 @@ public class ModTab extends PanelTab {
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         ScissorStack scissorStack = panel.getScissorStack();
 
-        filterWidget.render(context, mouseX, mouseY, delta);
         pushStackToPosition(context.getMatrices());
+        Falsify.shaderManager.GLOW_OUTLINE.startCapture(true);
         drawSmoothRect(panel.getTheme().primaryColor(), context.getMatrices(), 0, 0, (float) width, (float) height, 7, new int[] {10, 0, 0, 0});
+        Falsify.shaderManager.GLOW_OUTLINE.endCapture();
+        Falsify.shaderManager.GLOW_OUTLINE.renderShader();
+
 
         context.getMatrices().pop();
         scissorStack.push(x, (y+padding), (x+width), (y+height-padding));
         filteredModuleEntries.stream().filter(moduleEntry -> moduleEntry.getY() < y + height && moduleEntry.getY() + moduleEntry.getHeight() > y).forEach(moduleEntry -> moduleEntry.render(context, mouseX, mouseY, delta));
         scissorStack.pop();
+        filterWidget.render(context, mouseX, mouseY, delta);
         scrollbarWidget.render(context, mouseX, mouseY, delta);
     }
 

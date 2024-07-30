@@ -104,11 +104,16 @@ public class Falsify {
                 }
             }
         }
-        for (Module module : ModuleManager.enabledModules) {
-            module.onEvent(e);
-        }
+        shaderManager.clear();
+
         for(Waypoint waypoint : waypointManager.enabledWaypoints) {
             waypoint.onEvent(e);
         }
+
+        for (Module module : ModuleManager.enabledModules) {
+            module.onEvent(e);
+        }
+
+        shaderManager.renderAllCaptures();
     }
 }

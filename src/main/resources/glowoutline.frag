@@ -7,7 +7,6 @@ in vec2 v_OneTexel;
 
 uniform sampler2D u_Texture;
 uniform float u_Radius;
-uniform vec2 u_Direction;
 uniform vec2 u_Size;
 
 const int Quality = 8;
@@ -19,7 +18,7 @@ void main()
     vec2 radius = u_Radius/u_Size.xy;
     vec4 Color = texture2D( u_Texture, v_TexCoord);
     int checks = 0;
-    if(Color.a != 0) color = vec4(0,0,0,0);
+    if(Color.a != 0) color = Color;
     else {
         for (float d = 0.0;d < Pi; d += Pi / float(Directions))
         {

@@ -12,18 +12,25 @@ public abstract class ShaderRenderer {
     protected final Framebuffer capture;
     protected Shader shader;
     protected final MatrixStack matrices = new MatrixStack();
+    protected final boolean mix;
+    protected boolean captured = false;
 
-    public ShaderRenderer(Shader shader) {
+    public ShaderRenderer(Shader shader, boolean mix) {
         this.framebuffer = new Framebuffer();
         this.capture = new Framebuffer();
-            this.shader = shader;
+        this.shader = shader;
+        this.mix = mix;
+    }
+
+    public ShaderRenderer(Shader shader) {
+        this(shader, false);
     }
     public void preShaderRender() {
         ShaderManager.pre(framebuffer);
     }
 
     public void postShaderRender() {
-        ShaderManager.post(framebuffer);
+        ShaderManager.post(framebuffer, mix);
     }
 
     public abstract void loadVariables();
@@ -36,6 +43,7 @@ public abstract class ShaderRenderer {
         loadVariables();
         RenderUtils.renderShader(matrices);
         postShaderRender();
+        captured = false;
     }
 
     public void renderShader() {
@@ -63,6 +71,7 @@ public abstract class ShaderRenderer {
         if(clear) capture.clear(false);
         capture.bind();
         if(clear) capture.setViewport();
+        captured = true;
     }
 
     public Framebuffer getCapture() {
@@ -70,6 +79,7 @@ public abstract class ShaderRenderer {
     }
     public void clearCapture() {
         capture.clear(false);
+        captured = false;
 //        capture.setViewport();
     }
     public void pass(int framebuffer) {
@@ -83,5 +93,9 @@ public abstract class ShaderRenderer {
 
     public void endCapture() {
         Falsify.mc.getFramebuffer().beginWrite(true);
+    }
+
+    public void renderIfCaptured() {
+        if(captured) renderShader();
     }
 }

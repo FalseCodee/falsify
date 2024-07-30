@@ -88,8 +88,8 @@ public class WaypointTab extends PanelTab {
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         ScissorStack scissorStack = panel.getScissorStack();
 
+        panel.drawBackground(context, mouseX, mouseY, delta);
         pushStackToPosition(context.getMatrices());
-        drawSmoothRect(panel.getTheme().primaryColor(), context.getMatrices(), 0, 0, (float) width, (float) height, 7, new int[] {10, 0, 0, 0});
         context.getMatrices().translate(width/2, 10, 0);
         context.getMatrices().scale(3, 3, 1);
         Falsify.fontRenderer.drawCenteredString(context, "Waypoints", 0, 0, panel.getTheme().primaryTextColor(), true);

@@ -1,5 +1,6 @@
 package falsify.falsify.module;
 
+import falsify.falsify.Falsify;
 import falsify.falsify.gui.editor.EditGUI;
 import falsify.falsify.gui.editor.module.RenderModule;
 import falsify.falsify.listeners.Event;
@@ -21,24 +22,21 @@ public class DisplayModule<T extends RenderModule<?>> extends Module {
     protected final ColorSetting textColor = new ColorSetting("Text", 255,255,255,255);
     protected final ModeSetting borderType = new ModeSetting("Border Type", "Rectangle", "Rectangle", "Smooth");
     protected final BooleanSetting outline = new BooleanSetting("Draw Outline", false);
+    protected final BooleanSetting outlineGlow = new BooleanSetting("Outline Glow", false);
 
-
-    public DisplayModule(String name, String description, T renderModule, Category category, int keyCode, boolean isCheat){
-        super(name, description, isCheat, category, keyCode);
-        this.renderModule = renderModule;
-        settings.add(borderType);
-        settings.add(outline);
-        settings.add(backgroundColor);
-        settings.add(textColor);
-    }
 
     public DisplayModule(String name, String description, T renderModule, Category category, int keyCode, boolean enabled, boolean isCheat){
         super(name, description, category, keyCode, enabled, isCheat);
         this.renderModule = renderModule;
         settings.add(borderType);
         settings.add(outline);
+        settings.add(outlineGlow);
         settings.add(backgroundColor);
         settings.add(textColor);
+    }
+
+    public DisplayModule(String name, String description, T renderModule, Category category, int keyCode, boolean isCheat){
+        this(name, description, renderModule, category, keyCode, false, isCheat);
     }
 
     public void onEvent(Event<?> event){
@@ -50,7 +48,13 @@ public class DisplayModule<T extends RenderModule<?>> extends Module {
                  MatrixStack matrices = eventRender.getDrawContext().getMatrices();
                  matrices.push();
                  //RenderHelper.convertToScale(eventRender.getMatrixStack());
+                 if(outlineGlow.getValue()) {
+                     Falsify.shaderManager.GLOW_OUTLINE.startCapture(false);
+                 }
                  renderModule.render(eventRender.getDrawContext(), 0, 0, eventRender.getTickDelta());
+                 if(outlineGlow.getValue()) {
+                     Falsify.shaderManager.GLOW_OUTLINE.endCapture();
+                 }
                  matrices.pop();
              }
          } else if (event instanceof EventWindowResize e) {
