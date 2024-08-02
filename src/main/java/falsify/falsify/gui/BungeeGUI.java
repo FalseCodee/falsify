@@ -35,18 +35,22 @@ public class BungeeGUI extends Screen {
         int offset = 4;
         this.bungeeHack = ModuleManager.getModule(BungeeHack.class);
         assert this.client != null;
+
         this.fakeIPField = new TextFieldWidget(this.textRenderer, width/2-205+50+ offset, 66, 200, 20, Text.translatable("addServer.enterName"));
         this.fakeIPField.setFocused(true);
         this.fakeIPField.setEditable(true);
         this.fakeIPField.setText(bungeeHack.ip);
         this.fakeIPField.setChangedListener(this::onClose);
         this.addSelectableChild(this.fakeIPField);
+        this.addDrawableChild(this.fakeIPField);
+
         this.fakeUUIDField = new TextFieldWidget(this.textRenderer, width/2-205+50+ offset, 106, 200, 20, Text.translatable("addServer.enterIp"));
         this.fakeUUIDField.setMaxLength(128);
         this.fakeIPField.setEditable(true);
         this.fakeUUIDField.setText(bungeeHack.uuid);
         this.fakeUUIDField.setChangedListener(this::onClose);
         this.addSelectableChild(this.fakeUUIDField);
+        this.addDrawableChild(this.fakeUUIDField);
 
 
         this.fakeUsername = new TextFieldWidget(this.textRenderer, width/2-205+50+ offset, 146, 200, 20, Text.translatable("addServer.enterIp"));
@@ -55,6 +59,7 @@ public class BungeeGUI extends Screen {
         this.fakeUsername.setText(MinecraftClient.getInstance().getSession().getUsername());
         this.fakeUsername.setChangedListener(this::onClose);
         this.addSelectableChild(this.fakeUsername);
+        this.addDrawableChild(this.fakeUsername);
 
         this.toggle = this.addDrawableChild(ButtonWidget.builder(Text.of("BungeeHack: " + ((bungeeHack.toggled) ? "On" : "Off")), button -> {
             bungeeHack.toggle();
@@ -82,16 +87,12 @@ public class BungeeGUI extends Screen {
     }
 
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context, mouseX, mouseY, delta);
+        super.render(context, mouseX, mouseY, delta);
+
         context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 17, 16777215);
         context.drawTextWithShadow(this.textRenderer, Text.of("Enter Fake IP"), width/2-150, 53, 10526880);
         context.drawTextWithShadow(this.textRenderer, Text.of("Enter Fake UUID"), width/2-150, 94, 10526880);
         context.drawTextWithShadow(this.textRenderer, Text.of("Enter Fake IGN, Current: " + Falsify.mc.getSession().getUsername()), width/2-150, 134, 10526880);
-        this.fakeIPField.render(context, mouseX, mouseY, delta);
-        this.fakeUUIDField.render(context, mouseX, mouseY, delta);
-        this.fakeUsername.render(context, mouseX, mouseY, delta);
-
-        super.render(context, mouseX, mouseY, delta);
     }
 
 }
