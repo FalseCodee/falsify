@@ -2,9 +2,7 @@ package falsify.falsify;
 
 import falsify.falsify.gui.modmenu.primitives.Theme;
 import falsify.falsify.listeners.Event;
-import falsify.falsify.listeners.events.EventKey;
-import falsify.falsify.listeners.events.EventPacketRecieve;
-import falsify.falsify.listeners.events.EventPacketSend;
+import falsify.falsify.listeners.events.*;
 import falsify.falsify.module.Module;
 import falsify.falsify.module.ModuleManager;
 import falsify.falsify.module.modules.misc.PostProcess;
@@ -104,7 +102,9 @@ public class Falsify {
                 }
             }
         }
-        shaderManager.clear();
+        boolean rendering = e instanceof EventRender || e instanceof EventRender3d;
+        if(rendering)
+            shaderManager.clear();
 
         for(Waypoint waypoint : waypointManager.enabledWaypoints) {
             waypoint.onEvent(e);
@@ -114,6 +114,7 @@ public class Falsify {
             module.onEvent(e);
         }
 
-        shaderManager.renderAllCaptures();
+        if(rendering)
+            shaderManager.renderAllCaptures();
     }
 }

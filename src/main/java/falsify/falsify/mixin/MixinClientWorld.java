@@ -1,6 +1,7 @@
 package falsify.falsify.mixin;
 
 import falsify.falsify.Falsify;
+import falsify.falsify.listeners.events.EventChangeWorld;
 import falsify.falsify.module.ModuleManager;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.render.WorldRenderer;
@@ -24,5 +25,7 @@ public class MixinClientWorld {
             Falsify.configManager.loadWaypoints();
             ModuleManager.setLoadedConfigState(true);
         }
+
+        Falsify.onEvent(new EventChangeWorld());
     }
 }

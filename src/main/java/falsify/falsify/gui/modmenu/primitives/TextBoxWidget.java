@@ -1,6 +1,7 @@
 package falsify.falsify.gui.modmenu.primitives;
 
 import falsify.falsify.Falsify;
+import falsify.falsify.gui.utils.Animation;
 import falsify.falsify.gui.utils.Typable;
 import falsify.falsify.utils.fonts.FontRenderer;
 import net.minecraft.client.MinecraftClient;
@@ -18,7 +19,8 @@ import java.util.function.Predicate;
 public class TextBoxWidget extends PanelWidget implements Typable {
 
     private String text;
-    private final int maxLength = 32;
+    private final int maxLength = 256;
+    private float textOffset = 0.0f;
     private boolean isActive;
     private boolean selecting;
     private Predicate<String> textPredicate = Objects::nonNull;
@@ -29,6 +31,7 @@ public class TextBoxWidget extends PanelWidget implements Typable {
     private Consumer<String> changedListener;
     private final FontRenderer textRenderer;
     private final RenderableRunnable background;
+    private final Animation cursorAnimation = new Animation(250, Animation.Type.EASE_IN_OUT);
 
     public TextBoxWidget(Panel panel, double x, double y, double width, double height, RenderableRunnable background) {
         super(panel, x, y, width, height);
@@ -50,24 +53,28 @@ public class TextBoxWidget extends PanelWidget implements Typable {
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         pushStackToPosition(context.getMatrices());
+
+        if(cursorAnimation.getState() == Animation.State.ACTIVE || cursorAnimation.getState() == Animation.State.LOWERING) cursorAnimation.lower();
+        if(cursorAnimation.getState() == Animation.State.INACTIVE || cursorAnimation.getState() == Animation.State.RISING) cursorAnimation.rise();
+        cursorAnimation.tick();
+        cursorAnimation.setDuration(750);
+
         background.run(this, context, mouseX, mouseY, delta);
-
-        textRenderer.drawString(context, text, 0, 0, panel.getTheme().primaryTextColor(), true);
-
+        panel.getScissorStack().push(x, y, x + width, y + height);
+        textRenderer.drawString(context, text, -textOffset, 0, panel.getTheme().primaryTextColor(), true);
         if(isActive && text != null) {
             float textHeight = textRenderer.getStringHeight("I");
-            float cursorPos = textRenderer.getStringWidth(text.substring(0, getCursor()));
-            context.fill((int) cursorPos, 0, (int) (cursorPos + 1), (int) textHeight, Color.WHITE.getRGB());
+            float cursorPos = textRenderer.getStringWidth(text.substring(0, getCursor()))-textOffset;
+            context.fill((int) cursorPos, 0, (int) (cursorPos + 1), (int) textHeight, new Color(1.0f, 1.0f, 1.0f, (float) cursorAnimation.run()).getRGB());
 
             int min = Math.min(selectionStart, selectionEnd);
             int max = Math.max(selectionStart, selectionEnd);
-            float beginPos = textRenderer.getStringWidth(text.substring(0, min));
+            float beginPos = textRenderer.getStringWidth(text.substring(0, min))-textOffset;
             float endPos = beginPos + textRenderer.getStringWidth(text.substring(min, max));
 
             context.fill((int) beginPos, 0, (int) endPos, (int) textHeight, new Color(136, 251, 255, 140).getRGB());
         }
-
-
+        panel.getScissorStack().pop();
         context.getMatrices().pop();
     }
 
@@ -296,7 +303,15 @@ public class TextBoxWidget extends PanelWidget implements Typable {
     }
 
     public void setSelectionStart(int cursor) {
-        this.selectionStart = MathHelper.clamp(cursor, 0, this.text.length());
+        int tmp = MathHelper.clamp(cursor, 0, this.text.length());
+        boolean rising = tmp > this.selectionStart;
+        this.selectionStart = tmp;
+        if(rising)
+            this.textOffset = (float) Math.max(textOffset, textRenderer.getStringWidth(text.substring(0, cursor)) - width);
+        else
+            this.textOffset = Math.min(textOffset, textRenderer.getStringWidth(text.substring(0, Math.max(0,cursor - 4))));
+
+        cursorAnimation.setProgress(1.0);
     }
 
     public void setCursorToStart() {

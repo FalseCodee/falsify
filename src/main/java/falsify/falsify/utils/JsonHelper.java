@@ -15,7 +15,7 @@ public class JsonHelper {
 
     private static final ExecutorService executor = Executors.newSingleThreadExecutor();
 
-    public static JsonObject fromUrl(String urlString) {
+    public static JsonObject fromUrl(String urlString) throws RuntimeException {
         try {
             URL url = new URL(urlString);
             InputStream is = url.openStream();

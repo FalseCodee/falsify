@@ -36,6 +36,7 @@ public class KawaseBlurShaderRenderer extends ShaderRenderer {
         shader.set("u_Scale", blurModule.getDownscaleFactor());
     }
 
+    @Override
     public void renderShader(int sourceTexture) {
         if(!shouldRender()) return;
         int passes = fbos.length;

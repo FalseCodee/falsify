@@ -45,7 +45,6 @@ public class AutoMath extends ChatModule {
             String message = packet.chatMessage();
             if (message.toLowerCase().contains(mc.player.getGameProfile().getName().toLowerCase() + " solve ")) {
                 message = message.toLowerCase();
-                mc.player.sendMessage(Text.of(message));
                 final String solveThis = mc.player.getGameProfile().getName().toLowerCase() + " solve ";
                 final int beginIndex = solveThis.length() + message.indexOf(solveThis);
                 message = message.substring(beginIndex).toLowerCase();
@@ -139,7 +138,6 @@ public class AutoMath extends ChatModule {
         } else if(chatBot.getValue()) {
             if (message.toLowerCase().contains(mc.player.getGameProfile().getName().toLowerCase() + " solve ")) {
                 message = message.toLowerCase();
-                mc.player.sendMessage(Text.of(message));
                 final String solveThis = mc.player.getGameProfile().getName().toLowerCase() + " solve ";
                 final int beginIndex = solveThis.length() + message.indexOf(solveThis);
                 message = message.substring(beginIndex).toLowerCase();

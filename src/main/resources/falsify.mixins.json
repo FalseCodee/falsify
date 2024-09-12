@@ -13,12 +13,14 @@
     "MixinPlayerEntity",
     "MixinRender",
     "MixinSharedConstants",
+    "MixinWorldBorder",
     "MixinWorldRenderer",
     "special.MixinClientBrandRetriever",
     "special.MixinEntityTracker",
     "special.MixinFishingBobberEntity",
     "special.MixinHandshakeC2SPacket",
     "special.MixinMinecraft",
+    "special.MixinPlayerInteractEntityC2SPacket",
     "special.MixinPlayerMoveC2SPacket"
   ],
   "client": [

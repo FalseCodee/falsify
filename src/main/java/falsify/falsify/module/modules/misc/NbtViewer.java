@@ -9,8 +9,8 @@ import falsify.falsify.module.Module;
 import falsify.falsify.utils.ChatModuleUtils;
 import falsify.falsify.utils.MathUtils;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.component.ComponentMap;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 
 import java.awt.*;
@@ -31,24 +31,26 @@ public class NbtViewer extends Module {
 
             ItemStack itemStack = handledScreen.getScreenHandler().getCursorStack();
             //TODO: FIX
-            NbtCompound nbt = null;
-            if (nbt != null) {
-                String newData = ChatModuleUtils.beautifyNbt(nbt).replace("\\\"", "\"").replace("§", "&");
+
+            if (!itemStack.isEmpty()) {
+                ComponentMap nbt = itemStack.getComponents();
+                String data = ChatModuleUtils.beautifyNbt(nbt);
+                String newData = data.replace("\\\"", "\"").replace("§", "&");
                 if(!newData.equals(nbtData)) scrollOffset = 0;
                 nbtData = newData;
-                nbtUnchanged = nbt.asString();
+                nbtUnchanged = data;
             }
             render.getDrawContext().getMatrices().push();
             render.getDrawContext().getMatrices().translate(5 * mc.getWindow().getScaledWidth() / 8.0f, scrollOffset + 10, 1);
 
-            if(!nbtData.equals("")) {
+            if(!nbtData.isEmpty()) {
                 float width = Falsify.fontRenderer.getStringWidth(nbtData);
                 float height = Falsify.fontRenderer.getStringHeight(nbtData);
 
                 render.getDrawContext().fill(-5, -5, (int) (width + 5), (int) (height + 5), Color.BLACK.getRGB());
             }
             Falsify.fontRenderer.drawString(render.getDrawContext(), nbtData, 0, 0, Color.WHITE, true);
-            render.getDrawContext().getMatrices().push();
+            render.getDrawContext().getMatrices().pop();
 
         } else if(event instanceof EventMouse.Scroll scroll) {
             double padding = 10;
@@ -59,7 +61,7 @@ public class NbtViewer extends Module {
             if (bottomClamp - topClamp > bottomPoint - topPoint) return;
             double scrollDistance = MathUtils.clamp(scroll.getVertical(), bottomClamp - bottomPoint, topClamp - topPoint);
 
-            scrollOffset += scrollDistance * 10;
+            scrollOffset += (float) (scrollDistance * 10);
         } else if(event instanceof EventMouse mouse) {
             if(mouse.button == 0 && mouse.action == 1 && mc.mouse.getX() > 5 * mc.getWindow().getWidth() / 8.0f) {
                 mc.player.sendMessage(Text.of("Copied to clipboard."));

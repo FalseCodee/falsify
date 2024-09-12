@@ -7,7 +7,7 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
-import net.minecraft.client.render.entity.model.EntityModel;
+import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Identifier;
@@ -29,7 +29,7 @@ public class Cosmetic {
         this.texture = texture;
     }
 
-    public void render(LivingEntity livingEntity, EntityModel<?> model, float f, float tickDelta, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int lightLevel) {
+    public void render(LivingEntity livingEntity, BipedEntityModel<?> model, float f, float tickDelta, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int lightLevel) {
         if (!(livingEntity instanceof AbstractClientPlayerEntity playerEntity)) return;
         VertexConsumer vertexConsumer = fetchVertexConsumer(vertexConsumerProvider, texture);
         int m = LivingEntityRenderer.getOverlay(playerEntity, 0.0f);
@@ -40,7 +40,7 @@ public class Cosmetic {
         matrixStack.pop();
     }
 
-    protected void applyTranslations(LivingEntity livingEntity, EntityModel<?> model, MatrixStack matrixStack) {
+    protected void applyTranslations(LivingEntity livingEntity, BipedEntityModel<?> model, MatrixStack matrixStack) {
     }
 
     protected void renderPart(MatrixStack matrixStack, VertexConsumer consumer, int lightLevel, int overlay) {

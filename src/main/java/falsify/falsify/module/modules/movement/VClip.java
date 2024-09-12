@@ -5,6 +5,7 @@ import falsify.falsify.listeners.events.EventPacketSend;
 import falsify.falsify.module.Category;
 import falsify.falsify.module.Module;
 import falsify.falsify.module.settings.BooleanSetting;
+import falsify.falsify.utils.PlayerUtils;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
@@ -28,13 +29,33 @@ public class VClip extends Module {
                         double x = Double.parseDouble(args[1]);
                         double y = Double.parseDouble(args[2]);
                         double z = Double.parseDouble(args[3]);
-
+                        Vec3d pos = new Vec3d(mc.player.getX() + x, mc.player.getY() + y, mc.player.getZ() + z);
                         if(velocity.getValue()) mc.player.setVelocity(new Vec3d(x/10, y/10, z/10));
-                        mc.player.setPosition(mc.player.getX() + x, mc.player.getY() + y, mc.player.getZ() + z);
+                        PlayerUtils.tpExploit(pos);
                     } catch (NumberFormatException exception) {
                         mc.player.sendMessage(Text.of("Usage: .clip <number> <number> <number>"), false);
                     }
                     eventPacketSend.setCancelled(true);
+                } else if(args[0].equalsIgnoreCase(".up")) {
+                    event.setCancelled(true);
+                    Vec3d safeLocationAbove = PlayerUtils.safeLocationAboveBlock(mc.world, mc.player.getBlockPos());
+
+                    if(safeLocationAbove == null) {
+                        mc.player.sendMessage(Text.of("No suitable location found."), false);
+                        return;
+                    }
+
+                    PlayerUtils.tpExploit(safeLocationAbove);
+                } else if(args[0].equalsIgnoreCase(".down")) {
+                    event.setCancelled(true);
+                    Vec3d safeLocationBelow = PlayerUtils.safeLocationBelowBlock(mc.world, mc.player.getBlockPos());
+
+                    if(safeLocationBelow == null) {
+                        mc.player.sendMessage(Text.of("No suitable location found."), false);
+                        return;
+                    }
+
+                    PlayerUtils.tpExploit(safeLocationBelow);
                 }
             }
         }

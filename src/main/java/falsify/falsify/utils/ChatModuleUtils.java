@@ -1,11 +1,8 @@
 package falsify.falsify.utils;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import falsify.falsify.Falsify;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.component.Component;
+import net.minecraft.component.ComponentMap;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.StringHelper;
@@ -13,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class ChatModuleUtils {
     public static boolean isPlayer(String player){
@@ -155,9 +153,38 @@ public class ChatModuleUtils {
         return string.substring(0,1).toUpperCase() + string.substring(1);
     }
 
-    public static String beautifyNbt(NbtCompound nbt) {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        JsonElement je = JsonParser.parseString(nbt.asString());
-        return gson.toJson(je);
+    public static String beautifyNbt(ComponentMap nbt) {
+        String data = "{" + nbt.stream().map(Component::toString).collect(Collectors.joining(", ")) + "}";
+        StringBuilder builder = new StringBuilder();
+        final String tab = "  ";
+        int tabs = 0;
+        boolean inString = false;
+        for(char c : data.toCharArray()) {
+            if(c == '\"' || c == '\'') inString = !inString;
+            if(c == '{' || c == '[') {
+                tabs++;
+                builder.append(c).append("\n");
+                builder.repeat(tab, tabs);
+
+            }
+            else if (c == '}' || c == ']') {
+                tabs--;
+                builder.append("\n").repeat(tab, tabs);
+                builder.append(c);
+            } else if(c == ',' && !inString) {
+                builder.append(c).append("\n").repeat(tab, tabs);
+            } else {
+                builder.append(c);
+            }
+        }
+        return builder.toString();
+
+    }
+
+    public static String addHyphensToUuid(String uuidWithoutHyphens) {
+        return uuidWithoutHyphens.replaceFirst (
+                "(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)",
+                "$1-$2-$3-$4-$5"
+        );
     }
 }

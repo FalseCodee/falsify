@@ -1,10 +1,12 @@
 package falsify.falsify.utils;
 
+import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public abstract class FalseRunnable implements Runnable{
+    public static final ArrayList<FalseRunnable> nextTick = new ArrayList<>();
 
     private ScheduledExecutorService service;
     public void runTaskLater(long delay) {
@@ -23,6 +25,10 @@ public abstract class FalseRunnable implements Runnable{
         this.service = Executors.newSingleThreadScheduledExecutor();
         this.service.scheduleAtFixedRate(this, delay, period, TimeUnit.MILLISECONDS);
         return this.service;
+    }
+
+    public void runTaskNextTick() {
+        nextTick.add(this);
     }
 
     public void cancel() {

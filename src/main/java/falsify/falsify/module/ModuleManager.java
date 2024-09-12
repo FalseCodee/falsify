@@ -74,6 +74,10 @@ public class ModuleManager {
         modules.add(new TazCrafterDefamation());
         modules.add(new NbtViewer());
         modules.add(new UnicodeTranslate());
+        modules.add(new PotatoClicker());
+        modules.add(new PingSpoof());
+        modules.add(new PointTeleport());
+        modules.add(new InfiniteReach());
 
         modules.add(new FPSModule());
         modules.add(new TimeModule());
@@ -116,8 +120,8 @@ public class ModuleManager {
         modules = new CopyOnWriteArrayList<>(modules.stream().filter(module -> !module.isCheat).toList());
         enabledModules = new CopyOnWriteArrayList<>(enabledModules.stream().filter(module -> !module.isCheat).toList());
     }
-    public static KeyPressAutomation keyPressTest = new KeyPressAutomation("Say hi twice", -1);
-    public static GameMessageReceivedAutomation chatListener = new GameMessageReceivedAutomation("listen for lmfao", -1);
+    public static final KeyPressAutomation keyPressTest = new KeyPressAutomation("Say hi twice", -1);
+    public static final GameMessageReceivedAutomation chatListener = new GameMessageReceivedAutomation("listen for lmfao", -1);
 
     public static void setLoadedConfigState(boolean hasLoadedConfig) {
         ModuleManager.hasLoadedConfig = hasLoadedConfig;

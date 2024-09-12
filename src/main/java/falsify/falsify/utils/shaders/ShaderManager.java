@@ -1,6 +1,7 @@
 package falsify.falsify.utils.shaders;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import falsify.falsify.Falsify;
 import falsify.falsify.module.ModuleManager;
 import falsify.falsify.module.modules.misc.PostProcess;
@@ -11,19 +12,20 @@ import falsify.falsify.utils.shaders.renderers.DerivativeShaderRenderer;
 import falsify.falsify.utils.shaders.renderers.DistortionShaderRenderer;
 import falsify.falsify.utils.shaders.renderers.GlowOutlineShaderRenderer;
 import falsify.falsify.utils.shaders.renderers.KawaseBlurShaderRenderer;
+import net.minecraft.client.gl.ShaderProgram;
 import net.minecraft.client.util.math.MatrixStack;
 
 import static org.lwjgl.opengl.GL13C.GL_TEXTURE0;
 import static org.lwjgl.opengl.GL13C.GL_TEXTURE1;
 
 public class ShaderManager {
-    public Shader PASSTHROUGH;
-    public Shader MIXTHROUGH;
+    public final Shader PASSTHROUGH;
+    public final Shader MIXTHROUGH;
     private final Framebuffer framebuffer = new Framebuffer();
-    public DistortionShaderRenderer DISTORTION;
-    public DerivativeShaderRenderer DERIVATIVE_FILTER;
-    public GlowOutlineShaderRenderer GLOW_OUTLINE;
-    public KawaseBlurShaderRenderer KAWASE_BLUR;
+    public final DistortionShaderRenderer DISTORTION;
+    public final DerivativeShaderRenderer DERIVATIVE_FILTER;
+    public final GlowOutlineShaderRenderer GLOW_OUTLINE;
+    public final KawaseBlurShaderRenderer KAWASE_BLUR;
     public final MatrixStack matrices = new MatrixStack();
     public ShaderManager() {
         this.PASSTHROUGH = new Shader("passthrough.vert", "passthrough.frag");
@@ -117,6 +119,9 @@ public class ShaderManager {
     }
 
     public void renderAllCaptures() {
+        ShaderProgram shaderProgram = RenderSystem.getShader();
         GLOW_OUTLINE.renderIfCaptured();
+        KAWASE_BLUR.renderIfCaptured();
+        RenderSystem.setShader(() -> shaderProgram);
     }
 }

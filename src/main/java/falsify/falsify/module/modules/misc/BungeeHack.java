@@ -33,7 +33,7 @@ public class BungeeHack extends Module {
 //                    buffer.writeShort(p.port());
 //                    buffer.writeVarInt(p.intendedState().getId());
 
-                    HandshakeC2SPacket packet = new HandshakeC2SPacket(p.protocolVersion(), p.address() + "\000" + ip + "\000" + uuid, p.port(), p.intendedState());
+                    HandshakeC2SPacket packet = new HandshakeC2SPacket(p.protocolVersion(), p.address() + "\00" + ip + "\00" + uuid, p.port(), p.intendedState());
                     eventPacketSend.setPacket(packet);
                 }
             }

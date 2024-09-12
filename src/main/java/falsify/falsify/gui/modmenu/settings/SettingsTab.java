@@ -120,9 +120,9 @@ public class SettingsTab extends PanelTab {
         context.fill(0, 40, (int) width, 43, panel.getTheme().secondaryColor().getRGB());
         context.fill(0, 41, (int) width, 42, panel.getTheme().secondaryColor().brighter().brighter().getRGB());
         context.getMatrices().pop();
-        enableScissor(x+3, y+44, x+width-3, y+height-3);
+        panel.getScissorStack().push(x+3, y+44, x+width-3, y+height-3);
         settingWidgets.stream().filter(moduleEntry -> moduleEntry.getY() < y + height && moduleEntry.getY() + moduleEntry.getHeight() > y).forEach(settingWidget -> settingWidget.render(context, mouseX, mouseY, delta));
-        disableScissor();
+        panel.getScissorStack().pop();
 
         backButton.render(context, mouseX, mouseY, delta);
         toggleButton.render(context, mouseX, mouseY, delta);
@@ -148,7 +148,7 @@ public class SettingsTab extends PanelTab {
         double bottomPoint = settingWidgets.get(settingWidgets.size() - 1).getY() + settingWidgets.get(settingWidgets.size() - 1).getHeight();
         if(bottomClamp-topClamp > bottomPoint-topPoint) return true;
         amount *= 10;
-        if (settingWidgets.size() == 0) return true;
+        if (settingWidgets.isEmpty()) return true;
         double scrollDistance = MathUtils.clamp(amount, bottomClamp - bottomPoint, topClamp - topPoint);
         for (SettingWidget<?> sw : settingWidgets) {
             sw.setY(sw.getY() + scrollDistance);

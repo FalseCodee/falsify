@@ -8,6 +8,7 @@ import falsify.falsify.module.modules.chat.TazCrafterDefamation;
 import falsify.falsify.module.settings.RangeSetting;
 import falsify.falsify.utils.ChatModuleUtils;
 import falsify.falsify.utils.FalseRunnable;
+import falsify.falsify.utils.InventoryClickHelper;
 import falsify.falsify.utils.Timer;
 import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.client.gui.screen.ingame.CraftingScreen;
@@ -98,17 +99,17 @@ public class MelonCrafter extends Module {
         if(mc.currentScreen instanceof GameMenuScreen) mc.setScreen(null);
         if(mc.currentScreen == null) ChatModuleUtils.sendMessage("/shop Farming", false);
         else if(mc.currentScreen instanceof GenericContainerScreen screen) {
-            String title = ChatModuleUtils.concatArray(screen.getTitle().withoutStyle(),"");
-            if (title.contains("FARMING")) {
-                mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, 6, 0, SlotActionType.PICKUP, mc.player);
-            } else if (title.contains("Melon Slice")) {
-                if(title.contains("stacks")) {
+            InventoryClickHelper inv = new InventoryClickHelper(screen);
+            if (inv.getTitle().contains("FARMING")) {
+                inv.clickSlot(6, 0, SlotActionType.PICKUP);
+            } else if (inv.getTitle().contains("Melon Slice")) {
+                if(inv.getTitle().contains("stacks")) {
                     if (screen.getScreenHandler().getSlot(22).getStack().getCount() < openSpace)
-                        mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, 25, 0, SlotActionType.PICKUP, mc.player);
+                        inv.clickSlot(25, 0, SlotActionType.PICKUP);
                     else
-                        mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, 13, 0, SlotActionType.PICKUP, mc.player);
+                        inv.clickSlot(13, 0, SlotActionType.PICKUP);
                 } else {
-                    mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, 31, 0, SlotActionType.PICKUP, mc.player);
+                    inv.clickSlot(31, 0, SlotActionType.PICKUP);
                 }
             }
         }
