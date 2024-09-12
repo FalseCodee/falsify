@@ -8,12 +8,14 @@ import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
+import net.minecraft.text.Text;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.*;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -62,7 +64,7 @@ public class PlayerUtils {
         Falsify.mc.player.setPosition(target);
     }
 
-    public static final int TP_EXPLOIT_MAX_RANGE = 15*10;
+    public static int TP_EXPLOIT_MAX_RANGE = 15*10;
 
 
     public static void tpExploit(Vec3d target) {
@@ -218,6 +220,7 @@ public class PlayerUtils {
     public static Vec3d findSafeBlockNearLocation(World world, PlayerEntity player, Vec3d location) {
         Vec3d fixes = new Vec3d(0, 0, 0);
         if(location.y >= 319 || location.y <= -66) return location;
+        if(player.getPos().subtract(location).horizontalLength() > Falsify.mc.options.getClampedViewDistance()*16) return BlockPos.ofFloored(location).toCenterPos().subtract(0, 0.5, 0);;
 
         fixes = fixes.add(pushOutOfBlocks(player, new Vec3d(location.getX() - (double) player.getWidth() * 0.35, location.y, location.getZ() + (double) player.getWidth() * 0.35)));
         fixes = fixes.add(pushOutOfBlocks(player, new Vec3d(location.getX() - (double) player.getWidth() * 0.35, location.y, location.getZ() - (double) player.getWidth() * 0.35)));
